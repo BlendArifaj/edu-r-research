@@ -1,0 +1,114 @@
+{
+  "integrity": {
+    "system_name": "SEMS-R",
+    "is_original_sems_source": false,
+    "statement": "This assignment is a documented historical/reference architecture for evaluation only. Decomposition algorithms must not consume this file. SEMS-R is a reconstruction, not the original production SEMS source code."
+  },
+  "evaluation_notes": {
+    "user_entity": "User is shared_identity and excluded from six-way pairwise clustering.",
+    "cross_cutting_components": "StudentOverviewService, FacultyStatisticsService, and EnrollmentGateService are assigned to a primary historical service but remain high-coupling reconstruction artifacts.",
+    "legacy_components_in_six_way": {
+      "ReportBuilder": "faculty"
+    }
+  },
+  "services": {
+    "faculty": {
+      "components": [
+        "FacultyService",
+        "FacultyRepository",
+        "DepartmentRepository",
+        "StaffRepository",
+        "TeacherRepository",
+        "CourseRepository",
+        "AcademicCalendarRepository",
+        "FacultyStatisticsService"
+      ],
+      "owned_entities": [
+        "Faculty",
+        "Department",
+        "Staff",
+        "Teacher",
+        "Course",
+        "AcademicYear",
+        "Semester"
+      ]
+    },
+    "student": {
+      "components": [
+        "StudentService",
+        "StudentRepository",
+        "SemesterRegistrationRepository",
+        "CourseEnrollmentRepository",
+        "StudentOverviewService",
+        "EnrollmentGateService"
+      ],
+      "owned_entities": [
+        "Student",
+        "SemesterRegistration",
+        "CourseEnrollment"
+      ]
+    },
+    "grade": {
+      "components": [
+        "GradeService",
+        "ExamRepository",
+        "GradeRepository"
+      ],
+      "owned_entities": [
+        "Exam",
+        "ExamRegistration",
+        "Grade",
+        "GradeHistory"
+      ]
+    },
+    "finance": {
+      "components": [
+        "FinanceService",
+        "FinanceRepository"
+      ],
+      "owned_entities": [
+        "StudentAccount",
+        "Fee",
+        "Invoice",
+        "InvoiceLine",
+        "Payment",
+        "FinancialTransaction",
+        "FacultyLedgerEntry"
+      ]
+    },
+    "attendance": {
+      "components": [
+        "AttendanceService",
+        "AttendanceRepository"
+      ],
+      "owned_entities": [
+        "ClassSession",
+        "StudentAttendance",
+        "StaffAttendance"
+      ]
+    },
+    "library": {
+      "components": [
+        "LibraryService",
+        "LibraryRepository"
+      ],
+      "owned_entities": [
+        "Book",
+        "BookCopy",
+        "LibraryMember",
+        "Loan",
+        "Reservation"
+      ]
+    }
+  },
+  "shared_identity": {
+    "components": ["AuthService", "UserRepository"],
+    "owned_entities": ["User"],
+    "excluded_from_six_way_clustering": true
+  },
+  "legacy_utilities": {
+    "academic_utils": "shared, not independently deployable",
+    "code_generator": "shared, not independently deployable",
+    "report_builder": "cross-domain; evaluation treats it as faculty-adjacent reporting, not a seventh service"
+  }
+}

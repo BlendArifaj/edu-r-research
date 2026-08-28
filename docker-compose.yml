@@ -1,0 +1,280 @@
+# SEMS-R experimental reconstruction.
+# Monolith and microservices must not run together during controlled comparisons
+# unless a comparison profile is requested explicitly.
+
+x-ms-healthcheck: &ms-healthcheck
+  test:
+    [
+      "CMD",
+      "python",
+      "-c",
+      "import urllib.request; urllib.request.urlopen('http://127.0.0.1:8000/health')",
+    ]
+  interval: 3s
+  timeout: 3s
+  retries: 20
+  start_period: 15s
+
+services:
+  postgres-monolith:
+    image: postgres:16-alpine
+    profiles: ["monolith"]
+    environment:
+      POSTGRES_USER: sems
+      POSTGRES_PASSWORD: sems
+      POSTGRES_DB: sems_monolith
+    ports:
+      - "5432:5432"
+    volumes:
+      - sems_monolith_pg:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U sems -d sems_monolith"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+    cpus: 1.0
+    mem_limit: 1g
+    deploy:
+      resources:
+        limits:
+          cpus: "1.0"
+          memory: 1G
+
+  monolith:
+    build:
+      context: .
+      dockerfile: monolith/Dockerfile
+    profiles: ["monolith"]
+    environment:
+      SEMS_DATABASE_URL: postgresql+psycopg://sems:sems@postgres-monolith:5432/sems_monolith
+      SEMS_JWT_SECRET: ${SEMS_JWT_SECRET:-dev-only-change-me-use-32b-plus!}
+      SEMS_ENV: docker
+      SEMS_BOOTSTRAP_ADMIN: "true"
+    ports:
+      - "8000:8000"
+    depends_on:
+      postgres-monolith:
+        condition: service_healthy
+    cpus: 3.0
+    mem_limit: 3g
+    deploy:
+      resources:
+        limits:
+          cpus: "3.0"
+          memory: 3G
+
+  postgres-microservices:
+    image: postgres:16-alpine
+    profiles: ["microservices"]
+    environment:
+      POSTGRES_USER: sems
+      POSTGRES_PASSWORD: sems
+      POSTGRES_DB: postgres
+    ports:
+      - "5433:5432"
+    volumes:
+      - sems_microservices_pg:/var/lib/postgresql/data
+      - ./microservices/postgres-init.sql:/docker-entrypoint-initdb.d/01-databases.sql:ro
+    healthcheck:
+      test:
+        [
+          "CMD-SHELL",
+          "pg_isready -U sems && psql -U sems -d sems_identity -c 'SELECT 1' >/dev/null && psql -U sems -d sems_faculty -c 'SELECT 1' >/dev/null && psql -U sems -d sems_student -c 'SELECT 1' >/dev/null && psql -U sems -d sems_grade -c 'SELECT 1' >/dev/null && psql -U sems -d sems_finance -c 'SELECT 1' >/dev/null && psql -U sems -d sems_attendance -c 'SELECT 1' >/dev/null && psql -U sems -d sems_library -c 'SELECT 1' >/dev/null",
+        ]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+    cpus: 1.0
+    mem_limit: 1g
+    deploy:
+      resources:
+        limits:
+          cpus: "1.0"
+          memory: 1G
+
+  gateway:
+    build:
+      context: .
+      dockerfile: microservices/Dockerfile
+    profiles: ["microservices"]
+    command: ["uvicorn", "gateway.main:app", "--host", "0.0.0.0", "--port", "8000"]
+    environment: &ms-peers
+      SEMS_JWT_SECRET: ${SEMS_JWT_SECRET:-dev-only-change-me-use-32b-plus!}
+      SEMS_ENV: docker
+      SEMS_BOOTSTRAP_ADMIN: "true"
+      SEMS_SERVICE_NAME: gateway
+      SEMS_DATABASE_URL: postgresql+psycopg://sems:sems@postgres-microservices:5432/sems_identity
+      SEMS_IDENTITY_URL: http://gateway:8000
+      SEMS_FACULTY_URL: http://faculty:8000
+      SEMS_STUDENT_URL: http://student:8000
+      SEMS_GRADE_URL: http://grade:8000
+      SEMS_FINANCE_URL: http://finance:8000
+      SEMS_ATTENDANCE_URL: http://attendance:8000
+      SEMS_LIBRARY_URL: http://library:8000
+    ports:
+      - "8000:8000"
+    depends_on:
+      postgres-microservices:
+        condition: service_healthy
+      faculty:
+        condition: service_healthy
+      student:
+        condition: service_healthy
+      grade:
+        condition: service_healthy
+      finance:
+        condition: service_healthy
+      attendance:
+        condition: service_healthy
+      library:
+        condition: service_healthy
+    healthcheck: *ms-healthcheck
+    cpus: 0.6
+    mem_limit: 768m
+    deploy:
+      resources:
+        limits:
+          cpus: "0.6"
+          memory: 768M
+
+  faculty:
+    build:
+      context: .
+      dockerfile: microservices/Dockerfile
+    profiles: ["microservices"]
+    command: ["uvicorn", "faculty.main:app", "--host", "0.0.0.0", "--port", "8000"]
+    environment:
+      <<: *ms-peers
+      SEMS_SERVICE_NAME: faculty
+      SEMS_BOOTSTRAP_ADMIN: "false"
+      SEMS_DATABASE_URL: postgresql+psycopg://sems:sems@postgres-microservices:5432/sems_faculty
+    depends_on:
+      postgres-microservices:
+        condition: service_healthy
+    healthcheck: *ms-healthcheck
+    cpus: 0.4
+    mem_limit: 384m
+    deploy:
+      resources:
+        limits:
+          cpus: "0.4"
+          memory: 384M
+
+  student:
+    build:
+      context: .
+      dockerfile: microservices/Dockerfile
+    profiles: ["microservices"]
+    command: ["uvicorn", "student.main:app", "--host", "0.0.0.0", "--port", "8000"]
+    environment:
+      <<: *ms-peers
+      SEMS_SERVICE_NAME: student
+      SEMS_BOOTSTRAP_ADMIN: "false"
+      SEMS_DATABASE_URL: postgresql+psycopg://sems:sems@postgres-microservices:5432/sems_student
+    depends_on:
+      postgres-microservices:
+        condition: service_healthy
+    healthcheck: *ms-healthcheck
+    cpus: 0.4
+    mem_limit: 384m
+    deploy:
+      resources:
+        limits:
+          cpus: "0.4"
+          memory: 384M
+
+  grade:
+    build:
+      context: .
+      dockerfile: microservices/Dockerfile
+    profiles: ["microservices"]
+    command: ["uvicorn", "grade.main:app", "--host", "0.0.0.0", "--port", "8000"]
+    environment:
+      <<: *ms-peers
+      SEMS_SERVICE_NAME: grade
+      SEMS_BOOTSTRAP_ADMIN: "false"
+      SEMS_DATABASE_URL: postgresql+psycopg://sems:sems@postgres-microservices:5432/sems_grade
+    depends_on:
+      postgres-microservices:
+        condition: service_healthy
+    healthcheck: *ms-healthcheck
+    cpus: 0.4
+    mem_limit: 384m
+    deploy:
+      resources:
+        limits:
+          cpus: "0.4"
+          memory: 384M
+
+  finance:
+    build:
+      context: .
+      dockerfile: microservices/Dockerfile
+    profiles: ["microservices"]
+    command: ["uvicorn", "finance.main:app", "--host", "0.0.0.0", "--port", "8000"]
+    environment:
+      <<: *ms-peers
+      SEMS_SERVICE_NAME: finance
+      SEMS_BOOTSTRAP_ADMIN: "false"
+      SEMS_DATABASE_URL: postgresql+psycopg://sems:sems@postgres-microservices:5432/sems_finance
+    depends_on:
+      postgres-microservices:
+        condition: service_healthy
+    healthcheck: *ms-healthcheck
+    cpus: 0.4
+    mem_limit: 384m
+    deploy:
+      resources:
+        limits:
+          cpus: "0.4"
+          memory: 384M
+
+  attendance:
+    build:
+      context: .
+      dockerfile: microservices/Dockerfile
+    profiles: ["microservices"]
+    command: ["uvicorn", "attendance.main:app", "--host", "0.0.0.0", "--port", "8000"]
+    environment:
+      <<: *ms-peers
+      SEMS_SERVICE_NAME: attendance
+      SEMS_BOOTSTRAP_ADMIN: "false"
+      SEMS_DATABASE_URL: postgresql+psycopg://sems:sems@postgres-microservices:5432/sems_attendance
+    depends_on:
+      postgres-microservices:
+        condition: service_healthy
+    healthcheck: *ms-healthcheck
+    cpus: 0.4
+    mem_limit: 384m
+    deploy:
+      resources:
+        limits:
+          cpus: "0.4"
+          memory: 384M
+
+  library:
+    build:
+      context: .
+      dockerfile: microservices/Dockerfile
+    profiles: ["microservices"]
+    command: ["uvicorn", "library.main:app", "--host", "0.0.0.0", "--port", "8000"]
+    environment:
+      <<: *ms-peers
+      SEMS_SERVICE_NAME: library
+      SEMS_BOOTSTRAP_ADMIN: "false"
+      SEMS_DATABASE_URL: postgresql+psycopg://sems:sems@postgres-microservices:5432/sems_library
+    depends_on:
+      postgres-microservices:
+        condition: service_healthy
+    healthcheck: *ms-healthcheck
+    cpus: 0.4
+    mem_limit: 384m
+    deploy:
+      resources:
+        limits:
+          cpus: "0.4"
+          memory: 384M
+
+volumes:
+  sems_monolith_pg:
+  sems_microservices_pg:

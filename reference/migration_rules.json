@@ -1,0 +1,51 @@
+{
+  "integrity": {
+    "statement": "These are explicit migration constraints for evidence-constrained decomposition. They do not encode a Faculty->faculty-service mapping. Algorithms must reason from evidence plus these rules."
+  },
+  "rules": [
+    {
+      "id": "R1",
+      "statement": "Decompose the legacy system into independently deployable services."
+    },
+    {
+      "id": "R2",
+      "statement": "Apply the Single Responsibility Principle."
+    },
+    {
+      "id": "R3",
+      "statement": "Prefer database ownership by one service."
+    },
+    {
+      "id": "R4",
+      "statement": "Minimize unnecessary cross-service coupling."
+    },
+    {
+      "id": "R5",
+      "statement": "Avoid shared databases where practical."
+    },
+    {
+      "id": "R6",
+      "statement": "Maintain functional behavior."
+    },
+    {
+      "id": "R7",
+      "statement": "Prefer boundaries aligned with business capabilities."
+    },
+    {
+      "id": "R8",
+      "statement": "Identify cases in which strict isolation would create excessive communication."
+    },
+    {
+      "id": "R9",
+      "statement": "Explicitly report uncertain architectural decisions instead of silently guessing."
+    }
+  ],
+  "machine_checkable": [
+    "entity_has_at_most_one_owner",
+    "no_empty_services",
+    "no_extreme_service_imbalance",
+    "no_unassigned_components",
+    "no_duplicate_component_assignment",
+    "report_cyclic_service_dependencies"
+  ]
+}

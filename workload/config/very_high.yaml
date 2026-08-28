@@ -1,0 +1,24 @@
+name: very_high
+integrity: synthetic_experimental_workload_not_production_sems
+note: Synthetic SEMS-R very-high load. Not production SEMS traffic.
+host: http://127.0.0.1:8000
+users: 200
+spawn_rate: 40
+duration: 300s
+wait_min_s: 0.05
+wait_max_s: 0.3
+mix:
+  student_dashboard: 35
+  grades: 20
+  registration: 15
+  finance: 10
+  attendance: 10
+  library: 5
+  faculty_admin: 5
+saturation:
+  error_rate: 0.01
+  p95_ms: 2000
+  timeout_rate: 0.01
+  cpu_percent: 90
+  cpu_sustain_s: 30
+  rps_plateau_epsilon: 0.05

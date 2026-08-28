@@ -1,0 +1,2 @@
+# Keep this directory so paper reports have a landing place.
+# Generated reports are gitignored; regenerate with `make report`.

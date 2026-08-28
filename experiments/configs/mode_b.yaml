@@ -1,0 +1,40 @@
+# Mode B: selective extra CPU/RAM on gateway + student.
+# Monolith stays at Mode A 4 CPU / 4 GB. Totals are not equal.
+# Locust runs on the host and is outside this budget.
+mode: B
+integrity: sems-r-reconstruction-measured
+note: >
+  Selective scaling. Extra resources vs Mode A microservices: gateway +0.6 CPU / +768 MB,
+  student +0.4 CPU / +384 MB (+1.0 CPU / +1152 MB total). Not production SEMS.
+compared_against: A
+seed_scale: small
+configs:
+  - medium
+base_url: http://127.0.0.1:8000
+monolith_database_url: postgresql+psycopg://sems:sems@127.0.0.1:5432/sems_monolith
+architectures:
+  - monolith
+  - microservices
+compose_overlay: docker-compose.mode-b.yml
+extra_vs_mode_a:
+  gateway: {cpus: 0.6, memory_mb: 768}
+  student: {cpus: 0.4, memory_mb: 384}
+total_cpus:
+  monolith: 4.0
+  microservices: 5.0
+total_memory_mb:
+  monolith: 4096
+  microservices: 5248
+profiles:
+  monolith:
+    postgres-monolith: {cpus: 1.0, memory_mb: 1024}
+    monolith: {cpus: 3.0, memory_mb: 3072}
+  microservices:
+    postgres-microservices: {cpus: 1.0, memory_mb: 1024}
+    gateway: {cpus: 1.2, memory_mb: 1536}
+    faculty: {cpus: 0.4, memory_mb: 384}
+    student: {cpus: 0.8, memory_mb: 768}
+    grade: {cpus: 0.4, memory_mb: 384}
+    finance: {cpus: 0.4, memory_mb: 384}
+    attendance: {cpus: 0.4, memory_mb: 384}
+    library: {cpus: 0.4, memory_mb: 384}

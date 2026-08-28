@@ -1,0 +1,31 @@
+name: stress
+integrity: synthetic_experimental_workload_not_production_sems
+note: >
+  Iterative concurrency increase until a saturation rule fires.
+  Synthetic SEMS-R workload, not production SEMS traffic.
+host: http://127.0.0.1:8000
+users: 10
+spawn_rate: 5
+duration: 30s
+wait_min_s: 0.02
+wait_max_s: 0.1
+mix:
+  student_dashboard: 35
+  grades: 20
+  registration: 15
+  finance: 10
+  attendance: 10
+  library: 5
+  faculty_admin: 5
+stress:
+  start_users: 10
+  step_users: 10
+  max_users: 200
+  step_duration: 30s
+saturation:
+  error_rate: 0.01
+  p95_ms: 2000
+  timeout_rate: 0.01
+  cpu_percent: 90
+  cpu_sustain_s: 30
+  rps_plateau_epsilon: 0.05

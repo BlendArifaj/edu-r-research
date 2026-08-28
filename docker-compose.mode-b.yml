@@ -1,0 +1,21 @@
+# Mode B overlay: extra CPU/RAM on the Mode A hot path only.
+# Monolith stays on docker-compose.yml Mode A limits.
+# Not an equal-total comparison. Declare extras in experiments/configs/mode_b.yaml.
+
+services:
+  gateway:
+    cpus: 1.2
+    mem_limit: 1536m
+    deploy:
+      resources:
+        limits:
+          cpus: "1.2"
+          memory: 1536M
+  student:
+    cpus: 0.8
+    mem_limit: 768m
+    deploy:
+      resources:
+        limits:
+          cpus: "0.8"
+          memory: 768M

@@ -1,0 +1,33 @@
+# Measured Phase 10 Locust comparison stamps.
+# Not part of outputs/runs/2026-08-27_005. Do not invent stamps or stats.
+comparisons:
+  - mode: A
+    stamp: "2026-08-27_201847"
+    equal_total: true
+    budget: "4 CPU / 4 GB"
+    locust: "smoke, low, medium"
+  - mode: A
+    stamp: "2026-08-27_204815"
+    equal_total: true
+    budget: "4 CPU / 4 GB"
+    locust: "high"
+  - mode: B
+    stamp: "2026-08-27_211409"
+    equal_total: false
+    budget: "monolith 4/4; six-service 5 CPU / 5248 MB"
+    locust: "medium"
+  - mode: C
+    stamp: "2026-08-27_214907"
+    equal_total: false
+    budget: "monolith 4/4; six-service 7.25 CPU / 7296 MB"
+    locust: "high"
+  - mode: D
+    stamp: "2026-08-27_222327"
+    equal_total: false
+    budget: "monolith 1.5 CPU / 2 GB; six-service 10 CPU / 16 GB"
+    locust: "high"
+  - mode: E
+    stamp: "2026-08-27_225302"
+    equal_total: true
+    budget: "4 CPU / 4 GB"
+    locust: "high"

@@ -1,0 +1,86 @@
+[build-system]
+requires = ["setuptools>=75", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "sems-r"
+version = "0.1.0"
+description = "SEMS-R: reconstructed legacy education-management system for microservice decomposition research. Not the original SEMS source code."
+readme = "README.md"
+requires-python = ">=3.12"
+license = { text = "MIT" }
+authors = [{ name = "SEMS-R research reconstruction" }]
+dependencies = [
+  "fastapi>=0.115",
+  "uvicorn[standard]>=0.32",
+  "sqlalchemy>=2.0.36",
+  "psycopg[binary]>=3.2",
+  "pydantic>=2.10",
+  "pydantic-settings>=2.6",
+  "alembic>=1.14",
+  "pyjwt>=2.10",
+  "httpx>=0.28",
+  "python-multipart>=0.0.17",
+]
+
+[project.optional-dependencies]
+research = [
+  "networkx>=3.4",
+  "scikit-learn>=1.6",
+  "scipy>=1.14",
+  "pandas>=2.2",
+  "numpy>=2.1",
+  "matplotlib>=3.9",
+]
+load = [
+  "locust>=2.32",
+  "pyyaml>=6.0",
+]
+dev = [
+  "pytest>=8.3",
+  "pytest-cov>=6.0",
+  "ruff>=0.8",
+  "black>=24.10",
+  "mypy>=1.13",
+  "types-pyyaml>=6.0",
+  "pyyaml>=6.0",
+  "networkx>=3.4",
+  "numpy>=2.1",
+]
+all = [
+  "sems-r[research,load,dev]",
+]
+
+[tool.setuptools.packages.find]
+where = ["monolith"]
+include = ["app*"]
+
+[tool.pytest.ini_options]
+pythonpath = ["monolith", ".", "microservices"]
+testpaths = ["monolith/tests", "decomposition/tests", "experiments/tests", "analysis/tests", "microservices/tests", "workload/tests"]
+addopts = "-q --strict-markers"
+filterwarnings = [
+  "ignore::DeprecationWarning",
+]
+
+[tool.ruff]
+line-length = 100
+target-version = "py312"
+src = ["monolith", "workload", "decomposition", "experiments", "analysis", "microservices"]
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "UP", "B"]
+
+[tool.ruff.lint.per-file-ignores]
+"microservices/**/*.py" = ["B008"]
+
+[tool.black]
+line-length = 100
+target-version = ["py312"]
+
+[tool.mypy]
+python_version = "3.12"
+strict = true
+packages = ["app"]
+mypy_path = "monolith"
+ignore_missing_imports = true

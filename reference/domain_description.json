@@ -1,0 +1,75 @@
+{
+  "system": {
+    "name": "SEMS-R",
+    "full_name": "SEMS Experimental Reconstruction",
+    "is_original_sems_source": false,
+    "description": "A reconstructed university education-management system used as an experimental monolith. It is based on documented SEMS functional areas, not original production source."
+  },
+  "functional_areas": [
+    {
+      "id": "faculty",
+      "capabilities": [
+        "faculty and department administration",
+        "staff and teacher records",
+        "course catalog administration",
+        "academic calendar",
+        "faculty-level statistics"
+      ]
+    },
+    {
+      "id": "student",
+      "capabilities": [
+        "student registration and profile",
+        "semester registration",
+        "course enrollment",
+        "student academic overview"
+      ]
+    },
+    {
+      "id": "grade",
+      "capabilities": [
+        "exam scheduling",
+        "exam registration",
+        "grade recording and updates",
+        "grade history",
+        "GPA calculation"
+      ]
+    },
+    {
+      "id": "finance",
+      "capabilities": [
+        "tuition and semester fees",
+        "student invoices and payments",
+        "account balances",
+        "financial transactions",
+        "faculty income and expense ledger"
+      ]
+    },
+    {
+      "id": "attendance",
+      "capabilities": [
+        "class session management",
+        "student attendance",
+        "staff attendance",
+        "monthly attendance reports"
+      ]
+    },
+    {
+      "id": "library",
+      "capabilities": [
+        "book catalog and copies",
+        "library membership",
+        "loans and returns",
+        "reservations"
+      ]
+    }
+  ],
+  "known_cross_domain_dependencies": [
+    "Grade workflows require student, teacher, course, and often enrollment records.",
+    "Attendance workflows require student, teacher, course, and enrollment records.",
+    "Finance workflows require student and faculty context for invoicing and ledgers.",
+    "Library membership is issued to students and staff.",
+    "Student information is read by Student, Grade, Attendance, Finance, and Library.",
+    "Course ownership sits with Faculty administration but is consumed by Student, Grade, and Attendance."
+  ]
+}

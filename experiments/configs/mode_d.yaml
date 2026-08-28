@@ -1,0 +1,67 @@
+# Mode D: starved legacy (2 GB) vs scale-out microservices (16 GB).
+# Totals are not equal. Same locustfile and small HTTP seed as Mode A.
+# Docker Desktop must actually have >=10 CPU and >=16 GB or the 16 GB budget is fake.
+mode: D
+integrity: sems-r-reconstruction-measured
+note: >
+  Unequal-resource operational contrast. Monolith is a 2 GB / 1.5 CPU box.
+  Microservices get 16 GB / 10 CPU with nginx and two replicas of each app
+  service, plus a larger Postgres. Not production SEMS. Not a 10k-user replay.
+  First Locust config is high (100 users / 300s).
+compared_against: A
+seed_scale: small
+configs:
+  - high
+base_url: http://127.0.0.1:8000
+monolith_database_url: postgresql+psycopg://sems:sems@127.0.0.1:5432/sems_monolith
+architectures:
+  - monolith
+  - microservices
+compose_overlay: docker-compose.mode-d.yml
+load_balancer: nginx
+docker_requires:
+  cpus: 10
+  memory_mb: 16384
+replicas:
+  postgres-microservices: 1
+  nginx: 1
+  gateway: 2
+  faculty: 2
+  student: 2
+  grade: 2
+  finance: 2
+  attendance: 2
+  library: 2
+monolith_vs_mode_a:
+  postgres-monolith: {cpus: -0.5, memory_mb: -512}
+  monolith: {cpus: -2.0, memory_mb: -1536}
+extra_vs_mode_a:
+  postgres-microservices: {cpus: 1.0, memory_mb: 3072}
+  nginx: {cpus: 0.4, memory_mb: 256}
+  gateway: {cpus: 1.0, memory_mb: 1280}
+  faculty: {cpus: 0.6, memory_mb: 1280}
+  student: {cpus: 0.6, memory_mb: 1280}
+  grade: {cpus: 0.6, memory_mb: 1280}
+  finance: {cpus: 0.6, memory_mb: 1280}
+  attendance: {cpus: 0.6, memory_mb: 1280}
+  library: {cpus: 0.6, memory_mb: 1280}
+total_cpus:
+  monolith: 1.5
+  microservices: 10.0
+total_memory_mb:
+  monolith: 2048
+  microservices: 16384
+profiles:
+  monolith:
+    postgres-monolith: {cpus: 0.5, memory_mb: 512}
+    monolith: {cpus: 1.0, memory_mb: 1536}
+  microservices:
+    postgres-microservices: {cpus: 2.0, memory_mb: 4096, replicas: 1}
+    nginx: {cpus: 0.4, memory_mb: 256, replicas: 1}
+    gateway: {cpus: 0.8, memory_mb: 1024, replicas: 2}
+    faculty: {cpus: 0.5, memory_mb: 832, replicas: 2}
+    student: {cpus: 0.5, memory_mb: 832, replicas: 2}
+    grade: {cpus: 0.5, memory_mb: 832, replicas: 2}
+    finance: {cpus: 0.5, memory_mb: 832, replicas: 2}
+    attendance: {cpus: 0.5, memory_mb: 832, replicas: 2}
+    library: {cpus: 0.5, memory_mb: 832, replicas: 2}

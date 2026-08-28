@@ -1,0 +1,11 @@
+# Un-tuned baseline configuration. Do not fit these values on the reference architecture.
+seed: 42
+louvain_resolution: 1.0
+normalize_layers: true
+combined_weights:
+  alpha: 1.0  # static call-graph
+  beta: 1.0   # static data-sharing
+  gamma: 1.0  # runtime co-occurrence
+identity_tokens:
+  - auth
+  - user

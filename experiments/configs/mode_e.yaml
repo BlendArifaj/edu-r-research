@@ -1,0 +1,30 @@
+# Mode E: dependency-clustered campus vs monolith. Equal total 4 CPU / 4 GB.
+# Campus keeps faculty+student+grade+finance+attendance in one process.
+# Library stays HTTP. Not the historical six-service gold. Not production SEMS.
+mode: E
+integrity: sems-r-reconstruction-measured
+note: >
+  Dependency clustering, not historical six-way gold. Campus process uses
+  in-process ASGI for the Locust hot-path join. Library is the only HTTP peer.
+  Equal-total with the Mode A monolith budget. Locust high, small HTTP seed.
+compared_against: A
+seed_scale: small
+configs:
+  - high
+base_url: http://127.0.0.1:8000
+monolith_database_url: postgresql+psycopg://sems:sems@127.0.0.1:5432/sems_monolith
+architectures:
+  - monolith
+  - clustered
+compose_overlay: docker-compose.mode-e.yml
+load_balancer: ""
+total_cpus: 4.0
+total_memory_mb: 4096
+profiles:
+  monolith:
+    postgres-monolith: {cpus: 1.0, memory_mb: 1024}
+    monolith: {cpus: 3.0, memory_mb: 3072}
+  clustered:
+    postgres-clustered: {cpus: 1.0, memory_mb: 1024}
+    campus: {cpus: 2.6, memory_mb: 2688}
+    library-clustered: {cpus: 0.4, memory_mb: 384}

@@ -1,0 +1,116 @@
+# Mode E overlay: dependency-clustered campus + library. Equal 4 CPU / 4 GB.
+# Does not replace the historical six-service profile.
+
+x-ms-healthcheck: &ms-healthcheck
+  test:
+    [
+      "CMD",
+      "python",
+      "-c",
+      "import urllib.request; urllib.request.urlopen('http://127.0.0.1:8000/health')",
+    ]
+  interval: 3s
+  timeout: 3s
+  retries: 20
+  start_period: 15s
+
+x-campus-env: &campus-env
+  SEMS_JWT_SECRET: ${SEMS_JWT_SECRET:-dev-only-change-me-use-32b-plus!}
+  SEMS_ENV: docker
+  SEMS_BOOTSTRAP_ADMIN: "true"
+  SEMS_SERVICE_NAME: campus
+  SEMS_IDENTITY_DATABASE_URL: postgresql+psycopg://sems:sems@postgres-clustered:5432/sems_identity
+  SEMS_FACULTY_DATABASE_URL: postgresql+psycopg://sems:sems@postgres-clustered:5432/sems_faculty
+  SEMS_STUDENT_DATABASE_URL: postgresql+psycopg://sems:sems@postgres-clustered:5432/sems_student
+  SEMS_GRADE_DATABASE_URL: postgresql+psycopg://sems:sems@postgres-clustered:5432/sems_grade
+  SEMS_FINANCE_DATABASE_URL: postgresql+psycopg://sems:sems@postgres-clustered:5432/sems_finance
+  SEMS_ATTENDANCE_DATABASE_URL: postgresql+psycopg://sems:sems@postgres-clustered:5432/sems_attendance
+  SEMS_LIBRARY_URL: http://library-clustered:8000
+  SEMS_IDENTITY_URL: http://campus:8000
+  SEMS_FACULTY_URL: http://campus:8000
+  SEMS_STUDENT_URL: http://campus:8000
+
+services:
+  postgres-clustered:
+    image: postgres:16-alpine
+    profiles: ["clustered"]
+    environment:
+      POSTGRES_USER: sems
+      POSTGRES_PASSWORD: sems
+      POSTGRES_DB: postgres
+    ports:
+      - "5434:5432"
+    volumes:
+      - sems_clustered_pg:/var/lib/postgresql/data
+      - ./microservices/postgres-init.sql:/docker-entrypoint-initdb.d/01-databases.sql:ro
+    healthcheck:
+      test:
+        [
+          "CMD-SHELL",
+          "pg_isready -U sems && psql -U sems -d sems_identity -c 'SELECT 1' >/dev/null && psql -U sems -d sems_library -c 'SELECT 1' >/dev/null",
+        ]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+    cpus: 1.0
+    mem_limit: 1g
+    deploy:
+      resources:
+        limits:
+          cpus: "1.0"
+          memory: 1G
+
+  campus:
+    build:
+      context: .
+      dockerfile: microservices/Dockerfile
+    profiles: ["clustered"]
+    command: ["uvicorn", "clustered.main:app", "--host", "0.0.0.0", "--port", "8000"]
+    environment:
+      <<: *campus-env
+    ports:
+      - "8000:8000"
+    depends_on:
+      postgres-clustered:
+        condition: service_healthy
+    healthcheck: *ms-healthcheck
+    cpus: 2.6
+    mem_limit: 2688m
+    deploy:
+      resources:
+        limits:
+          cpus: "2.6"
+          memory: 2688M
+
+  library-clustered:
+    build:
+      context: .
+      dockerfile: microservices/Dockerfile
+    profiles: ["clustered"]
+    command: ["uvicorn", "library.main:app", "--host", "0.0.0.0", "--port", "8000"]
+    environment:
+      SEMS_JWT_SECRET: ${SEMS_JWT_SECRET:-dev-only-change-me-use-32b-plus!}
+      SEMS_ENV: docker
+      SEMS_BOOTSTRAP_ADMIN: "false"
+      SEMS_SERVICE_NAME: library
+      SEMS_DATABASE_URL: postgresql+psycopg://sems:sems@postgres-clustered:5432/sems_library
+      SEMS_IDENTITY_URL: http://campus:8000
+      SEMS_FACULTY_URL: http://campus:8000
+      SEMS_STUDENT_URL: http://campus:8000
+      SEMS_LIBRARY_URL: http://library-clustered:8000
+    depends_on:
+      postgres-clustered:
+        condition: service_healthy
+      campus:
+        condition: service_healthy
+    healthcheck: *ms-healthcheck
+    cpus: 0.4
+    mem_limit: 384m
+    deploy:
+      resources:
+        limits:
+          cpus: "0.4"
+          memory: 384M
+
+volumes:
+  sems_clustered_pg:

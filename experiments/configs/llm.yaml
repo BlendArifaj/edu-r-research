@@ -1,0 +1,12 @@
+# LLM experiment config. Do not put API keys in this file.
+# Keys: OPENAI_API_KEY, XAI_API_KEY, GEMINI_API_KEY, ANTHROPIC_API_KEY, OLLAMA_HOST
+provider: openai
+model: gpt-4o-mini
+temperature: 0.2
+runs: 3
+max_retries: 2
+conditions:
+  - C0
+  - C1
+  - C2
+  - C3
