@@ -1,17 +1,17 @@
-# SEMS-R: Reconstructed Legacy Education System
+# EDU-R: Reconstructed Legacy Education System
 
 **Research integrity statement**
 
-This repository is a **controlled software reconstruction** based on the documented functional and architectural characteristics of the historical SEMS case study. **It is not the original production SEMS source code.** Runtime measurements, workload results, and decomposition scores produced here are measurements of SEMS-R, not of the historical production system. Historical results from prior studies must be kept in a separate dataset and must never be pooled with SEMS-R measurements.
+This repository is a **controlled software reconstruction** based on the documented functional and architectural characteristics of the historical EDU case study. **It is not the original production EDU source code.** Runtime measurements, workload results, and decomposition scores produced here are measurements of EDU-R, not of the historical production system. Historical results from prior studies must be kept in a separate dataset and must never be pooled with EDU-R measurements.
 
 Call this system:
 
-- **SEMS Experimental Reconstruction**, or
-- **SEMS-R: Reconstructed Legacy Education System**
+- **EDU Experimental Reconstruction**, or
+- **EDU-R: Reconstructed Legacy Education System**
 
 ## What this repository is
 
-SEMS-R is an experimental testbed for an IEEE Access-style study of microservice decomposition. It reconstructs a realistic education-management monolith (six functional areas, one shared database, evolved coupling), extracts architectural evidence, runs deterministic and LLM-based decomposition methods, evaluates boundaries against a **hidden historical reference architecture**, and supports controlled load comparison of the monolith versus a six-service reconstruction.
+EDU-R is an experimental testbed for an IEEE Access-style study of microservice decomposition. It reconstructs a realistic education-management monolith (six functional areas, one shared database, evolved coupling), extracts architectural evidence, runs deterministic and LLM-based decomposition methods, evaluates boundaries against a **hidden historical reference architecture**, and supports controlled load comparison of the monolith versus a six-service reconstruction.
 
 The six historical services (Faculty, Student, Grade, Finance, Attendance, Library) are a **reference architecture**, not assumed to be perfect ground truth.
 
@@ -85,7 +85,7 @@ Smoke load against the running monolith (60s, 5 users). Locust uses only `BASE_U
 make load-smoke-monolith
 ```
 
-The mix (35/20/15/10/10/5/5) is a **synthetic experimental assumption**, not production SEMS traffic. Artifacts land in `outputs/performance/`.
+The mix (35/20/15/10/10/5/5) is a **synthetic experimental assumption**, not production EDU traffic. Artifacts land in `outputs/performance/`.
 
 ### Phase 3 — architectural evidence
 
@@ -159,7 +159,7 @@ The API is at `http://localhost:8000`. OpenAPI docs: `http://localhost:8000/docs
 
 ### Phase 8 — paper-ready reporting
 
-Reads measured Table A–D CSVs from a run snapshot. Does not invent expert ranks, LLM scores, or historical SEMS numbers. Default snapshot is `outputs/runs/2026-08-27_005`.
+Reads measured Table A–D CSVs from a run snapshot. Does not invent expert ranks, LLM scores, or historical EDU numbers. Default snapshot is `outputs/runs/2026-08-27_005`.
 
 ```bash
 make report
@@ -192,7 +192,7 @@ make compare-load
 # optional: python -m workload.compare --configs smoke,low
 ```
 
-Artifacts: `outputs/performance/comparisons/<stamp>/` (`comparison.md`, `comparison.csv`, inspected cgroup limits). Reconstruction measurements, not production SEMS.
+Artifacts: `outputs/performance/comparisons/<stamp>/` (`comparison.md`, `comparison.csv`, inspected cgroup limits). Reconstruction measurements, not production EDU.
 
 Mode B gives extra CPU/RAM to gateway and student only (monolith stays at 4/4). Totals are not equal; extras are in `experiments/configs/mode_b.yaml`.
 
@@ -231,7 +231,7 @@ Do **not**:
 - feed `reference/historical_architecture.json` to decomposition algorithms;
 - tune clustering weights against the reference and report them as unbiased;
 - fabricate LLM responses, expert judgments, or runtime measurements;
-- describe SEMS-R traffic as production SEMS traffic;
+- describe EDU-R traffic as production EDU traffic;
 - compare monolith vs microservices without documenting CPU/RAM/database allocation.
 
 See `RESEARCH_DECISIONS.md` and `EXPERIMENT_LOG.md`.
