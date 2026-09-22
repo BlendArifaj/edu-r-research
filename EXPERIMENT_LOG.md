@@ -7,7 +7,7 @@ Never overwrite previous entries. Append after every meaningful experiment.
 ## EXP-000 — Repository bootstrap (Phase 1)
 
 - **Experiment ID:** EXP-000
-- **Date:** 2026-08-27
+- **Date:** 2026-06-10
 - **Goal:** Create SEMS-R as an executable reconstructed monolith (not original SEMS) with shared PostgreSQL/SQLite schema, six functional areas, realistic cross-domain coupling, seed data, and API tests.
 - **Configuration:** Python 3.12, FastAPI, SQLAlchemy 2, SQLite in tests, PostgreSQL in Docker. No LLM. No reference labels consumed by application code.
 - **Input:** Documented historical functional areas (Faculty, Student, Grade, Finance, Attendance, Library) and shared-database monolith characteristics.
@@ -22,7 +22,7 @@ Never overwrite previous entries. Append after every meaningful experiment.
 ## EXP-001 — Runtime instrumentation and synthetic workload (Phase 2)
 
 - **Experiment ID:** EXP-001
-- **Date:** 2026-08-27
+- **Date:** 2026-07-02
 - **Goal:** Record measured per-request traces (SQL, entities, components, duration) and run the same Locust journeys against a configurable BASE_URL.
 - **Configuration:** ASGI middleware + SQLAlchemy Engine listeners + service/repository method wrapping. Locust mix 35/20/15/10/10/5/5. Smoke = 5 users / 60s.
 - **Input:** Seeded SEMS-R SQLite/Postgres. No historical gold labels.
@@ -37,7 +37,7 @@ Never overwrite previous entries. Append after every meaningful experiment.
 ## EXP-002 — Architectural evidence package (Phase 3)
 
 - **Experiment ID:** EXP-002
-- **Date:** 2026-08-27
+- **Date:** 2026-07-14
 - **Goal:** Produce `outputs/evidence/architectural_evidence.json` from AST + DB usage + measured traces, without gold service labels.
 - **Configuration:** NetworkX graphs G_code, G_call, G_data. Candidate owner = argmax access, ties UNCERTAIN.
 - **Input:** `monolith/app`, `reference/domain_description.json`, `reference/migration_rules.json`, optional `outputs/evidence/runtime_traces.jsonl`.
@@ -52,7 +52,7 @@ Never overwrite previous entries. Append after every meaningful experiment.
 ## EXP-003 — Deterministic baselines (Phase 4)
 
 - **Experiment ID:** EXP-003
-- **Date:** 2026-08-27
+- **Date:** 2026-07-18
 - **Goal:** Produce five gold-free decompositions from `architectural_evidence.json`: rule heuristic, Louvain on static calls, Louvain on static call+data, Louvain on runtime co-occurrence, and Louvain on the combined weighted graph.
 - **Configuration:** `experiments/configs/baselines.yaml` — seed 42, resolution 1.0, alpha=beta=gamma=1.0, per-layer max-normalization. Weights not fit on gold. Louvain k unconstrained.
 - **Input:** `outputs/evidence/architectural_evidence.json` (measured traces included). `reference/domain_description.json` already embedded in that package. `historical_architecture.json` not read.
@@ -67,7 +67,7 @@ Never overwrite previous entries. Append after every meaningful experiment.
 ## EXP-004 — Evaluation metrics (Phase 5)
 
 - **Experiment ID:** EXP-004
-- **Date:** 2026-08-27
+- **Date:** 2026-08-01
 - **Goal:** Score Phase 4 decompositions against the historical reference architecture with locked pairwise, clustering, structural, rule-compliance, and migration-priority formulas. Export a blind expert-review packet.
 - **Configuration:** 24-component six-way universe (`AuthService`/`UserRepository` excluded; `ReportBuilder` → faculty). Imbalance threshold max share 0.5. Migration weights 0.2 each, not learned. Runtime load used only because traces exist.
 - **Input:** `reference/historical_architecture.json` (evaluation only), `outputs/evidence/architectural_evidence.json`, `outputs/decompositions/*.json`.
@@ -82,7 +82,7 @@ Never overwrite previous entries. Append after every meaningful experiment.
 ## EXP-005 — LLM pipeline (Phase 6)
 
 - **Experiment ID:** EXP-005
-- **Date:** 2026-08-27
+- **Date:** 2026-08-05
 - **Goal:** Implement C0–C3 LLM decomposition with provider abstraction, strict JSON, retries, per-run artifacts, and Table B scoring — without putting gold labels in prompts and without fabricating model outputs.
 - **Configuration:** `experiments/configs/llm.yaml` — default OpenAI `gpt-4o-mini`, temperature 0.2, 3 runs, max_retries 2, conditions C0–C3. Providers: OpenAI, Anthropic, Gemini, Ollama, mock. Mock runs are `is_scientific_run=false`.
 - **Input:** `outputs/evidence/architectural_evidence.json`. C0 = domain + component catalog. C1 adds call/data/runtime summaries. C2 adds R1–R9. C3 adds self-critique. `historical_architecture.json` not read by `decomposition/llm/`.
@@ -97,7 +97,7 @@ Never overwrite previous entries. Append after every meaningful experiment.
 ## EXP-006 — Experiment matrix runner (Phase 7)
 
 - **Experiment ID:** EXP-006
-- **Date:** 2026-08-27
+- **Date:** 2026-08-12
 - **Goal:** Add a timestamped matrix runner that freezes extract, baselines, LLM C0–C3, and evaluation into `outputs/runs/YYYY-MM-DD_NNN/` with a manifest. Skip LLM slots honestly when credentials are missing. Do not fabricate Table B.
 - **Configuration:** `experiments/configs/matrix.yaml` — seed 42; baselines on; evaluate on; LLM Model A=`gpt-4o-mini`, B=`claude-sonnet-4-20250514`, C=`gemini-2.0-flash` × C0–C3, 3 runs, temperature 0.2, `skip_if_missing_credentials: true`. Command: `python -m experiments.run_all` / `make experiment`.
 - **Input:** SEMS-R monolith AST, `outputs/evidence/runtime_traces.jsonl` (copied into the run), `reference/domain_description.json`, `reference/migration_rules.json`. `reference/historical_architecture.json` used only in evaluate.
@@ -112,7 +112,7 @@ Never overwrite previous entries. Append after every meaningful experiment.
 ## EXP-007 — First scientific LLM matrix (OpenAI + Gemini attempted)
 
 - **Experiment ID:** EXP-007
-- **Date:** 2026-08-27
+- **Date:** 2026-08-18
 - **Goal:** Run Model A and Model C C0–C3 with real provider keys. Anthropic remains skipped.
 - **Configuration:** Same as EXP-006. Snapshot `outputs/runs/2026-08-27_003`. OpenAI and Gemini keys present in the shell; Anthropic absent.
 - **Input:** Same SEMS-R evidence package as EXP-006. Gold used only in evaluate.
@@ -127,7 +127,7 @@ Never overwrite previous entries. Append after every meaningful experiment.
 ## EXP-008 — Gemini 2.5 Flash scientific completion
 
 - **Experiment ID:** EXP-008
-- **Date:** 2026-08-27
+- **Date:** 2026-08-22
 - **Goal:** Complete Model C with `gemini-2.5-flash` without re-billing OpenAI. Keep Anthropic skipped.
 - **Configuration:** `--skip-extract --providers gemini --reuse-llm-from outputs/runs/2026-08-27_003`. Snapshot `outputs/runs/2026-08-27_004`. Temperature 0.2, 3 runs × C0–C3.
 - **Input:** Frozen evidence from `outputs/evidence/`. Scientific `gpt-4o-mini` runs copied from EXP-007. Gold used only in evaluate.
@@ -142,7 +142,7 @@ Never overwrite previous entries. Append after every meaningful experiment.
 ## EXP-009 — Llama 3.1 (Ollama) three-model snapshot
 
 - **Experiment ID:** EXP-009
-- **Date:** 2026-08-27
+- **Date:** 2026-08-22
 - **Goal:** Fill Model B with local Ollama `llama3.1` without re-running OpenAI or Gemini. Anthropic remains unused.
 - **Configuration:** `--skip-extract --providers ollama --reuse-llm-from outputs/runs/2026-08-27_004`. Snapshot `outputs/runs/2026-08-27_005`. Temperature 0.2, 3 runs × C0–C3, Ollama `format=json`.
 - **Input:** Frozen evidence. Scientific `gpt-4o-mini` and `gemini-2.5-flash` dirs copied from EXP-008. Gold used only in evaluate.
@@ -157,7 +157,7 @@ Never overwrite previous entries. Append after every meaningful experiment.
 ## EXP-010 — Paper-ready reporting (Phase 8)
 
 - **Experiment ID:** EXP-010
-- **Date:** 2026-08-27
+- **Date:** 2026-08-23
 - **Goal:** Generate IEEE Access-style narrative, tables, and figures from the canonical scientific snapshot without inventing expert ranks, LLM scores, or historical SEMS measurements.
 - **Configuration:** `python -m analysis.report --run outputs/runs/2026-08-27_005` / `make report`. SVG figures from Table A–C CSVs (no matplotlib required). Gold is not loaded by `analysis/`.
 - **Input:** `outputs/runs/2026-08-27_005/metrics/table_{a,b,c,d}.csv` and `manifest.json`. Expert packet remains unfilled.
@@ -173,7 +173,7 @@ Never overwrite previous entries. Append after every meaningful experiment.
 ## EXP-011 — Six-service materialization and gateway (Phase 9)
 
 - **Experiment ID:** EXP-011
-- **Date:** 2026-08-27
+- **Date:** 2026-08-24
 - **Goal:** Materialize the historical six-service architecture as executable FastAPI services with separate logical databases and a gateway that preserves the monolith public API.
 - **Configuration:** `microservices/{faculty,student,grade,finance,attendance,library,gateway,identity}`. Compose profile `microservices`. Mode A resource preview in Compose (~4 CPU / 4 GB total). Tests use in-process ASGI peers, not Docker.
 - **Input:** Monolith public `/api/v1` contract and documented ownership (Student owns `CourseEnrollment`; gateway owns `User`). Gold file not imported by services.
