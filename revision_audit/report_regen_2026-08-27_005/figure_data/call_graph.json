@@ -1,0 +1,247 @@
+[
+  {
+    "from": "AttendanceService",
+    "to": "AttendanceRepository",
+    "kind": "call"
+  },
+  {
+    "from": "AttendanceService",
+    "to": "CourseRepository",
+    "kind": "call"
+  },
+  {
+    "from": "AttendanceService",
+    "to": "TeacherRepository",
+    "kind": "call"
+  },
+  {
+    "from": "AttendanceService",
+    "to": "StudentRepository",
+    "kind": "call"
+  },
+  {
+    "from": "AttendanceService",
+    "to": "StaffRepository",
+    "kind": "call"
+  },
+  {
+    "from": "AttendanceService",
+    "to": "CourseEnrollmentRepository",
+    "kind": "call"
+  },
+  {
+    "from": "AttendanceService",
+    "to": "ReportBuilder",
+    "kind": "call"
+  },
+  {
+    "from": "AuthService",
+    "to": "UserRepository",
+    "kind": "call"
+  },
+  {
+    "from": "FacultyService",
+    "to": "FacultyRepository",
+    "kind": "call"
+  },
+  {
+    "from": "FacultyService",
+    "to": "DepartmentRepository",
+    "kind": "call"
+  },
+  {
+    "from": "FacultyService",
+    "to": "StaffRepository",
+    "kind": "call"
+  },
+  {
+    "from": "FacultyService",
+    "to": "TeacherRepository",
+    "kind": "call"
+  },
+  {
+    "from": "FacultyService",
+    "to": "CourseRepository",
+    "kind": "call"
+  },
+  {
+    "from": "FacultyService",
+    "to": "AcademicCalendarRepository",
+    "kind": "call"
+  },
+  {
+    "from": "FacultyService",
+    "to": "UserRepository",
+    "kind": "call"
+  },
+  {
+    "from": "FacultyStatisticsService",
+    "to": "FacultyRepository",
+    "kind": "call"
+  },
+  {
+    "from": "FacultyStatisticsService",
+    "to": "FinanceRepository",
+    "kind": "call"
+  },
+  {
+    "from": "FacultyStatisticsService",
+    "to": "ReportBuilder",
+    "kind": "call"
+  },
+  {
+    "from": "FinanceService",
+    "to": "FinanceRepository",
+    "kind": "call"
+  },
+  {
+    "from": "FinanceService",
+    "to": "StudentRepository",
+    "kind": "call"
+  },
+  {
+    "from": "FinanceService",
+    "to": "FacultyRepository",
+    "kind": "call"
+  },
+  {
+    "from": "FinanceService",
+    "to": "AcademicCalendarRepository",
+    "kind": "call"
+  },
+  {
+    "from": "GradeService",
+    "to": "ExamRepository",
+    "kind": "call"
+  },
+  {
+    "from": "GradeService",
+    "to": "GradeRepository",
+    "kind": "call"
+  },
+  {
+    "from": "GradeService",
+    "to": "StudentRepository",
+    "kind": "call"
+  },
+  {
+    "from": "GradeService",
+    "to": "CourseRepository",
+    "kind": "call"
+  },
+  {
+    "from": "GradeService",
+    "to": "TeacherRepository",
+    "kind": "call"
+  },
+  {
+    "from": "GradeService",
+    "to": "CourseEnrollmentRepository",
+    "kind": "call"
+  },
+  {
+    "from": "GradeService",
+    "to": "FinanceService",
+    "kind": "call"
+  },
+  {
+    "from": "LibraryService",
+    "to": "LibraryRepository",
+    "kind": "call"
+  },
+  {
+    "from": "LibraryService",
+    "to": "UserRepository",
+    "kind": "call"
+  },
+  {
+    "from": "LibraryService",
+    "to": "StudentRepository",
+    "kind": "call"
+  },
+  {
+    "from": "LibraryService",
+    "to": "StaffRepository",
+    "kind": "call"
+  },
+  {
+    "from": "StudentOverviewService",
+    "to": "StudentService",
+    "kind": "call"
+  },
+  {
+    "from": "StudentOverviewService",
+    "to": "GradeService",
+    "kind": "call"
+  },
+  {
+    "from": "StudentOverviewService",
+    "to": "FinanceService",
+    "kind": "call"
+  },
+  {
+    "from": "StudentOverviewService",
+    "to": "LibraryService",
+    "kind": "call"
+  },
+  {
+    "from": "StudentOverviewService",
+    "to": "ReportBuilder",
+    "kind": "call"
+  },
+  {
+    "from": "StudentService",
+    "to": "StudentRepository",
+    "kind": "call"
+  },
+  {
+    "from": "StudentService",
+    "to": "UserRepository",
+    "kind": "call"
+  },
+  {
+    "from": "StudentService",
+    "to": "FacultyRepository",
+    "kind": "call"
+  },
+  {
+    "from": "StudentService",
+    "to": "DepartmentRepository",
+    "kind": "call"
+  },
+  {
+    "from": "StudentService",
+    "to": "AcademicCalendarRepository",
+    "kind": "call"
+  },
+  {
+    "from": "StudentService",
+    "to": "CourseRepository",
+    "kind": "call"
+  },
+  {
+    "from": "StudentService",
+    "to": "SemesterRegistrationRepository",
+    "kind": "call"
+  },
+  {
+    "from": "StudentService",
+    "to": "CourseEnrollmentRepository",
+    "kind": "call"
+  },
+  {
+    "from": "StudentService",
+    "to": "EnrollmentGateService",
+    "kind": "call"
+  },
+  {
+    "from": "StudentService",
+    "to": "FinanceService",
+    "kind": "call"
+  },
+  {
+    "from": "EnrollmentGateService",
+    "to": "FinanceService",
+    "kind": "call"
+  }
+]

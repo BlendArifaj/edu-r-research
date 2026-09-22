@@ -1,0 +1,94 @@
+{
+  "table_a": [
+    {
+      "method": "rule_based",
+      "n_services": 8,
+      "pairwise_precision": 1.0,
+      "pairwise_recall": 0.8596,
+      "pairwise_f1": 0.9245,
+      "ari": 0.9067,
+      "nmi": 0.9606,
+      "cross_service_coupling": 0.6327,
+      "db_ownership_conflicts": 0,
+      "cycles": 1
+    },
+    {
+      "method": "graph_static",
+      "n_services": 4,
+      "pairwise_precision": 0.3043,
+      "pairwise_recall": 0.3684,
+      "pairwise_f1": 0.3333,
+      "ari": 0.1385,
+      "nmi": 0.4466,
+      "cross_service_coupling": 0.4286,
+      "db_ownership_conflicts": 0,
+      "cycles": 1
+    },
+    {
+      "method": "static_only",
+      "n_services": 4,
+      "pairwise_precision": 0.3016,
+      "pairwise_recall": 0.3333,
+      "pairwise_f1": 0.3167,
+      "ari": 0.1275,
+      "nmi": 0.443,
+      "cross_service_coupling": 0.449,
+      "db_ownership_conflicts": 0,
+      "cycles": 1
+    },
+    {
+      "method": "runtime_only",
+      "n_services": 5,
+      "pairwise_precision": 0.3382,
+      "pairwise_recall": 0.4035,
+      "pairwise_f1": 0.368,
+      "ari": 0.1848,
+      "nmi": 0.499,
+      "cross_service_coupling": 0.5102,
+      "db_ownership_conflicts": 0,
+      "cycles": 1
+    },
+    {
+      "method": "combined_graph",
+      "n_services": 4,
+      "pairwise_precision": 0.371,
+      "pairwise_recall": 0.4035,
+      "pairwise_f1": 0.3866,
+      "ari": 0.2183,
+      "nmi": 0.4883,
+      "cross_service_coupling": 0.4898,
+      "db_ownership_conflicts": 0,
+      "cycles": 1
+    }
+  ],
+  "table_c": [
+    {
+      "evidence": "static_call",
+      "method": "graph_static",
+      "pairwise_f1": 0.3333,
+      "modularity": 0.287,
+      "cross_service_coupling": 0.4286
+    },
+    {
+      "evidence": "static_call_plus_data",
+      "method": "static_only",
+      "pairwise_f1": 0.3167,
+      "modularity": 0.2801,
+      "cross_service_coupling": 0.449
+    },
+    {
+      "evidence": "runtime",
+      "method": "runtime_only",
+      "pairwise_f1": 0.368,
+      "modularity": 0.2022,
+      "cross_service_coupling": 0.5102
+    },
+    {
+      "evidence": "static_plus_runtime",
+      "method": "combined_graph",
+      "pairwise_f1": 0.3866,
+      "modularity": 0.2551,
+      "cross_service_coupling": 0.4898
+    }
+  ]
+}

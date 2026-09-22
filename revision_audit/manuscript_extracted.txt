@@ -1,0 +1,277 @@
+Date of publication xxxx 00, 0000, date of current version xxxx 00, 0000.
+Digital Object Identifier 10.1109/ACCESS.2024.Doi Number
+Evidence-Constrained LLMs for Microservice Decomposition: An Empirical Study on a Reconstructed Legacy System
+Blend Arifaj¹ and Isak Shabani¹*
+¹Faculty of Electrical and Computer Engineering, University of Prishtina, 10000, Republic of Kosovo
+Corresponding author: Isak Shabani (isak.shabani@uni-pr.edu)
+ABSTRACT Reengineering monolithic architectures into microservices is an architectural decision problem where the observed dependencies are possibly indicative of accidental legacy coupling rather than intentional future service affinity. In this study, we present EDU-R, a controlled reconstruction of an existing university information system, and conduct evaluations of deterministic, graph-based, LLM, and human approaches to recover a six-service reference decomposition. Our evaluation uses 24 architectural components, 5 independent software architects, 3 LLMs, 4 increasingly rich evidence conditions, and multiple models runs. Contrary to the initial hypothesis, the least constrained LLM condition resulted in the highest boundary agreement across the three models: Gemini 2.5 Flash and Llama 3.1 obtained F1 = 0.9068 in pairwise agreement, whereas GPT-4o-mini obtained 0.8247. Adding evidence about call, data, runtime, migration rule, and self-critique did not improve boundary F1. The best-performing graph approach based on static and runtime evidence resulted in F1 = 0.3866, while 5 architects obtained F1 between 0.8468 and 0.9245, and achieved very high mutual agreement (average pairwise Cohen's kappa = 0.8584). In a different equal-resource runtime experiment involving 300 concurrent users, we demonstrated that a deployment organized by dependency clusters achieved 245.88 requests/s versus 201.35 requests/s of the monolith, with significantly lower median, p95, and p99 latency, and much fewer failures. We conclude that semantic context enables LLMs to approximate experts' boundary judgments, but more evidence is not necessarily better: low-level dependency evidence can introduce noise in the context of breaking legacy coupling. The quality of structural decomposition and runtime behavior should thus be considered separately.
+INDEX TERMS reengineering, legacy modernization, large language models, microservice decomposition, software architecture, human-in-the-loop, graph clustering, performance evaluation, EDU-R.
+I. INTRODUCTION
+Institutional processes, data, and business rules encoded in legacy systems often keep these systems working for decades because their replacement is expensive. Nevertheless, over time, feature proliferation and collaboration around data lead to high coupling between modules, coarse-grained deployment, and scalability costs. Microservices architecture is one possible way to achieve legacy modernization, as some capabilities can be deployed and scaled separately; however, the key issue is to understand where the boundaries of services should be rather than create new deployment units [1]-[5].
+Decomposition is a difficult task because information comes from many sources: static calls, database dependencies, runtime interaction, domain semantics, and operational constraints suggest different partitions. Even recent systematic reviews of the area show insufficient standardization of datasets, metrics, benchmarks, and tools. Machine-learning-based techniques are concentrated mainly on service identification rather than the entire migration process [1]-[6]. However, current research tends to integrate static, semantic, data-centric, process, and learned views of the problem [8]-[15], and language models already start assisting in architecture and refactoring tasks [16]-[20]. Yet, fluent reasoning about semantics does not mean architectural sense of boundaries, and the question about value of increasing technical context for the LLMs remains open.
+This study examines the Student Electronic Management System (EDU), a university management system structured according to six main services: Faculty, Student, Grade, Finance, Attendance, and Library. Because the production source code is not available, EDU-R (Reconstructed Legacy Education System) is created as a controlled reconstruction of the system, preserving its documented business functionality and defining a six-service reference decomposition for evaluation purposes. Reference partitioning is used only for post-hoc evaluation, and decomposition approaches do not use it.
+The study poses five research questions: (RQ1) How well do deterministic, graph-based, LLM-based, and human decomposition approaches capture EDU-R reference partitions? (RQ2) How does the quantity and type of architectural evidence presented to an LLM influence decomposition precision? (RQ3) How do migration constraints and self-critique influence LLM stability and rule compliance? (RQ4) What evidence combination is the most efficient for the graph-based decomposition approach? (RQ5) What performance tradeoffs are observed in the experiment comparing a dependency-clustered deployment with a monolith under equivalent computational capacity?
+The contributions of this work are as follows: (1) a reproducible case study based on the real-life problem of legacy modernization with clearly distinguished measured reconstruction vs. production claims; (2) a multi-method comparison of deterministic heuristics, graph-based methods, three LLMs (under four evidence conditions), and five independent architects; (3) evidence ablation and stability analysis, proving that additional low-level context is not necessarily helpful for LLM boundary recovery; and (4) equal-resource runtime analysis of deployment structure separate from structural decomposition quality.
+II. BACKGROUND AND RELATED WORK
+A. Monolith-to-Microservice Reengineering
+Monolith-to-microservice modernization comprises more than service identification; it can require code restructuring, data ownership changes, deployment redesign, communication mechanisms, and staged migration. Abgaz et al. [1] organize decomposition into input collection, monolith analysis, service identification, optimization, evaluation, and deployment. Oumoussa and Saidi [2] likewise show continuing heterogeneity in identification techniques. More recent reviews reinforce the same concern: a 2025 mapping study of 114 migration studies reports scarce tool support and limited evaluation of frequently claimed benefits such as scalability and maintainability [3], while Mohottige et al. [4], synthesizing 117 studies, classify approaches as static, dynamic, hybrid, and artifact-driven and identify database partitioning and behavioral equivalence as persistent challenges. Trabelsi et al. [5], reviewing 81 machine-learning studies, further report limited data availability, incomplete tool support, and a lack of standardized benchmarks. Semantic identification has also expanded rapidly, but recent review evidence still calls for stronger industrial validation and common evaluation settings [6].
+The latest automated techniques cover runtime-based, static, graph, data, and business-oriented techniques. Mono2Micro can still be considered a milestone among runtime-driven techniques, which are grounded on the usage of use-case execution traces [7]. The more recent trend is connected to the development of reproducible architecture recovery and learned representation: Schneider et al. [8] executed nine static architecture-recovery tools on a common dataset and proved that the combination of the tools can give better results than each of them independently; MAGNET utilizes graph neural networks for method-level structural and semantic evidence [9]; MicroMatic is aimed at fully automated identification [10]; GC-VCG uses a graph Transformer for merging structural and semantic perspectives [11]. Additionally, the data perspective is becoming increasingly important: Romani et al. [12] consider the database model to be the first step for service identification, while MINDS uses both NLP and process mining evidence [13]. Among other contemporary approaches, we should mention VAE/GNN-based decomposition [14] and business-oriented identification [15]. These works illustrate that modern decomposition research is becoming multi-perspective; however, evidence selection becomes a part of the architectural problem.
+B. Structural, Runtime, Data, and Semantic Evidence
+Static dependencies are attractive because they can be extracted without executing the application; however, they may preserve accidental coupling that modernization intends to remove. Runtime traces reveal interactions that actually occur but depend on workload coverage. Database evidence exposes shared ownership and transaction boundaries, while semantic evidence captures business meaning that may be weakly represented in call graphs. Recent empirical work illustrates the diversity of these signals: static recovery tools differ substantially in what they extract [8], graph-based methods combine structural and semantic views [9], [11], [14], data-centric decomposition explicitly prioritizes database ownership [12], and process-aware NLP methods add behavioral evidence [13]. The 2025 semantic-identification review similarly concludes that semantic, hybrid, and AI-enhanced techniques are growing while benchmark and validation practices remain fragmented [6].
+The distinction between the observed dependency and desired architectural affinity is central to this study. Two components may interact frequently because a legacy monolith evolved around a shared database, convenience API, or cross-cutting service; however, an architect may still want them separated in the target architecture. Conversely, semantic similarity can over-group concepts that belong to distinct, bounded contexts. This tension is visible in recent data-centric and multi-view approaches, which deliberately combine or prioritize different evidence sources rather than treating the source code as a perfect representation of future boundaries [11]-[13]. Therefore, we evaluated the evidence sources separately and in combination instead of assuming that more evidence must monotonically improve the decomposition.
+C. LLMs and Generative AI for Software Architecture
+LLMs are increasingly used for microservice generation, architecture synthesis, architecture reconstruction, and decision support. Martinez Saucedo et al. [16] added an LLM semantic layer to data-driven decomposition analysis so that practitioners could interrogate alternative partitions. Trabelsi et al. [17] investigated the systematic use of LLMs for microservice generation. ArchiLLM generates high-level microservice architectures from requirements and user stories and evaluates them using quantitative measures and expert feedback [18]. Most directly related to the present study, Sambu et al. [19] evaluated LLM-based monolith-to-microservice refactoring at ICSA 2026 and reported that LLMs can improve several architectural-quality measures while specialized automated approaches remain stronger at recovering the target service structure. A 2026 multivocal review of generative AI in software architecture likewise identified architectural decision support and reconstruction as active application areas, while highlighting precision, hallucination, weak architecture-specific datasets, and insufficient evaluation frameworks as open challenges [20].
+These findings motivate an evidence-controlled design rather than treating an LLM as an autonomous architect. In the present study, LLMs receive explicitly defined evidence conditions; invalid outputs are retained as invalid rather than being repaired manually; the reference architecture is hidden during generation; repeated runs quantify stability; and recommendations are compared with deterministic baselines and five independent architects. Our experiment complements recent LLM work [16]-[20] by asking a narrower question that is not answered by architecture synthesis alone: whether adding low-level calls, data, runtime, migration rules, and self-critique context improves the recovery of service boundaries in a reconstructed legacy system.
+D. Performance and the Cost of Distribution
+Decomposition quality cannot be inferred from performance alone, and distribution does not guarantee higher performance. Faustino et al. [21] show that modularization and distribution introduce measurable migration effort and performance costs, emphasizing architectural trade-offs rather than a universal microservice advantage. Rodrigues et al. [22], in a recent systematic review of performance and scalability assessment, screened 801 studies and retained 29 for detailed analysis; they concluded that comparable assessment models across architectural configurations remain limited. These results support the evaluation of runtime effects separately from structural boundary agreements.
+Conversely, architectural structure can influence runtime behavior. Avritzer et al. [23] report that microservice systems with poorer structural-complexity measures exhibit reduced scalability and that endpoints with higher coupling tend to have longer response times. Waseem et al. [24] document recurring microservice problems associated with communication, configuration, data management, and operational complexity using thousands of issue reports, interviews, and practitioner surveys. Together, this evidence strengthens the case for evaluating both boundary quality and the runtime cost of materializing a decomposition.
+E. Research Gap
+Mature systematic reviews, automated graph and machine learning techniques, data- and process-focused methods, and a burgeoning number of studies on LLM-supported architectural decomposition [1]-[20] have already been established in the existing literature. Nevertheless, three under-explored topics related to architectural decomposition remain. First, recent findings on the ability of language models to generate or evaluate microservice architectures provide little information on the progressive enrichment of technical context and its effect on boundary recovery [16]-[20]. Second, decomposition algorithms use more than one evidence source; however, the existence of legacy dependencies can imply erosion rather than affinity of the architecture [8]-[15]. Finally, decomposition accuracy and runtime performance are usually assessed independently, although their coupling may affect the results [21]-[24]. The EDU-R study aims to fill these research gaps within one controlled reconstruction.
+III. CASE STUDY AND EDU-R RECONSTRUCTION
+A. EDU Legacy-System Context
+EDU supports university students, academic staff, administrative staff, grading, attendance, financial processes, and library operations. The application is modeled as a client-server three-tier system with an ASP.NET/.NET application layer and a shared relational database. Six major functional areas define the case-study domain: Faculty, Student, Grade, Finance, Attendance, and Library. For evaluation, these functional areas form a six-service reference architecture with separate logical data ownership. Because the production source is unavailable, the study uses documented system characteristics and domain responsibilities to guide the reconstruction rather than presenting EDU-R as a replica of the production implementation.
+FIGURE 1.  EDU legacy architecture used as the basis for the EDU-R reconstruction.
+B. EDU-R and Evaluation Universe
+EDU-R is a controlled Python reconstruction created for reproducible experimentation. It is not the production EDU source. The reconstruction preserves the six documented business areas, representative application services and repositories, a shared monolithic data model, synthetic runtime interactions, and a materializable distributed target. The full expert sheet contained 26 named components (325 unordered pairs). Two shared-identity components, AuthService and UserRepository, were excluded from the six-way boundary scoring because assigning them to a single business service would artificially force an ownership decision. The reported pairwise F1, ARI, and NMI therefore use a 24-component evaluation universe.
+The six-service reference partition is stored separately and is used only after candidate decompositions have been produced. Neither deterministic methods nor LLM prompts read the reference mapping. This prevents direct label leakage from the evaluation artifact itself, although reconstruction names such as FacultyService remain an important threat to validity discussed later.
+IV. METHODOLOGY
+FIGURE 2.  Experimental workflow: evidence, baselines, LLM conditions, architect judgments, and post-hoc evaluation.
+A. Architectural Evidence and Baselines
+All methods read only architectural evidence: domain description, component catalog, call summaries, data-access summaries, runtime summaries, and migration rules R1-R9 when a condition permits them. Deterministic baselines include: (i) a name/module rule heuristic; (ii) static call-graph clustering; (iii) static call plus data evidence; (iv) runtime-only clustering; and (v) a combined graph with equal weights for static, data, and runtime signals. The combined-graph weights were alpha = beta = gamma = 1.0 and were not fitted on the reference partition. Louvain community count was unconstrained.
+B. LLM Conditions
+Three models were evaluated: Gemini 2.5 Flash, GPT-4o-mini, and Llama 3.1. Temperature was 0.2 and each model-condition cell was executed three times. C0 received the domain description and component catalog. C1 additionally received call, data, and runtime summaries. C2 added migration rules R1-R9. C3 further required explicit self-critique, identification of unsupported assumptions, and revision or uncertainty when the evidence did not justify a decision. Invalid JSON was stored as invalid (parsed = null) rather than manually repaired.
+C. Independent Architect Evaluation
+Five software architects independently completed the 325-pair sheet and provided extract-first migration rankings. Their pairwise decisions were collected before model results were shown. For scoring against the six-service reference, the analysis was restricted to the same 24-component universe used for the model evaluation. Expert migration ranks in Table IV are medians of the five extract-first lists. No reference extract-first order was defined, so no reference ranking is reported.
+D. Boundary and Agreement Metrics
+A decomposition is converted to pairwise same-service decisions. For components i and j:
+yᵢⱼ = 1 if i and j are assigned to the same service; 0 otherwise(1)
+From the resulting pairwise labels, precision, recall, and F1 are computed as:
+Precision = TP / (TP + FP),   Recall = TP / (TP + FN)(2)
+F1 = 2 · Precision · Recall / (Precision + Recall)(3)
+We additionally report Adjusted Rand Index (ARI) and Normalized Mutual Information (NMI). LLM stability is the mean pairwise boundary F1 over all pairs of repeated runs within a model-condition cell:
+Stability = (1 / |P|) · Σ₍a,b₎∈P F1(runₐ, run_b)(4)
+Rule compliance is the fraction of applicable machine-checkable migration rules satisfied by a generated architecture. Human agreement is summarized with pairwise Cohen's kappa; with observed agreement pₒ and chance agreement pₑ:
+κ = (pₒ − pₑ) / (1 − pₑ)(5)
+E. Runtime Experiment
+For each, Mode E runs the same experiment that contrasts EDU-R monolith with the dependency-clustered distribution, under the same budget of 4 CPU cores and 4 GB RAM in total. The clustered distribution includes Campus Faculty, Campus Student, Campus Grade, Campus Finance, and Campus Attendance within the same process but has Library as an HTTP service. Each arm utilizes one Docker Desktop VM, with one uvicorn worker process. Since Locust runs on the host, its resource consumption is not included in the application budget. The load mix (35/20/15/10/10/5/5 for 7 journey classes) is fabricated. The results are reported in the table for 300 users running concurrently. Note that the actual run time is omitted until further verification from the Locust configuration.
+V. RESULTS
+A. Deterministic Baselines (RQ1, RQ5)
+TABLE I. Deterministic decomposition methods versus the six-service reference architecture.
+Method
+k
+F1
+ARI
+NMI
+Rule Heuristic
+8
+0.925
+0.925
+0.925
+Static graph
+4
+0.333
+0.333
+0.333
+Static + Data
+4
+0.317
+0.317
+0.317
+Runtime
+5
+0.368
+0.368
+0.368
+Combined Graph
+4
+0.387
+0.387
+0.387
+The rule heuristic obtained the highest pairwise F1 (0.9245), but this result is optimistic because reconstruction class and file names expose business semantics (for example, FacultyService). It should therefore be treated as a name-aware upper-bound heuristic rather than a fair anonymous-component baseline. Graph methods formed only four or five communities; the strongest graph method was the combined graph (F1 = 0.3866).
+B. LLM Decomposition and Evidence Conditions (RQ2, RQ3)
+TABLE II. LLM boundary F1, rule compliance, and run-to-run stability.
+Model
+Cond
+F1
+Compliance
+Stability
+Gemini 2.5 Flash
+C0
+0.907
+1.000
+0.965
+C1
+0.815
+1.000
+0.944
+C2
+0.784
+1.000
+1.000
+C3
+0.813
+1.000
+0.923
+GPT-4o-mini
+C0
+0.825
+0.833
+0.996
+C1
+0.733
+0.833
+0.996
+C2
+0.717
+0.833
+1.000
+C3
+0.733
+0.833
+0.995
+Llama 3.1
+C0
+0.907
+0.667
+0.981
+C1
+0.617
+0.778
+0.271
+C2
+0.781
+0.667
+0.925
+C3
+0.500
+0.667
+0.684
+FIGURE 3.  Boundary F1 across progressively richer LLM evidence conditions.
+C0 produced the highest pairwise F1 for every model. Gemini 2.5 Flash and Llama 3.1 both reached 0.9068 in C0, while GPT-4o-mini reached 0.8247. Adding call, data, and runtime summaries in C1 reduced F1 to 0.8152, 0.7333, and 0.6173 respectively. C2 and C3 recovered some quality for selected models but never exceeded C0. The effect of evidence was therefore non-monotonic.
+Stability was also model-dependent. Gemini remained high (0.9225-1.0000) and GPT-4o-mini remained almost deterministic (0.9901-1.0000). In contrast, Llama 3.1 stability collapsed to 0.2712 in C1 before recovering to 0.9251 in C2. Additional context can therefore change not only accuracy but also output consistency.
+C. Evidence Ablation (RQ4)
+TABLE III. Graph evidence ablation.
+Evidence
+F1
+Modularity
+Cross-service coupling
+Static call
+0.333
+0.287
+0.429
+Static + data
+0.317
+0.280
+0.449
+Runtime
+0.368
+0.202
+0.510
+Static + runtime
+0.387
+0.255
+0.490
+Static plus runtime produced the best graph-based boundary F1 (0.3866), followed by runtime-only (0.3680), static call (0.3333), and static plus data (0.3167). The addition of data evidence to static calls did not improve boundary recovery in this reconstruction. This reinforces the main LLM finding: more evidence is not automatically more useful evidence.
+D. Independent Architects (RQ1)
+Architect F1 values against the reference architecture were 0.8704, 0.8750, 0.8750, 0.9245, and 0.8468 (mean = 0.8783). Mean pairwise Cohen's kappa across the five reviewers was 0.8584, with a range of 0.7752-0.9897 over ten rater pairs. The high agreement indicates that the principal business boundaries were recognizable to independent architects, while the spread of F1 scores confirms that the reference split should be treated as an evaluation architecture rather than unquestioned ground truth.
+TABLE IV. Migration-priority rankings. No reference extraction order was defined.
+Service
+Rule rank
+LLM Rank
+Expert median
+Student
+1
+2
+2
+Faculty
+2
+2
+3
+Finance
+3
+3
+4
+Grade
+4
+3
+3
+Library
+5
+3
+4
+Attendance
+6
+3
+3
+E. Runtime Cost/Benefit of Distribution (RQ5)
+TABLE V. Equal-total-resource Mode E runtime comparison with 300 concurrent users.
+Metric
+Monolith
+Clustered
+Change
+Requests
+180,144
+220,512
++22.4%
+Throughput
+201.35 RPS
+245.88 RPS
++22.1%
+Median latency
+140 ms
+120ms
+-14.3%
+p95 latency
+270 ms
+250ms
+-7.4%
+p99 latency
+390 ms
+310ms
+-20.5%
+Failures
+198
+4
+-98.0%
+FIGURE 4.  Clustered runtime metrics normalized to the monolith (100%). Lower is better for latency and failures; higher is better for throughput.
+Under the tested equal-resource setup, the clustered deployment completed 220,512 requests versus 180,144 for the monolith and achieved 245.88 versus 201.35 requests/s. Median latency decreased from 140 to 120 ms, p95 from 270 to 250 ms, and p99 from 390 to 310 ms. Failures decreased from 198 to 4. These values correspond to approximately 22.1% higher observed throughput, 14.3% lower median latency, 7.4% lower p95, 20.5% lower p99, and 98.0% fewer failures.
+The result is specific to the EDU-R reconstruction, synthetic workload, dependency-clustered deployment, and tested resource budget. Because Phase 10 contains one run per arm, it demonstrates the observed performance trade-off in this controlled setup but does not establish universal or statistically generalizable superiority of microservices.
+VI. DISCUSSION
+A. Why Did C0 Outperform Richer Evidence?
+The most definitive finding is that more detailed evidence does not make for better LLM boundary F1 performance. It may be argued that the higher-level names and functions of components give away the meaning intended to be conveyed about the business, while the relationships between calls, data, and runtime are indicative of historical entanglement. During reengineering, however, perceived interdependency does not equal desirable affinity from an architecture standpoint. When two components interact intensively simply because the monolith was built around a common data model, using this information to infer co-location is bound to perpetuate precisely the very thing that must be severed.
+B. LLMs and Graph Methods Fail Differently
+Graph clustering focuses on structural and behavioral connectivity, whereas LLMs can take advantage of semantic information about responsibility. It is natural to observe a big difference (from 0.3866 to 0.9068 for Gemini and Llama) between the best graph F1 and C0 LLMs since, in this case, a reconstruction is such that domain terminology is useful but technical dependencies span across domains. However, one should not conclude that LLMs are always superior to graph approaches because the rule-based heuristic and C0 approach both get semantic names.
+C. Human Agreement and the Meaning of Ground Truth
+The six‑service reference architecture is not assumed to be the correct version. Architecture decisions involve trade‑offs in coupling, data ownership, deployment, team boundaries and migration risk. Strong agreement among architects measured by a kappa of 0.8584 provides independent evidence that the high‑level boundaries of architecture are clear. The variation in architect F1 shows that there are legitimate alternatives to architecture. For this reason, model disagreements should be examined as hypotheses rather, than automatically labeled hallucinations.
+D. Structural Quality and Runtime Quality Are Distinct
+Indeed, the execution-time study confirms that it is necessary to distinguish decomposition from evaluation of deployment. A possible partition may appear to be logically good but still result in network and transaction costs when deployed; a clustered deployment, on the other hand, may increase performance and reduce tail latency for some load type. Existing performance papers, similarly, indicate configuration-based results, poor cross-comparability between evaluation techniques, dependency of coupling and response time, and common operational problems of distributed systems [21]-[24]. It means that decomposition must be treated as the initial step of validation process, rather than its conclusion.
+VIII. CONCLUSION
+The study treated microservice decomposition as a decision-support problem by using EDU-R, which is a controlled reconstruction of an existing university system. The five architects reached a high level of agreement with each other, and when name-aware prompting was applied to the LLM, the boundary F1 scores were close to those of the reference architecture. Unlike the original hypothesis, including context relating to calls, data, runtime, migration rules, and self-critique did not lead to an improvement in the pairwise F1 scores; C0 proved to be the best option for all three of the models examined. The most effective combination of graph evidence was static and runtime evidence together, although this combination was still considerably lower than the results obtained with the semantic/name-aware methods. In a separate experiment involving the same amount of resources, the dependency-clustered deployment that was tested achieved about 22% greater observed throughput, lower tail latency, and fewer failures than the monolith when dealing with 300 concurrent users. The main conclusion is that legacy dependency evidence should not be considered as equivalent to the desired architectural affinity since additional context can maintain accidental coupling rather than help to identify better boundaries. LLM-assisted decomposition is thus most reliable when the evidence sources are controlled, uncertainty is made explicit, independent architects are kept involved, and the proposed boundaries are validated under actual runtime workloads before migration takes place.
+REFERENCES
+[1] Y. M. Abgaz, A. McCarren, P. Elger, D. Solan, N. Lapuz, M. Bivol, G. M. Jackson, M. Yilmaz, J. Buckley, and P. M. Clarke, "Decomposition of Monolith Applications Into Microservices Architectures: A Systematic Review," IEEE Trans. Softw. Eng., vol. 49, no. 8, pp. 4213-4242, 2023, doi: 10.1109/TSE.2023.3287297.
+[2] I. Oumoussa and R. Saidi, "Evolution of Microservices Identification in Monolith Decomposition: A Systematic Review," IEEE Access, vol. 12, pp. 23389-23405, 2024, doi: 10.1109/ACCESS.2024.3365079.
+[3] A. C. Martinez Saucedo, G. Rodriguez, F. Gomes Rocha, and R. Pereira dos Santos, "Migration of monolithic systems to microservices: A systematic mapping study," Inf. Softw. Technol., vol. 177, Art. no. 107590, 2025, doi: 10.1016/j.infsof.2024.107590.
+[4] T. I. Mohottige, A. Polyvyanyy, C. J. Fidge, R. Buyya, and A. P. Barros, "Reengineering software systems into microservices: State-of-the-art and future directions," Inf. Softw. Technol., vol. 183, Art. no. 107732, 2025, doi: 10.1016/j.infsof.2025.107732.
+[5] I. Trabelsi, B. Mahmoudi, J. B. Minani, N. Moha, and Y.-G. Gueheneuc, "A Systematic Literature Review of Machine Learning Approaches for Migrating Monolithic Systems to Microservices," IEEE Trans. Softw. Eng., vol. 51, no. 11, pp. 2972-2995, 2025, doi: 10.1109/TSE.2025.3603897.
+[6] N. Ait Mansour, H. Sbai, K. Baina, and I. El Kodssi, "Semantic Approaches to Microservice Identification: A Systematic Literature Review," IEEE Access, vol. 13, pp. 175244-175270, 2025, doi: 10.1109/ACCESS.2025.3618990.
+[7] A. K. Kalia, J. Xiao, R. Krishna, S. Sinha, M. Vukovic, and D. Banerjee, "Mono2Micro: A Practical and Effective Tool for Decomposing Monolithic Java Applications to Microservices," in Proc. 29th ACM Joint Meeting Eur. Softw. Eng. Conf. Symp. Foundations Softw. Eng. (ESEC/FSE), 2021, doi: 10.1145/3468264.3473915.
+[8] S. Schneider, A. Bakhtin, X. Li, J. Soldani, A. Brogi, T. Cerny, R. Scandariato, and D. Taibi, "Comparison of static analysis architecture recovery tools for microservice applications," Empir. Softw. Eng., vol. 30, Art. no. 128, 2025, doi: 10.1007/s10664-025-10686-2.
+[9] I. Trabelsi, N. Moha, Y.-G. Gueheneuc, and L. Geffard, "MAGNET: Method-Based Approach Using Graph Neural Network for Microservices Identification," in Proc. IEEE 21st Int. Conf. Softw. Archit. (ICSA), 2024, pp. 1-11, doi: 10.1109/ICSA59870.2024.00009.
+[10] I. Trabelsi, B. Popa, J. Pereyrol, P.-O. Beaulieu, and N. Moha, "MicroMatic: Fully Automated Microservices Identification Approach From Monolithic Systems," in Proc. ACM/IEEE 6th Int. Workshop Softw. Eng. Res. Practices Internet Things (SERP4IoT), 2024, pp. 7-13, doi: 10.1145/3643794.3648283.
+[11] X. Wei et al., "Extracting microservices from monolithic applications using consistent graph enhanced Graph Transformer," J. Syst. Softw., vol. 222, Art. no. 112345, 2025, doi: 10.1016/j.jss.2025.112345.
+[12] Y. Romani, O. Tibermacine, and C. Tibermacine, "A data-centric method for microservice identification: From data models analysis to source code assignment," Inf. Softw. Technol., vol. 195, Art. no. 108141, 2026, doi: 10.1016/j.infsof.2026.108141.
+[13] N. Ait Mansour, H. Sbai, and K. Baina, "MINDS: An NLP-Driven Process Mining Framework for Superior Microservices Decomposition," IEEE Access, vol. 13, pp. 208376-208396, 2025, doi: 10.1109/ACCESS.2025.3639460.
+[14] R. Maharjan, K. Sooksatra, T. Cerny, Y. Rajbhandari, and S. Shrestha, "A Case Study on Monolith to Microservices Decomposition with Variational Autoencoder-Based Graph Neural Network," Future Internet, vol. 17, no. 7, Art. no. 303, 2025, doi: 10.3390/fi17070303.
+[15] B. Mahmoudi, I. Trabelsi, D. Tamzalit, N. Moha, and Y.-G. Gueheneuc, "BOAM: A Business Oriented Identification Approach of Microservices Within Legacy Systems," in Service-Oriented Computing - ICSOC 2024, Lecture Notes in Computer Science, 2024, pp. 123-137, doi: 10.1007/978-981-96-0808-9_10.
+[16] A. C. Martinez Saucedo, J. A. Diaz-Pace, H. Astudillo, and G. Rodriguez, "Exploring Alternative Microservice Decompositions using Data-driven Techniques and LLMs," CLEI Electron. J., vol. 28, no. 3, 2025, doi: 10.19153/cleiej.28.3.6.
+[17] I. Trabelsi, N. Moha, and Y.-G. Gueheneuc, "Exploring the Systematic Use of LLMs for Microservices Generation," in Service-Oriented Computing - ICSOC 2024 Workshops, Lecture Notes in Computer Science, vol. 15833, 2025, pp. 121-128, doi: 10.1007/978-981-96-7238-7_10.
+[18] M. Calamo, F. Monti, F. Spaziani, F. Leotta, and M. Mecella, "From User Stories to Architectures: Using LLM-powered Agents to Design and Improve Microservice-based Software," IEEE Softw., Early Access, pp. 1-8, 2026, doi: 10.1109/MS.2026.3668669.
+[19] A. Sambu, R. Capuano, E. O'Dea, K. Vaidhyanathan, and H. Muccini, "LLMs for Architectural Refactoring: An Exploratory Study on Monoliths to Microservices," in Proc. IEEE 23rd Int. Conf. Softw. Archit. (ICSA), 2026, pp. 268-279, doi: 10.1109/ICSA66085.2026.00033.
+[20] M. Esposito, X. Li, S. Moreschini, N. Ahmad, T. Cerny, K. Vaidhyanathan, V. Lenarduzzi, and D. Taibi, "Generative AI for software architecture: Applications, challenges, and future directions," J. Syst. Softw., vol. 231, Art. no. 112607, 2026, doi: 10.1016/j.jss.2025.112607.
+[21] D. Faustino, N. Goncalves, M. Portela, and A. Rito Silva, "Stepwise migration of a monolith to a microservice architecture: Performance and migration effort evaluation," Perform. Eval., vol. 164, Art. no. 102411, 2024, doi: 10.1016/j.peva.2024.102411.
+[22] H. Rodrigues, A. Rito Silva, and A. Avritzer, "Assessment of performance and its scalability in microservice architectures: Systematic literature review," J. Syst. Softw., vol. 230, Art. no. 112500, 2025, doi: 10.1016/j.jss.2025.112500.
+[23] A. Avritzer, A. Janes, H. Rodrigues, Y. Cai, T. Schoyen, E. Pisch, C. Trubiani, A. B. Bondi, D. S. Menasche, and C. Zhang, "Automated assessment of the relationship between microservice architectures and performance," J. Syst. Softw., vol. 237, Art. no. 112857, 2026, doi: 10.1016/j.jss.2026.112857.
+[24] M. Waseem, P. Liang, A. Ahmad, A. A. Khan, M. Shahin, P. Abrahamsson, A. R. Nasab, and T. Mikkonen, "Understanding the issues, their causes and solutions in microservices systems: An empirical study," J. Syst. Softw., vol. 237, Art. no. 112828, 2026, doi: 10.1016/j.jss.2026.112828.
+AUTHOR BIOGRAPHIES
+ISAK SHABANI received the Dip. Ing. in Computer and Telecommunication in 2002, M.Sc. degree in Computer Engineering in 2007 and Ph.D. in Computer Science, in 2012 from the Faculty of Electrical and Computer Engineering, University of Prishtina, Kosovo.  He is an Associated Professor and Dean at the Faculty of Electrical and Computer Engineering at the University of Pristina. He has long experience in university teaching and research. He is author of several publications in international journals and conferences. He served for 12 years as Director of Information technology at University of Prishtina.  His research interests include Distributed systems, Web services, HCI, Systems design and ICT in Education. He was the author and leader of the most important project at the UP “Digitalization of academic and administrative services”. Coordinator and member of several science and education capacity-building projects under Tempus, Erasmus+ framework and Horizon 2020. He serves as a reviewer for international scientific journals.
+BLEND ARIFAJ received the M.Sc. degree in computer engineering from the University of Prishtina in 2020. He is currently a Ph.D. student at the Faculty of Electrical and Computer Engineering, University of Prishtina, and works as an AI Engineer. His research interests include artificial intelligence for software engineering, large language models, legacy-system modernization, microservice architecture, distributed systems, and software architecture evaluation. His professional work focuses on building and modernizing scalable cloud and AI-enabled software systems.

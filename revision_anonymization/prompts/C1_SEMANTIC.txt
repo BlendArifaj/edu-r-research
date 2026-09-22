@@ -1,0 +1,286 @@
+You are a software architect proposing a microservice decomposition of SEMS-R (SEMS Experimental Reconstruction). This system is a controlled reconstruction of documented education-management functional areas. It is not the original production SEMS source code.
+
+Propose independently deployable services by grouping the listed application components (services, repositories, and legacy utilities). Reason only from the information in this prompt.
+
+Return ONLY a JSON object with this shape (no markdown, no commentary):
+{
+  "services": [
+    {
+      "name": "candidate-service",
+      "components": ["ComponentName"],
+      "owned_entities": ["EntityName"],
+      "responsibilities": ["..."],
+      "dependencies": ["other-service"],
+      "rationale": "evidence-based reason"
+    }
+  ],
+  "migration_priority": [
+    {"service": "candidate-service", "rank": 1, "confidence": 0.0, "reason": ""}
+  ],
+  "uncertain_decisions": [],
+  "unsupported_assumptions": [],
+  "rule_violations": [],
+  "architectural_risks": [],
+  "critique": "",
+  "revised": false
+}
+Every listed component must appear in exactly one service.
+Use UNCERTAIN in uncertain_decisions when evidence is insufficient.
+Do not invent runtime measurements.
+Do not use a hidden labeled historical service assignment.
+SEMS-R is a reconstruction, not original production SEMS source.
+
+## C0 High-level system description
+A reconstructed university education-management system used as an experimental monolith. It is based on documented SEMS functional areas, not original production source.
+
+### Functional areas (documented capabilities, not a labeled assignment of classes)
+- faculty: faculty and department administration; staff and teacher records; course catalog administration; academic calendar; faculty-level statistics
+- student: student registration and profile; semester registration; course enrollment; student academic overview
+- grade: exam scheduling; exam registration; grade recording and updates; grade history; GPA calculation
+- finance: tuition and semester fees; student invoices and payments; account balances; financial transactions; faculty income and expense ledger
+- attendance: class session management; student attendance; staff attendance; monthly attendance reports
+- library: book catalog and copies; library membership; loans and returns; reservations
+
+### Known cross-domain dependencies (narrative)
+- Grade workflows require student, teacher, course, and often enrollment records.
+- Attendance workflows require student, teacher, course, and enrollment records.
+- Finance workflows require student and faculty context for invoicing and ledgers.
+- Library membership is issued to students and staff.
+- Student information is read by Student, Grade, Attendance, Finance, and Library.
+- Course ownership sits with Faculty administration but is consumed by Student, Grade, and Attendance.
+
+### Components
+- ReportBuilder [legacy] module=app.legacy.report_builder
+- AttendanceRepository [repository] module=app.repositories.attendance_repository
+- FacultyRepository [repository] module=app.repositories.faculty_repository
+- DepartmentRepository [repository] module=app.repositories.faculty_repository
+- StaffRepository [repository] module=app.repositories.faculty_repository
+- TeacherRepository [repository] module=app.repositories.faculty_repository
+- CourseRepository [repository] module=app.repositories.faculty_repository
+- AcademicCalendarRepository [repository] module=app.repositories.faculty_repository
+- FinanceRepository [repository] module=app.repositories.finance_repository
+- ExamRepository [repository] module=app.repositories.grade_repository
+- GradeRepository [repository] module=app.repositories.grade_repository
+- LibraryRepository [repository] module=app.repositories.library_repository
+- StudentRepository [repository] module=app.repositories.student_repository
+- SemesterRegistrationRepository [repository] module=app.repositories.student_repository
+- CourseEnrollmentRepository [repository] module=app.repositories.student_repository
+- UserRepository [repository] module=app.repositories.user_repository
+- AttendanceService [service] module=app.services.attendance_service
+- AuthService [service] module=app.services.auth_service
+- FacultyService [service] module=app.services.faculty_service
+- FacultyStatisticsService [service] module=app.services.faculty_service
+- FinanceService [service] module=app.services.finance_service
+- GradeService [service] module=app.services.grade_service
+- LibraryService [service] module=app.services.library_service
+- StudentOverviewService [service] module=app.services.overview_service
+- EnrollmentGateService [service] module=app.services.student_service
+- StudentService [service] module=app.services.student_service
+
+## C1 Structured architectural evidence
+The following is extracted from SEMS-R source and measured traces.
+Runtime values are SEMS-R measurements, not production SEMS traffic.
+
+### Call dependencies (from → to)
+- AttendanceService -> AttendanceRepository
+- AttendanceService -> CourseRepository
+- AttendanceService -> TeacherRepository
+- AttendanceService -> StudentRepository
+- AttendanceService -> StaffRepository
+- AttendanceService -> CourseEnrollmentRepository
+- AttendanceService -> ReportBuilder
+- AuthService -> UserRepository
+- FacultyService -> FacultyRepository
+- FacultyService -> DepartmentRepository
+- FacultyService -> StaffRepository
+- FacultyService -> TeacherRepository
+- FacultyService -> CourseRepository
+- FacultyService -> AcademicCalendarRepository
+- FacultyService -> UserRepository
+- FacultyStatisticsService -> FacultyRepository
+- FacultyStatisticsService -> FinanceRepository
+- FacultyStatisticsService -> ReportBuilder
+- FinanceService -> FinanceRepository
+- FinanceService -> StudentRepository
+- FinanceService -> FacultyRepository
+- FinanceService -> AcademicCalendarRepository
+- GradeService -> ExamRepository
+- GradeService -> GradeRepository
+- GradeService -> StudentRepository
+- GradeService -> CourseRepository
+- GradeService -> TeacherRepository
+- GradeService -> CourseEnrollmentRepository
+- GradeService -> FinanceService
+- LibraryService -> LibraryRepository
+- LibraryService -> UserRepository
+- LibraryService -> StudentRepository
+- LibraryService -> StaffRepository
+- StudentOverviewService -> StudentService
+- StudentOverviewService -> GradeService
+- StudentOverviewService -> FinanceService
+- StudentOverviewService -> LibraryService
+- StudentOverviewService -> ReportBuilder
+- StudentService -> StudentRepository
+- StudentService -> UserRepository
+- StudentService -> FacultyRepository
+- StudentService -> DepartmentRepository
+- StudentService -> AcademicCalendarRepository
+- StudentService -> CourseRepository
+- StudentService -> SemesterRegistrationRepository
+- StudentService -> CourseEnrollmentRepository
+- StudentService -> EnrollmentGateService
+- StudentService -> FinanceService
+- EnrollmentGateService -> FinanceService
+
+### Entity ownership candidates (argmax of static access; ties UNCERTAIN)
+- AcademicYear table=academic_years sharing=4 candidate_owner=FacultyService accessors=AcademicCalendarRepository,FacultyService,FinanceService,StudentService
+- Book table=books sharing=2 candidate_owner=LibraryService accessors=LibraryRepository,LibraryService
+- BookCopy table=book_copies sharing=2 candidate_owner=LibraryService accessors=LibraryRepository,LibraryService
+- ClassSession table=class_sessions sharing=2 candidate_owner=AttendanceService accessors=AttendanceRepository,AttendanceService
+- Course table=courses sharing=6 candidate_owner=FacultyService accessors=AttendanceService,CourseRepository,FacultyService,GradeService,ReportBuilder,StudentService
+- CourseEnrollment table=course_enrollments sharing=4 candidate_owner=StudentService accessors=AttendanceService,CourseEnrollmentRepository,GradeService,StudentService
+- Department table=departments sharing=3 candidate_owner=FacultyService accessors=DepartmentRepository,FacultyService,StudentService
+- Exam table=exams sharing=2 candidate_owner=GradeService accessors=ExamRepository,GradeService
+- ExamRegistration table=exam_registrations sharing=2 candidate_owner=GradeService accessors=ExamRepository,GradeService
+- Faculty table=faculties sharing=5 candidate_owner=FacultyService accessors=FacultyRepository,FacultyService,FacultyStatisticsService,FinanceService,StudentService
+- FacultyLedgerEntry table=faculty_ledger_entries sharing=3 candidate_owner=FinanceService accessors=FacultyStatisticsService,FinanceRepository,FinanceService
+- Fee table=fees sharing=3 candidate_owner=FinanceService accessors=FacultyStatisticsService,FinanceRepository,FinanceService
+- FinancialTransaction table=financial_transactions sharing=3 candidate_owner=FinanceService accessors=FacultyStatisticsService,FinanceRepository,FinanceService
+- Grade table=grades sharing=3 candidate_owner=GradeService accessors=GradeRepository,GradeService,ReportBuilder
+- GradeHistory table=grade_histories sharing=2 candidate_owner=GradeService accessors=GradeRepository,GradeService
+- Invoice table=invoices sharing=3 candidate_owner=FinanceService accessors=FacultyStatisticsService,FinanceRepository,FinanceService
+- InvoiceLine table=invoice_lines sharing=1 candidate_owner=FinanceService accessors=FinanceService
+- LibraryMember table=library_members sharing=2 candidate_owner=LibraryService accessors=LibraryRepository,LibraryService
+- Loan table=loans sharing=2 candidate_owner=LibraryService accessors=LibraryRepository,LibraryService
+- Payment table=payments sharing=4 candidate_owner=FinanceService accessors=FacultyStatisticsService,FinanceRepository,FinanceService,ReportBuilder
+- Reservation table=reservations sharing=2 candidate_owner=LibraryService accessors=LibraryRepository,LibraryService
+- Semester table=semesters sharing=4 candidate_owner=FacultyService accessors=AcademicCalendarRepository,FacultyService,FinanceService,StudentService
+- SemesterRegistration table=semester_registrations sharing=5 candidate_owner=StudentService accessors=AttendanceService,CourseEnrollmentRepository,GradeService,SemesterRegistrationRepository,StudentService
+- Staff table=staff sharing=4 candidate_owner=FacultyService accessors=AttendanceService,FacultyService,LibraryService,StaffRepository
+- StaffAttendance table=staff_attendances sharing=2 candidate_owner=AttendanceService accessors=AttendanceRepository,AttendanceService
+- Student table=students sharing=7 candidate_owner=StudentService accessors=AttendanceService,FinanceService,GradeService,LibraryService,ReportBuilder,StudentRepository,StudentService
+- StudentAccount table=student_accounts sharing=4 candidate_owner=FinanceService accessors=FacultyStatisticsService,FinanceRepository,FinanceService,ReportBuilder
+- StudentAttendance table=student_attendances sharing=3 candidate_owner=AttendanceService accessors=AttendanceRepository,AttendanceService,ReportBuilder
+- Teacher table=teachers sharing=4 candidate_owner=FacultyService accessors=AttendanceService,FacultyService,GradeService,TeacherRepository
+- User table=users sharing=5 candidate_owner=UNCERTAIN accessors=AuthService,FacultyService,LibraryService,StudentService,UserRepository
+
+### Component × entity static usage
+- AcademicCalendarRepository uses AcademicYear (direct)
+- AcademicCalendarRepository uses Semester (direct)
+- AttendanceRepository uses ClassSession (direct)
+- AttendanceRepository uses StaffAttendance (direct)
+- AttendanceRepository uses StudentAttendance (direct)
+- AttendanceService uses ClassSession (direct|via_repo)
+- AttendanceService uses Course (via_repo)
+- AttendanceService uses CourseEnrollment (via_repo)
+- AttendanceService uses SemesterRegistration (via_repo)
+- AttendanceService uses Staff (via_repo)
+- AttendanceService uses StaffAttendance (direct|via_repo)
+- AttendanceService uses Student (via_repo)
+- AttendanceService uses StudentAttendance (direct|via_repo)
+- AttendanceService uses Teacher (via_repo)
+- AuthService uses User (direct|via_repo)
+- CourseEnrollmentRepository uses CourseEnrollment (direct)
+- CourseEnrollmentRepository uses SemesterRegistration (direct)
+- CourseRepository uses Course (direct)
+- DepartmentRepository uses Department (direct)
+- ExamRepository uses Exam (direct)
+- ExamRepository uses ExamRegistration (direct)
+- FacultyRepository uses Faculty (direct)
+- FacultyService uses AcademicYear (direct|via_repo)
+- FacultyService uses Course (direct|via_repo)
+- FacultyService uses Department (direct|via_repo)
+- FacultyService uses Faculty (direct|via_repo)
+- FacultyService uses Semester (direct|via_repo)
+- FacultyService uses Staff (direct|via_repo)
+- FacultyService uses Teacher (direct|via_repo)
+- FacultyService uses User (direct|via_repo)
+- FacultyStatisticsService uses Faculty (via_repo)
+- FacultyStatisticsService uses FacultyLedgerEntry (via_repo)
+- FacultyStatisticsService uses Fee (via_repo)
+- FacultyStatisticsService uses FinancialTransaction (via_repo)
+- FacultyStatisticsService uses Invoice (via_repo)
+- FacultyStatisticsService uses Payment (via_repo)
+- FacultyStatisticsService uses StudentAccount (via_repo)
+- FinanceRepository uses FacultyLedgerEntry (direct)
+- FinanceRepository uses Fee (direct)
+- FinanceRepository uses FinancialTransaction (direct)
+- FinanceRepository uses Invoice (direct)
+- FinanceRepository uses Payment (direct)
+- FinanceRepository uses StudentAccount (direct)
+- FinanceService uses AcademicYear (via_repo)
+- FinanceService uses Faculty (via_repo)
+- FinanceService uses FacultyLedgerEntry (direct|via_repo)
+- FinanceService uses Fee (direct|via_repo)
+- FinanceService uses FinancialTransaction (direct|via_repo)
+- FinanceService uses Invoice (direct|via_repo)
+- FinanceService uses InvoiceLine (direct)
+- FinanceService uses Payment (direct|via_repo)
+- FinanceService uses Semester (via_repo)
+- FinanceService uses Student (via_repo)
+- FinanceService uses StudentAccount (direct|via_repo)
+- GradeRepository uses Grade (direct)
+- GradeRepository uses GradeHistory (direct)
+- GradeService uses Course (via_repo)
+- GradeService uses CourseEnrollment (via_repo)
+- GradeService uses Exam (direct|via_repo)
+- GradeService uses ExamRegistration (direct|via_repo)
+- GradeService uses Grade (direct|via_repo)
+- GradeService uses GradeHistory (direct|via_repo)
+- GradeService uses SemesterRegistration (via_repo)
+- GradeService uses Student (via_repo)
+- GradeService uses Teacher (via_repo)
+- LibraryRepository uses Book (direct)
+- LibraryRepository uses BookCopy (direct)
+- LibraryRepository uses LibraryMember (direct)
+- LibraryRepository uses Loan (direct)
+- LibraryRepository uses Reservation (direct)
+- LibraryService uses Book (direct|via_repo)
+- LibraryService uses BookCopy (direct|via_repo)
+- LibraryService uses LibraryMember (direct|via_repo)
+- LibraryService uses Loan (direct|via_repo)
+- LibraryService uses Reservation (direct|via_repo)
+- LibraryService uses Staff (via_repo)
+- LibraryService uses Student (via_repo)
+- LibraryService uses User (via_repo)
+- ReportBuilder uses Course (direct)
+- ReportBuilder uses Grade (direct)
+- ReportBuilder uses Payment (direct)
+- ReportBuilder uses Student (direct)
+- ReportBuilder uses StudentAccount (direct)
+- ReportBuilder uses StudentAttendance (direct)
+- SemesterRegistrationRepository uses SemesterRegistration (direct)
+- StaffRepository uses Staff (direct)
+- StudentRepository uses Student (direct)
+- StudentService uses AcademicYear (via_repo)
+- StudentService uses Course (via_repo)
+- StudentService uses CourseEnrollment (direct|via_repo)
+- StudentService uses Department (via_repo)
+- StudentService uses Faculty (via_repo)
+- StudentService uses Semester (via_repo)
+- StudentService uses SemesterRegistration (direct|via_repo)
+- StudentService uses Student (direct|via_repo)
+- StudentService uses User (direct|via_repo)
+- TeacherRepository uses Teacher (direct)
+- UserRepository uses User (direct)
+
+### Runtime interactions
+Measured SEMS-R traces. Not production SEMS traffic. component_entity_counts are request-level co-occurrence (component on the same request as a queried table), not per-query attribution.
+trace_count=10505
+Busiest endpoints:
+- GET /api/v1/students/1/grades n=1172 sql_mean=2.0
+- GET /api/v1/students/1/account n=986 sql_mean=3.0
+- GET /api/v1/courses n=763 sql_mean=2.0
+- GET /api/v1/students/1 n=750 sql_mean=2.0
+- GET /api/v1/students/1/courses n=750 sql_mean=4.0
+- GET /api/v1/students/1/overview n=750 sql_mean=10.0
+- GET /api/v1/exams n=427 sql_mean=2.0
+- GET /api/v1/courses/1 n=422 sql_mean=2.0
+- GET /api/v1/students/1/gpa n=422 sql_mean=4.0
+- POST /api/v1/students/1/semester-registrations n=336 sql_mean=4.0
+- POST /api/v1/students/1/enrollments n=336 sql_mean=4.0
+- GET /api/v1/students/1/enrollments n=336 sql_mean=3.0
+- GET /api/v1/students/1/invoices n=242 sql_mean=4.0
+- GET /api/v1/invoices/1 n=236 sql_mean=2.0
+- POST /api/v1/payments n=236 sql_mean=8.0
+

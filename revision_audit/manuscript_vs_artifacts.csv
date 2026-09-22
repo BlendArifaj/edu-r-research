@@ -1,0 +1,21 @@
+table,row,manuscript_field,manuscript_value,artifact_source,artifact_value,match,notes
+I,Rule Heuristic,F1,0.925,table_a.csv pairwise_f1,0.9245,round_3dp,F1 in ms matches rounded artifact
+I,Rule Heuristic,ARI,0.925,table_a.csv ari,0.9067,no,MS ARI equals MS F1 — column copy error
+I,Rule Heuristic,NMI,0.925,table_a.csv nmi,0.9606,no,MS NMI equals MS F1 — column copy error
+I,Static graph,F1,0.333,table_a.csv,0.3333,yes,
+I,Static graph,ARI,0.333,table_a.csv ari,0.1385,no,MS ARI equals MS F1
+I,Static graph,NMI,0.333,table_a.csv nmi,0.4466,no,MS NMI equals MS F1
+I,Static + Data,F1,0.317,static_only,0.3167,yes,
+I,Static + Data,ARI,0.317,static_only ari,0.1275,no,column copy
+I,Runtime,F1,0.368,runtime_only,0.368,yes,
+I,Runtime,ARI,0.368,runtime_only ari,0.1848,no,column copy
+I,Combined Graph,F1,0.387,combined_graph,0.3866,yes,
+I,Combined Graph,ARI,0.387,combined_graph ari,0.2183,no,column copy
+II,Gemini C0,F1,0.907,table_b.csv,0.9068,yes,
+II,GPT C0,F1,0.825,table_b.csv,0.8247,yes,
+III,Static + runtime,F1,0.387,table_c static_plus_runtime,0.3866,yes,same method as combined_graph Table I
+V,Requests monolith,180144,comparison.csv 2026-08-27_225302,60048,no,MS = 3× local count; 300 vs 100 users in ms
+V,Requests clustered,220512,comparison.csv clustered,23000,no,Not 3× local; other platform/correction not in repo
+V,Throughput clustered,245.88 RPS,comparison.csv,76.94,no,Derived in ms from corrected request count
+V,Median clustered,120 ms,comparison.csv,1200,no,MS matches edited paper.md not Locust log
+V,Failures monolith,198,comparison.csv,66,no,MS = 3× local failures (66×3=198)

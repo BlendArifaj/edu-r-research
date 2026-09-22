@@ -1,0 +1,124 @@
+{
+  "integrity": "sems-r-reconstruction-measured",
+  "mode": "C",
+  "note": "Sequential exclusive Compose profiles. Locust is on the host, outside the container budget. Mode C is not equal-total; nginx plus declared replicas. Not a production 10k-user replay.",
+  "stamp": "2026-08-27_214907",
+  "configs": [
+    "high"
+  ],
+  "seed_scale": "small",
+  "base_url": "http://127.0.0.1:8000",
+  "extra_vs_mode_a": {
+    "nginx": {
+      "cpus": 0.25,
+      "memory_mb": 128.0
+    },
+    "gateway": {
+      "cpus": 0.6,
+      "memory_mb": 768.0
+    },
+    "faculty": {
+      "cpus": 0.4,
+      "memory_mb": 384.0
+    },
+    "student": {
+      "cpus": 0.4,
+      "memory_mb": 384.0
+    },
+    "grade": {
+      "cpus": 0.4,
+      "memory_mb": 384.0
+    },
+    "finance": {
+      "cpus": 0.4,
+      "memory_mb": 384.0
+    },
+    "attendance": {
+      "cpus": 0.4,
+      "memory_mb": 384.0
+    },
+    "library": {
+      "cpus": 0.4,
+      "memory_mb": 384.0
+    }
+  },
+  "replicas": {
+    "postgres-microservices": 1,
+    "nginx": 1,
+    "gateway": 2,
+    "faculty": 2,
+    "student": 2,
+    "grade": 2,
+    "finance": 2,
+    "attendance": 2,
+    "library": 2
+  },
+  "load_balancer": "nginx",
+  "total_cpus": {
+    "monolith": 4.0,
+    "microservices": 7.25
+  },
+  "total_memory_mb": {
+    "monolith": 4096,
+    "microservices": 7296
+  },
+  "profiles": {
+    "monolith": {
+      "postgres-monolith": {
+        "cpus": 1.0,
+        "memory_mb": 1024
+      },
+      "monolith": {
+        "cpus": 3.0,
+        "memory_mb": 3072
+      }
+    },
+    "microservices": {
+      "postgres-microservices": {
+        "cpus": 1.0,
+        "memory_mb": 1024,
+        "replicas": 1
+      },
+      "nginx": {
+        "cpus": 0.25,
+        "memory_mb": 128,
+        "replicas": 1
+      },
+      "gateway": {
+        "cpus": 0.6,
+        "memory_mb": 768,
+        "replicas": 2
+      },
+      "faculty": {
+        "cpus": 0.4,
+        "memory_mb": 384,
+        "replicas": 2
+      },
+      "student": {
+        "cpus": 0.4,
+        "memory_mb": 384,
+        "replicas": 2
+      },
+      "grade": {
+        "cpus": 0.4,
+        "memory_mb": 384,
+        "replicas": 2
+      },
+      "finance": {
+        "cpus": 0.4,
+        "memory_mb": 384,
+        "replicas": 2
+      },
+      "attendance": {
+        "cpus": 0.4,
+        "memory_mb": 384,
+        "replicas": 2
+      },
+      "library": {
+        "cpus": 0.4,
+        "memory_mb": 384,
+        "replicas": 2
+      }
+    }
+  }
+}

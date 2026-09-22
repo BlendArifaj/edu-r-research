@@ -1,0 +1,53 @@
+{
+  "experiment_identifier": "REVISION_CONTROL_V1",
+  "protocol_version": "anonymization_exp_v2",
+  "cohort": "REVISION_CONTROL_V1",
+  "freeze_timestamp_utc": "2026-09-22T13:58:55Z",
+  "git_sha_recorded_at_execution": "713a3f99d1cf8a480ed4099eb59b2d68f102ecc8",
+  "git_sha_at_freeze": "713a3f99d1cf8a480ed4099eb59b2d68f102ecc8",
+  "git_status_at_freeze": "uncommitted: REVISION_FORENSIC_AUDIT.md, revision_anonymization/, revision_audit/ (freeze artifacts not yet in git object database)",
+  "proposed_immutable_tag": "ieee-access-revision-control-v1",
+  "tag_creation_policy": "Create tag only after committing freeze bundle; do not push without authorization",
+  "llama_artifact_digest": "46e0c10c039e",
+  "llama_model_ref": "llama3.1:latest",
+  "output_root": "outputs/runs/anonymization_exp_v1/",
+  "historical_baseline_excluded": "outputs/runs/2026-08-27_005 (36 runs, ORIGINAL_SUBMITTED_BASELINE)",
+  "checksum_manifest": "revision_anonymization/FINAL_ARTIFACT_MANIFEST.sha256",
+  "checksum_manifest_entry_count": 649,
+  "checksum_manifest_file_sha256_note": "Compute: shasum -a 256 revision_anonymization/FINAL_ARTIFACT_MANIFEST.sha256 (avoid storing in this file to prevent manifest self-reference churn)",
+  "execution_counts": {
+    "planned": 120,
+    "executed": 120,
+    "valid_parses": 117,
+    "invalid_model_outputs": 3,
+    "infrastructure_failures": 0
+  },
+  "artifact_roots": {
+    "protocol": "revision_anonymization/ANONYMIZATION_EXPERIMENT_PROTOCOL.md",
+    "retry_policy": "revision_anonymization/RETRY_FAILURE_POLICY.md",
+    "leakage_audit": "revision_anonymization/LEAKAGE_AUDIT.md",
+    "component_map": "revision_anonymization/component_identifier_map.csv",
+    "functional_area_map": "revision_anonymization/functional_area_identifier_map.csv",
+    "prompts": "revision_anonymization/prompts/",
+    "evidence_anonymized": "revision_anonymization/evidence/architectural_evidence_anonymized.json",
+    "evidence_semantic_ref": "revision_anonymization/evidence/architectural_evidence_semantic_frozen_ref.json",
+    "run_manifest": "revision_anonymization/run_manifest.csv",
+    "validation": "revision_anonymization/validation_results.json",
+    "llama_digest": "revision_anonymization/llama_digest_frozen.txt",
+    "run_artifacts": "outputs/runs/anonymization_exp_v1/decompositions/",
+    "analysis_results": "revision_anonymization/results/",
+    "analyze_script": "revision_anonymization/scripts/analyze_revision.py",
+    "score_script": "revision_anonymization/scripts/score_revision.py",
+    "scoring_pipeline": [
+      "decomposition/evaluation/scoring.py",
+      "decomposition/evaluation/pairwise.py",
+      "decomposition/evaluation/stability.py",
+      "decomposition/evaluation/gold.py",
+      "decomposition/llm/parse.py"
+    ]
+  },
+  "publication_numbers_freeze": "revision_anonymization/results/PUBLICATION_RESULTS_FREEZE.md",
+  "interpretation_boundaries": "revision_anonymization/results/PUBLICATION_RESULTS_FREEZE.md#interpretation-boundaries",
+  "claim_matrix": "revision_anonymization/REVISION_CLAIM_MATRIX.md",
+  "reviewer_matrix": "revision_anonymization/REVIEWER_RESOLUTION_MATRIX.md"
+}

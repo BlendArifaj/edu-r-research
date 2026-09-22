@@ -1,0 +1,3 @@
+architecture,config,users,duration,request_count,failure_count,median_ms,p95_ms,p99_ms,rps,locust_exit_code,artifact_dir
+monolith,medium,50,300s,68029,24,45.0,120.0,150.0,226.99193527559615,1,/Users/bezepsolution/agentic-programming/sems-research/outputs/performance/comparisons/2026-08-27_211409/monolith/medium
+microservices,medium,50,300s,14561,158,120.0,1400.0,30000.0,48.62137076428627,1,/Users/bezepsolution/agentic-programming/sems-research/outputs/performance/comparisons/2026-08-27_211409/microservices/medium

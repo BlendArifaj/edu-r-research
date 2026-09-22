@@ -1,0 +1,45 @@
+# Frozen Llama artifact — do not edit after execution starts
+frozen_at_utc: 2026-09-22T11:39:19.818103+00:00
+model_name: llama3.1
+model_tag: latest
+model_ref: llama3.1:latest
+digest: 46e0c10c039e
+
+## ollama list (llama3.1 row)
+llama3.1:latest      46e0c10c039e    4.9 GB    5 weeks ago     
+
+## ollama show
+Model
+    architecture        llama     
+    parameters          8.0B      
+    context length      131072    
+    embedding length    4096      
+    quantization        Q4_K_M    
+
+  Capabilities
+    completion    
+    tools         
+
+  Parameters
+    stop    "<|start_header_id|>"    
+    stop    "<|end_header_id|>"      
+    stop    "<|eot_id|>"             
+
+  License
+    LLAMA 3.1 COMMUNITY LICENSE AGREEMENT            
+    Llama 3.1 Version Release Date: July 23, 2024    
+    ...
+
+## machine-readable
+{
+  "frozen_at_utc": "2026-09-22T11:39:19.818103+00:00",
+  "model_name": "llama3.1",
+  "model_tag": "latest",
+  "model_ref": "llama3.1:latest",
+  "digest": "46e0c10c039e",
+  "ollama_list_excerpt": [
+    "llama3.1:latest      46e0c10c039e    4.9 GB    5 weeks ago     "
+  ],
+  "ollama_show": "  Model\n    architecture        llama     \n    parameters          8.0B      \n    context length      131072    \n    embedding length    4096      \n    quantization        Q4_K_M    \n\n  Capabilities\n    completion    \n    tools         \n\n  Parameters\n    stop    \"<|start_header_id|>\"    \n    stop    \"<|end_header_id|>\"      \n    stop    \"<|eot_id|>\"             \n\n  License\n    LLAMA 3.1 COMMUNITY LICENSE AGREEMENT            \n    Llama 3.1 Version Release Date: July 23, 2024    \n    ...                                              \n\n",
+  "abort_if_digest_changes": true
+}

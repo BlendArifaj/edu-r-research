@@ -1,0 +1,79 @@
+You are a software architect proposing a microservice decomposition of SEMS-R (SEMS Experimental Reconstruction). This system is a controlled reconstruction of documented education-management functional areas. It is not the original production SEMS source code.
+
+Propose independently deployable services by grouping the listed application components (services, repositories, and legacy utilities). Reason only from the information in this prompt.
+
+Return ONLY a JSON object with this shape (no markdown, no commentary):
+{
+  "services": [
+    {
+      "name": "candidate-service",
+      "components": ["ComponentName"],
+      "owned_entities": ["EntityName"],
+      "responsibilities": ["..."],
+      "dependencies": ["other-service"],
+      "rationale": "evidence-based reason"
+    }
+  ],
+  "migration_priority": [
+    {"service": "candidate-service", "rank": 1, "confidence": 0.0, "reason": ""}
+  ],
+  "uncertain_decisions": [],
+  "unsupported_assumptions": [],
+  "rule_violations": [],
+  "architectural_risks": [],
+  "critique": "",
+  "revised": false
+}
+Every listed component must appear in exactly one service.
+Use UNCERTAIN in uncertain_decisions when evidence is insufficient.
+Do not invent runtime measurements.
+Do not use a hidden labeled historical service assignment.
+SEMS-R is a reconstruction, not original production SEMS source.
+
+## C0 High-level system description
+A reconstructed university education-management system used as an experimental monolith. It is based on documented SEMS functional areas, not original production source.
+
+### Functional areas (documented capabilities, not a labeled assignment of classes)
+- Area_02: faculty and department administration; staff and teacher records; course catalog administration; academic calendar; faculty-level statistics
+- Area_06: student registration and profile; semester registration; course enrollment; student academic overview
+- Area_04: exam scheduling; exam registration; grade recording and updates; grade history; GPA calculation
+- Area_03: tuition and semester fees; student invoices and payments; account balances; financial transactions; faculty income and expense ledger
+- Area_01: class session management; student attendance; staff attendance; monthly attendance reports
+- Area_05: book catalog and copies; library membership; loans and returns; reservations
+
+### Known cross-domain dependencies (narrative)
+- Grade workflows require student, teacher, course, and often enrollment records.
+- Attendance workflows require student, teacher, course, and enrollment records.
+- Finance workflows require student and faculty context for invoicing and ledgers.
+- Library membership is issued to students and staff.
+- Student information is read by Student, Grade, Attendance, Finance, and Library.
+- Course ownership sits with Faculty administration but is consumed by Student, Grade, and Attendance.
+
+### Components
+- Component_19 [legacy] module=Module_19
+- Component_02 [repository] module=Module_02
+- Component_10 [repository] module=Module_10
+- Component_07 [repository] module=Module_07
+- Component_21 [repository] module=Module_21
+- Component_25 [repository] module=Module_25
+- Component_06 [repository] module=Module_06
+- Component_01 [repository] module=Module_01
+- Component_13 [repository] module=Module_13
+- Component_09 [repository] module=Module_09
+- Component_15 [repository] module=Module_15
+- Component_17 [repository] module=Module_17
+- Component_23 [repository] module=Module_23
+- Component_20 [repository] module=Module_20
+- Component_05 [repository] module=Module_05
+- Component_26 [repository] module=Module_26
+- Component_03 [service] module=Module_03
+- Component_04 [service] module=Module_04
+- Component_11 [service] module=Module_11
+- Component_12 [service] module=Module_12
+- Component_14 [service] module=Module_14
+- Component_16 [service] module=Module_16
+- Component_18 [service] module=Module_18
+- Component_22 [service] module=Module_22
+- Component_08 [service] module=Module_08
+- Component_24 [service] module=Module_24
+

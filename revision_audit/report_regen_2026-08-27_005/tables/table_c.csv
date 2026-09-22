@@ -1,0 +1,5 @@
+evidence,method,pairwise_f1,modularity,cross_service_coupling
+static_call,graph_static,0.3333,0.287,0.4286
+static_call_plus_data,static_only,0.3167,0.2801,0.449
+runtime,runtime_only,0.368,0.2022,0.5102
+static_plus_runtime,combined_graph,0.3866,0.2551,0.4898

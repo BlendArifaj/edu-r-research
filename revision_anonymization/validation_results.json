@@ -1,0 +1,118 @@
+{
+  "all_pass": true,
+  "checks": {
+    "A_bijection_forward": {
+      "pass": true,
+      "n": 26
+    },
+    "B_bijection_reverse": {
+      "pass": true
+    },
+    "C_no_identity_aliases_in_anon_prompts": {
+      "pass": true,
+      "leaks": []
+    },
+    "D_no_gold_file_in_prompts": {
+      "pass": true,
+      "hits": []
+    },
+    "E_structure_unchanged": {
+      "pass": true,
+      "semantic": {
+        "components": 26,
+        "g_call_edges": 49,
+        "database_usage": 98,
+        "entity_ownership": 30,
+        "runtime_endpoints": 482,
+        "migration_rules": 9
+      },
+      "anonymized": {
+        "components": 26,
+        "g_call_edges": 49,
+        "database_usage": 98,
+        "entity_ownership": 30,
+        "runtime_endpoints": 482,
+        "migration_rules": 9
+      }
+    },
+    "F_relation_parity": {
+      "pass": true,
+      "semantic": {
+        "components": 26,
+        "g_call_edges": 49,
+        "database_usage": 98,
+        "entity_ownership": 30,
+        "runtime_endpoints": 482,
+        "migration_rules": 9
+      },
+      "anonymized": {
+        "components": 26,
+        "g_call_edges": 49,
+        "database_usage": 98,
+        "entity_ownership": 30,
+        "runtime_endpoints": 482,
+        "migration_rules": 9
+      }
+    },
+    "G_rules_unchanged": {
+      "pass": true
+    },
+    "H_prompt_section_count": {
+      "pass": true
+    },
+    "I_map_not_in_prompt": {
+      "pass": true,
+      "leaks": []
+    },
+    "J_scoring_reverse_map": {
+      "pass": true,
+      "eval_universe": "24 components; AuthService/UserRepository excluded after reverse map"
+    },
+    "K_no_original_module_paths_in_anon_evidence": {
+      "pass": true,
+      "sample_leaks": []
+    },
+    "L_opaque_file_paths": {
+      "pass": true,
+      "bad": []
+    },
+    "M_opaque_functional_area_ids": {
+      "pass": true,
+      "area_ids": [
+        "Area_02",
+        "Area_06",
+        "Area_04",
+        "Area_03",
+        "Area_01",
+        "Area_05"
+      ]
+    },
+    "schema_reference_labels_in_prompt_template": {
+      "pass": true,
+      "hits": []
+    },
+    "N_counterbalanced_pair_order": {
+      "pass": true
+    },
+    "O_pair_semantic_anonymized": {
+      "pass": true,
+      "n_pairs": 60
+    },
+    "P_pair_settings_match": {
+      "pass": true
+    },
+    "Q_prompt_evidence_hashes_recorded": {
+      "pass": true
+    },
+    "R_no_reference_partition": {
+      "pass": true,
+      "hits": []
+    },
+    "S_llama_digest_frozen": {
+      "pass": true
+    },
+    "T_retry_policy_frozen": {
+      "pass": true
+    }
+  }
+}

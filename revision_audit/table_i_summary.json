@@ -1,0 +1,8 @@
+{
+  "n_eval_components": 24,
+  "expected_unordered_pairs": 276,
+  "c_24_2": 276,
+  "all_methods_same_pair_count": true,
+  "f1_equals_ari_any_method": false,
+  "f1_equals_nmi_any_method": false
+}

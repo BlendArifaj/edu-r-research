@@ -1,0 +1,2 @@
+config,delta,request_count,failure_count,median_ms,p95_ms,p99_ms,rps
+high,clustered_minus_monolith,-37048,-62,1060.0,2230.0,2710.0,-124.40998775327377

@@ -1,0 +1,13 @@
+model,evidence_condition,old_submitted_mean_f1,new_revision_semantic_mean_f1,difference_new_minus_old,absolute_difference,direction,qualitative_consistency
+gemini-2.5-flash,C0,0.906767,0.9245,0.017733,0.017733,higher,close
+gemini-2.5-flash,C1,0.815233,0.85276,0.037527,0.037527,higher,close
+gemini-2.5-flash,C2,0.7835,0.77095,-0.01255,0.01255,lower,close
+gemini-2.5-flash,C3,0.812767,0.86265,0.049883,0.049883,higher,close
+gpt-4o-mini,C0,0.8247,0.84466,0.01996,0.01996,higher,close
+gpt-4o-mini,C1,0.7333,0.7333,0.0,0.0,,close
+gpt-4o-mini,C2,0.7174,0.76176,0.04436,0.04436,higher,close
+gpt-4o-mini,C3,0.7333,0.7389,0.0056,0.0056,higher,close
+llama3.1,C0,0.906767,0.90322,-0.003547,0.003547,lower,close
+llama3.1,C1,0.617267,0.71576,0.098493,0.098493,higher,moderate drift
+llama3.1,C2,0.780867,0.6586,-0.122267,0.122267,lower,large drift
+llama3.1,C3,0.5,0.64,0.14,0.14,higher,large drift

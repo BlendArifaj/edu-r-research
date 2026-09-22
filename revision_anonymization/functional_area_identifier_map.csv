@@ -1,0 +1,7 @@
+original_area_id,anonymized_area_id,sort_index
+attendance,Area_01,1
+faculty,Area_02,2
+finance,Area_03,3
+grade,Area_04,4
+library,Area_05,5
+student,Area_06,6

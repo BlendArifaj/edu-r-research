@@ -1,0 +1,44 @@
+{
+  "integrity": "sems-r-reconstruction-measured",
+  "mode": "E",
+  "note": "Sequential exclusive Compose profiles. Locust is on the host, outside the container budget. Mode E is a dependency-clustered campus plus library, equal-total with Mode A. Not the historical six-service gold. Not a production 10k-user replay.",
+  "stamp": "2026-08-27_225302",
+  "configs": [
+    "high"
+  ],
+  "seed_scale": "small",
+  "base_url": "http://127.0.0.1:8000",
+  "extra_vs_mode_a": {},
+  "replicas": {},
+  "load_balancer": "",
+  "docker_requires": {},
+  "monolith_vs_mode_a": {},
+  "total_cpus": 4.0,
+  "total_memory_mb": 4096,
+  "profiles": {
+    "monolith": {
+      "postgres-monolith": {
+        "cpus": 1.0,
+        "memory_mb": 1024
+      },
+      "monolith": {
+        "cpus": 3.0,
+        "memory_mb": 3072
+      }
+    },
+    "clustered": {
+      "postgres-clustered": {
+        "cpus": 1.0,
+        "memory_mb": 1024
+      },
+      "campus": {
+        "cpus": 2.6,
+        "memory_mb": 2688
+      },
+      "library-clustered": {
+        "cpus": 0.4,
+        "memory_mb": 384
+      }
+    }
+  }
+}

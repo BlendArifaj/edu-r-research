@@ -1,0 +1,308 @@
+You are a software architect proposing a microservice decomposition of SEMS-R (SEMS Experimental Reconstruction). This system is a controlled reconstruction of documented education-management functional areas. It is not the original production SEMS source code.
+
+Propose independently deployable services by grouping the listed application components (services, repositories, and legacy utilities). Reason only from the information in this prompt.
+
+Return ONLY a JSON object with this shape (no markdown, no commentary):
+{
+  "services": [
+    {
+      "name": "candidate-service",
+      "components": ["ComponentName"],
+      "owned_entities": ["EntityName"],
+      "responsibilities": ["..."],
+      "dependencies": ["other-service"],
+      "rationale": "evidence-based reason"
+    }
+  ],
+  "migration_priority": [
+    {"service": "candidate-service", "rank": 1, "confidence": 0.0, "reason": ""}
+  ],
+  "uncertain_decisions": [],
+  "unsupported_assumptions": [],
+  "rule_violations": [],
+  "architectural_risks": [],
+  "critique": "",
+  "revised": false
+}
+Every listed component must appear in exactly one service.
+Use UNCERTAIN in uncertain_decisions when evidence is insufficient.
+Do not invent runtime measurements.
+Do not use a hidden labeled historical service assignment.
+SEMS-R is a reconstruction, not original production SEMS source.
+
+## C0 High-level system description
+A reconstructed university education-management system used as an experimental monolith. It is based on documented SEMS functional areas, not original production source.
+
+### Functional areas (documented capabilities, not a labeled assignment of classes)
+- Area_02: faculty and department administration; staff and teacher records; course catalog administration; academic calendar; faculty-level statistics
+- Area_06: student registration and profile; semester registration; course enrollment; student academic overview
+- Area_04: exam scheduling; exam registration; grade recording and updates; grade history; GPA calculation
+- Area_03: tuition and semester fees; student invoices and payments; account balances; financial transactions; faculty income and expense ledger
+- Area_01: class session management; student attendance; staff attendance; monthly attendance reports
+- Area_05: book catalog and copies; library membership; loans and returns; reservations
+
+### Known cross-domain dependencies (narrative)
+- Grade workflows require student, teacher, course, and often enrollment records.
+- Attendance workflows require student, teacher, course, and enrollment records.
+- Finance workflows require student and faculty context for invoicing and ledgers.
+- Library membership is issued to students and staff.
+- Student information is read by Student, Grade, Attendance, Finance, and Library.
+- Course ownership sits with Faculty administration but is consumed by Student, Grade, and Attendance.
+
+### Components
+- Component_19 [legacy] module=Module_19
+- Component_02 [repository] module=Module_02
+- Component_10 [repository] module=Module_10
+- Component_07 [repository] module=Module_07
+- Component_21 [repository] module=Module_21
+- Component_25 [repository] module=Module_25
+- Component_06 [repository] module=Module_06
+- Component_01 [repository] module=Module_01
+- Component_13 [repository] module=Module_13
+- Component_09 [repository] module=Module_09
+- Component_15 [repository] module=Module_15
+- Component_17 [repository] module=Module_17
+- Component_23 [repository] module=Module_23
+- Component_20 [repository] module=Module_20
+- Component_05 [repository] module=Module_05
+- Component_26 [repository] module=Module_26
+- Component_03 [service] module=Module_03
+- Component_04 [service] module=Module_04
+- Component_11 [service] module=Module_11
+- Component_12 [service] module=Module_12
+- Component_14 [service] module=Module_14
+- Component_16 [service] module=Module_16
+- Component_18 [service] module=Module_18
+- Component_22 [service] module=Module_22
+- Component_08 [service] module=Module_08
+- Component_24 [service] module=Module_24
+
+## C1 Structured architectural evidence
+The following is extracted from SEMS-R source and measured traces.
+Runtime values are SEMS-R measurements, not production SEMS traffic.
+
+### Call dependencies (from → to)
+- Component_03 -> Component_02
+- Component_03 -> Component_06
+- Component_03 -> Component_25
+- Component_03 -> Component_23
+- Component_03 -> Component_21
+- Component_03 -> Component_05
+- Component_03 -> Component_19
+- Component_04 -> Component_26
+- Component_11 -> Component_10
+- Component_11 -> Component_07
+- Component_11 -> Component_21
+- Component_11 -> Component_25
+- Component_11 -> Component_06
+- Component_11 -> Component_01
+- Component_11 -> Component_26
+- Component_12 -> Component_10
+- Component_12 -> Component_13
+- Component_12 -> Component_19
+- Component_14 -> Component_13
+- Component_14 -> Component_23
+- Component_14 -> Component_10
+- Component_14 -> Component_01
+- Component_16 -> Component_09
+- Component_16 -> Component_15
+- Component_16 -> Component_23
+- Component_16 -> Component_06
+- Component_16 -> Component_25
+- Component_16 -> Component_05
+- Component_16 -> Component_14
+- Component_18 -> Component_17
+- Component_18 -> Component_26
+- Component_18 -> Component_23
+- Component_18 -> Component_21
+- Component_22 -> Component_24
+- Component_22 -> Component_16
+- Component_22 -> Component_14
+- Component_22 -> Component_18
+- Component_22 -> Component_19
+- Component_24 -> Component_23
+- Component_24 -> Component_26
+- Component_24 -> Component_10
+- Component_24 -> Component_07
+- Component_24 -> Component_01
+- Component_24 -> Component_06
+- Component_24 -> Component_20
+- Component_24 -> Component_05
+- Component_24 -> Component_08
+- Component_24 -> Component_14
+- Component_08 -> Component_14
+
+### Entity ownership candidates (argmax of static access; ties UNCERTAIN)
+- AcademicYear table=academic_years sharing=4 candidate_owner=Component_11 accessors=Component_01,Component_11,Component_14,Component_24
+- Book table=books sharing=2 candidate_owner=Component_18 accessors=Component_17,Component_18
+- BookCopy table=book_copies sharing=2 candidate_owner=Component_18 accessors=Component_17,Component_18
+- ClassSession table=class_sessions sharing=2 candidate_owner=Component_03 accessors=Component_02,Component_03
+- Course table=courses sharing=6 candidate_owner=Component_11 accessors=Component_03,Component_06,Component_11,Component_16,Component_19,Component_24
+- CourseEnrollment table=course_enrollments sharing=4 candidate_owner=Component_24 accessors=Component_03,Component_05,Component_16,Component_24
+- Department table=departments sharing=3 candidate_owner=Component_11 accessors=Component_07,Component_11,Component_24
+- Exam table=exams sharing=2 candidate_owner=Component_16 accessors=Component_09,Component_16
+- ExamRegistration table=exam_registrations sharing=2 candidate_owner=Component_16 accessors=Component_09,Component_16
+- Faculty table=faculties sharing=5 candidate_owner=Component_11 accessors=Component_10,Component_11,Component_12,Component_14,Component_24
+- FacultyLedgerEntry table=faculty_ledger_entries sharing=3 candidate_owner=Component_14 accessors=Component_12,Component_13,Component_14
+- Fee table=fees sharing=3 candidate_owner=Component_14 accessors=Component_12,Component_13,Component_14
+- FinancialTransaction table=financial_transactions sharing=3 candidate_owner=Component_14 accessors=Component_12,Component_13,Component_14
+- Grade table=grades sharing=3 candidate_owner=Component_16 accessors=Component_15,Component_16,Component_19
+- GradeHistory table=grade_histories sharing=2 candidate_owner=Component_16 accessors=Component_15,Component_16
+- Invoice table=invoices sharing=3 candidate_owner=Component_14 accessors=Component_12,Component_13,Component_14
+- InvoiceLine table=invoice_lines sharing=1 candidate_owner=Component_14 accessors=Component_14
+- LibraryMember table=library_members sharing=2 candidate_owner=Component_18 accessors=Component_17,Component_18
+- Loan table=loans sharing=2 candidate_owner=Component_18 accessors=Component_17,Component_18
+- Payment table=payments sharing=4 candidate_owner=Component_14 accessors=Component_12,Component_13,Component_14,Component_19
+- Reservation table=reservations sharing=2 candidate_owner=Component_18 accessors=Component_17,Component_18
+- Semester table=semesters sharing=4 candidate_owner=Component_11 accessors=Component_01,Component_11,Component_14,Component_24
+- SemesterRegistration table=semester_registrations sharing=5 candidate_owner=Component_24 accessors=Component_03,Component_05,Component_16,Component_20,Component_24
+- Staff table=staff sharing=4 candidate_owner=Component_11 accessors=Component_03,Component_11,Component_18,Component_21
+- StaffAttendance table=staff_attendances sharing=2 candidate_owner=Component_03 accessors=Component_02,Component_03
+- Student table=students sharing=7 candidate_owner=Component_24 accessors=Component_03,Component_14,Component_16,Component_18,Component_19,Component_23,Component_24
+- StudentAccount table=student_accounts sharing=4 candidate_owner=Component_14 accessors=Component_12,Component_13,Component_14,Component_19
+- StudentAttendance table=student_attendances sharing=3 candidate_owner=Component_03 accessors=Component_02,Component_03,Component_19
+- Teacher table=teachers sharing=4 candidate_owner=Component_11 accessors=Component_03,Component_11,Component_16,Component_25
+- User table=users sharing=5 candidate_owner=UNCERTAIN accessors=Component_04,Component_11,Component_18,Component_24,Component_26
+
+### Component × entity static usage
+- Component_01 uses AcademicYear (direct)
+- Component_01 uses Semester (direct)
+- Component_02 uses ClassSession (direct)
+- Component_02 uses StaffAttendance (direct)
+- Component_02 uses StudentAttendance (direct)
+- Component_03 uses ClassSession (direct|via_repo)
+- Component_03 uses Course (via_repo)
+- Component_03 uses CourseEnrollment (via_repo)
+- Component_03 uses SemesterRegistration (via_repo)
+- Component_03 uses Staff (via_repo)
+- Component_03 uses StaffAttendance (direct|via_repo)
+- Component_03 uses Student (via_repo)
+- Component_03 uses StudentAttendance (direct|via_repo)
+- Component_03 uses Teacher (via_repo)
+- Component_04 uses User (direct|via_repo)
+- Component_05 uses CourseEnrollment (direct)
+- Component_05 uses SemesterRegistration (direct)
+- Component_06 uses Course (direct)
+- Component_07 uses Department (direct)
+- Component_09 uses Exam (direct)
+- Component_09 uses ExamRegistration (direct)
+- Component_10 uses Faculty (direct)
+- Component_11 uses AcademicYear (direct|via_repo)
+- Component_11 uses Course (direct|via_repo)
+- Component_11 uses Department (direct|via_repo)
+- Component_11 uses Faculty (direct|via_repo)
+- Component_11 uses Semester (direct|via_repo)
+- Component_11 uses Staff (direct|via_repo)
+- Component_11 uses Teacher (direct|via_repo)
+- Component_11 uses User (direct|via_repo)
+- Component_12 uses Faculty (via_repo)
+- Component_12 uses FacultyLedgerEntry (via_repo)
+- Component_12 uses Fee (via_repo)
+- Component_12 uses FinancialTransaction (via_repo)
+- Component_12 uses Invoice (via_repo)
+- Component_12 uses Payment (via_repo)
+- Component_12 uses StudentAccount (via_repo)
+- Component_13 uses FacultyLedgerEntry (direct)
+- Component_13 uses Fee (direct)
+- Component_13 uses FinancialTransaction (direct)
+- Component_13 uses Invoice (direct)
+- Component_13 uses Payment (direct)
+- Component_13 uses StudentAccount (direct)
+- Component_14 uses AcademicYear (via_repo)
+- Component_14 uses Faculty (via_repo)
+- Component_14 uses FacultyLedgerEntry (direct|via_repo)
+- Component_14 uses Fee (direct|via_repo)
+- Component_14 uses FinancialTransaction (direct|via_repo)
+- Component_14 uses Invoice (direct|via_repo)
+- Component_14 uses InvoiceLine (direct)
+- Component_14 uses Payment (direct|via_repo)
+- Component_14 uses Semester (via_repo)
+- Component_14 uses Student (via_repo)
+- Component_14 uses StudentAccount (direct|via_repo)
+- Component_15 uses Grade (direct)
+- Component_15 uses GradeHistory (direct)
+- Component_16 uses Course (via_repo)
+- Component_16 uses CourseEnrollment (via_repo)
+- Component_16 uses Exam (direct|via_repo)
+- Component_16 uses ExamRegistration (direct|via_repo)
+- Component_16 uses Grade (direct|via_repo)
+- Component_16 uses GradeHistory (direct|via_repo)
+- Component_16 uses SemesterRegistration (via_repo)
+- Component_16 uses Student (via_repo)
+- Component_16 uses Teacher (via_repo)
+- Component_17 uses Book (direct)
+- Component_17 uses BookCopy (direct)
+- Component_17 uses LibraryMember (direct)
+- Component_17 uses Loan (direct)
+- Component_17 uses Reservation (direct)
+- Component_18 uses Book (direct|via_repo)
+- Component_18 uses BookCopy (direct|via_repo)
+- Component_18 uses LibraryMember (direct|via_repo)
+- Component_18 uses Loan (direct|via_repo)
+- Component_18 uses Reservation (direct|via_repo)
+- Component_18 uses Staff (via_repo)
+- Component_18 uses Student (via_repo)
+- Component_18 uses User (via_repo)
+- Component_19 uses Course (direct)
+- Component_19 uses Grade (direct)
+- Component_19 uses Payment (direct)
+- Component_19 uses Student (direct)
+- Component_19 uses StudentAccount (direct)
+- Component_19 uses StudentAttendance (direct)
+- Component_20 uses SemesterRegistration (direct)
+- Component_21 uses Staff (direct)
+- Component_23 uses Student (direct)
+- Component_24 uses AcademicYear (via_repo)
+- Component_24 uses Course (via_repo)
+- Component_24 uses CourseEnrollment (direct|via_repo)
+- Component_24 uses Department (via_repo)
+- Component_24 uses Faculty (via_repo)
+- Component_24 uses Semester (via_repo)
+- Component_24 uses SemesterRegistration (direct|via_repo)
+- Component_24 uses Student (direct|via_repo)
+- Component_24 uses User (direct|via_repo)
+- Component_25 uses Teacher (direct)
+- Component_26 uses User (direct)
+
+### Runtime interactions
+Measured SEMS-R traces. Not production SEMS traffic. component_entity_counts are request-level co-occurrence (component on the same request as a queried table), not per-query attribution.
+trace_count=10505
+Busiest endpoints:
+- GET /api/v1/students/1/grades n=1172 sql_mean=2.0
+- GET /api/v1/students/1/account n=986 sql_mean=3.0
+- GET /api/v1/courses n=763 sql_mean=2.0
+- GET /api/v1/students/1 n=750 sql_mean=2.0
+- GET /api/v1/students/1/courses n=750 sql_mean=4.0
+- GET /api/v1/students/1/overview n=750 sql_mean=10.0
+- GET /api/v1/exams n=427 sql_mean=2.0
+- GET /api/v1/courses/1 n=422 sql_mean=2.0
+- GET /api/v1/students/1/gpa n=422 sql_mean=4.0
+- POST /api/v1/students/1/semester-registrations n=336 sql_mean=4.0
+- POST /api/v1/students/1/enrollments n=336 sql_mean=4.0
+- GET /api/v1/students/1/enrollments n=336 sql_mean=3.0
+- GET /api/v1/students/1/invoices n=242 sql_mean=4.0
+- GET /api/v1/invoices/1 n=236 sql_mean=2.0
+- POST /api/v1/payments n=236 sql_mean=8.0
+
+## C2 Explicit migration constraints
+These rules do not encode a class-to-service gold mapping.
+- R1: Decompose the legacy system into independently deployable services.
+- R2: Apply the Single Responsibility Principle.
+- R3: Prefer database ownership by one service.
+- R4: Minimize unnecessary cross-service coupling.
+- R5: Avoid shared databases where practical.
+- R6: Maintain functional behavior.
+- R7: Prefer boundaries aligned with business capabilities.
+- R8: Identify cases in which strict isolation would create excessive communication.
+- R9: Explicitly report uncertain architectural decisions instead of silently guessing.
+Machine-checkable: entity_has_at_most_one_owner, no_empty_services, no_extreme_service_imbalance, no_unassigned_components, no_duplicate_component_assignment, report_cyclic_service_dependencies
+
+## C3 Self-critique protocol
+1. Propose an architecture in the JSON schema.
+2. Critique your own boundaries in the critique field.
+3. List unsupported assumptions.
+4. List high-risk cross-service dependencies in architectural_risks.
+5. Put decisions that are not justified by evidence in uncertain_decisions (use UNCERTAIN).
+6. If the critique exposes a serious problem, revise the services list and set revised=true.
+The JSON object you return must be the revised architecture when a revision is needed.
+
