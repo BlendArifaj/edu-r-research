@@ -1,0 +1,99 @@
+{
+  "experiment_id": "PETCLINIC_EXT_V1",
+  "evidence_condition": "E0_MINIMAL",
+  "identifier_condition": "ANONYMIZED",
+  "generated_at": "2026-09-25T21:38:27.047121+00:00",
+  "domain_description_ref": "DOMAIN_DESCRIPTION.txt",
+  "components": [
+    {
+      "name": "Component_01",
+      "module": "Module_01",
+      "file": "artifacts/Component_01.java",
+      "kind": "domain"
+    },
+    {
+      "name": "Component_02",
+      "module": "Module_02",
+      "file": "artifacts/Component_02.java",
+      "kind": "controller"
+    },
+    {
+      "name": "Component_03",
+      "module": "Module_03",
+      "file": "artifacts/Component_03.java",
+      "kind": "repository"
+    },
+    {
+      "name": "Component_04",
+      "module": "Module_04",
+      "file": "artifacts/Component_04.java",
+      "kind": "domain"
+    },
+    {
+      "name": "Component_05",
+      "module": "Module_05",
+      "file": "artifacts/Component_05.java",
+      "kind": "controller"
+    },
+    {
+      "name": "Component_06",
+      "module": "Module_06",
+      "file": "artifacts/Component_06.java",
+      "kind": "domain"
+    },
+    {
+      "name": "Component_07",
+      "module": "Module_07",
+      "file": "artifacts/Component_07.java",
+      "kind": "repository"
+    },
+    {
+      "name": "Component_08",
+      "module": "Module_08",
+      "file": "artifacts/Component_08.java",
+      "kind": "validator"
+    },
+    {
+      "name": "Component_14",
+      "module": "Module_14",
+      "file": "artifacts/Component_14.java",
+      "kind": "domain"
+    },
+    {
+      "name": "Component_15",
+      "module": "Module_15",
+      "file": "artifacts/Component_15.java",
+      "kind": "controller"
+    },
+    {
+      "name": "Component_09",
+      "module": "Module_09",
+      "file": "artifacts/Component_09.java",
+      "kind": "domain"
+    },
+    {
+      "name": "Component_10",
+      "module": "Module_10",
+      "file": "artifacts/Component_10.java",
+      "kind": "domain"
+    },
+    {
+      "name": "Component_11",
+      "module": "Module_11",
+      "file": "artifacts/Component_11.java",
+      "kind": "controller"
+    },
+    {
+      "name": "Component_12",
+      "module": "Module_12",
+      "file": "artifacts/Component_12.java",
+      "kind": "repository"
+    },
+    {
+      "name": "Component_13",
+      "module": "Module_13",
+      "file": "artifacts/Component_13.java",
+      "kind": "domain"
+    }
+  ]
+}

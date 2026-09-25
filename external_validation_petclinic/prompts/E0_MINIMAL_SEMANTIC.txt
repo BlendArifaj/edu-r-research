@@ -1,0 +1,40 @@
+You are a software architect proposing a microservice decomposition of a legacy Spring PetClinic monolith.
+Reason only from the information in this prompt and the bundled evidence JSON.
+
+Return ONLY a JSON object with this shape (no markdown, no commentary):
+{
+  "services": [
+    {
+      "name": "candidate-service",
+      "components": ["ComponentName"],
+      "owned_entities": ["EntityName"],
+      "responsibilities": ["..."],
+      "dependencies": ["other-service"],
+      "rationale": "evidence-based reason"
+    }
+  ],
+  "migration_priority": [
+    {"service": "candidate-service", "rank": 1, "confidence": 0.0, "reason": ""}
+  ],
+  "uncertain_decisions": [],
+  "unsupported_assumptions": [],
+  "rule_violations": [],
+  "architectural_risks": [],
+  "critique": "",
+  "revised": false
+}
+Every listed component must appear in exactly one service.
+Service names are free text; do not assume any fixed label set.
+Do not use a hidden labeled reference partition.
+
+## Condition
+E0_MINIMAL: domain description and component catalog only (no static-call or persistence relation lists).
+
+## Identifier treatment
+SEMANTIC identifiers in the evidence package.
+
+## Domain description
+Spring PetClinic is a sample veterinary clinic management application. It supports day-to-day clinic operations such as maintaining client records, registering pets, scheduling and recording veterinary visits, and managing veterinarian staff and their specialties. The monolith under study is the canonical single-application deployment; decomposition candidates are application-layer Java components extracted from that codebase.
+
+## Evidence
+See architectural evidence file: E0_MINIMAL_SEMANTIC.json

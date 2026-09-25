@@ -1,0 +1,139 @@
+{
+  "method": "regex_import_and_type_reference_scan",
+  "definition": "Directed edge source->target if source Java unit references target component simple name",
+  "filter": "included monolith components only; test sources excluded",
+  "node_count": 15,
+  "edge_count": 26,
+  "edges": [
+    {
+      "source": "Owner",
+      "target": "Pet",
+      "relation": "static_reference"
+    },
+    {
+      "source": "Owner",
+      "target": "Visit",
+      "relation": "static_reference"
+    },
+    {
+      "source": "OwnerController",
+      "target": "Owner",
+      "relation": "static_reference"
+    },
+    {
+      "source": "OwnerController",
+      "target": "OwnerRepository",
+      "relation": "static_reference"
+    },
+    {
+      "source": "OwnerRepository",
+      "target": "Owner",
+      "relation": "static_reference"
+    },
+    {
+      "source": "Pet",
+      "target": "PetType",
+      "relation": "static_reference"
+    },
+    {
+      "source": "Pet",
+      "target": "Visit",
+      "relation": "static_reference"
+    },
+    {
+      "source": "PetController",
+      "target": "Owner",
+      "relation": "static_reference"
+    },
+    {
+      "source": "PetController",
+      "target": "OwnerRepository",
+      "relation": "static_reference"
+    },
+    {
+      "source": "PetController",
+      "target": "Pet",
+      "relation": "static_reference"
+    },
+    {
+      "source": "PetController",
+      "target": "PetType",
+      "relation": "static_reference"
+    },
+    {
+      "source": "PetController",
+      "target": "PetTypeRepository",
+      "relation": "static_reference"
+    },
+    {
+      "source": "PetController",
+      "target": "PetValidator",
+      "relation": "static_reference"
+    },
+    {
+      "source": "PetTypeRepository",
+      "target": "PetType",
+      "relation": "static_reference"
+    },
+    {
+      "source": "PetValidator",
+      "target": "Pet",
+      "relation": "static_reference"
+    },
+    {
+      "source": "VisitController",
+      "target": "Owner",
+      "relation": "static_reference"
+    },
+    {
+      "source": "VisitController",
+      "target": "OwnerRepository",
+      "relation": "static_reference"
+    },
+    {
+      "source": "VisitController",
+      "target": "Pet",
+      "relation": "static_reference"
+    },
+    {
+      "source": "VisitController",
+      "target": "Visit",
+      "relation": "static_reference"
+    },
+    {
+      "source": "Specialty",
+      "target": "Vet",
+      "relation": "static_reference"
+    },
+    {
+      "source": "Vet",
+      "target": "Specialty",
+      "relation": "static_reference"
+    },
+    {
+      "source": "VetController",
+      "target": "Vet",
+      "relation": "static_reference"
+    },
+    {
+      "source": "VetController",
+      "target": "VetRepository",
+      "relation": "static_reference"
+    },
+    {
+      "source": "VetController",
+      "target": "Vets",
+      "relation": "static_reference"
+    },
+    {
+      "source": "VetRepository",
+      "target": "Vet",
+      "relation": "static_reference"
+    },
+    {
+      "source": "Vets",
+      "target": "Vet",
+      "relation": "static_reference"
+    }
+  ]
+}

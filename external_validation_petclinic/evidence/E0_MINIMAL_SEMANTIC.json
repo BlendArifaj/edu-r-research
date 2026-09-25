@@ -1,0 +1,99 @@
+{
+  "experiment_id": "PETCLINIC_EXT_V1",
+  "evidence_condition": "E0_MINIMAL",
+  "identifier_condition": "SEMANTIC",
+  "generated_at": "2026-09-25T21:38:27.046528+00:00",
+  "domain_description_ref": "DOMAIN_DESCRIPTION.txt",
+  "components": [
+    {
+      "name": "Owner",
+      "module": "org.springframework.samples.petclinic.owner",
+      "file": "src/main/java/org/springframework/samples/petclinic/owner/Owner.java",
+      "kind": "domain"
+    },
+    {
+      "name": "OwnerController",
+      "module": "org.springframework.samples.petclinic.owner",
+      "file": "src/main/java/org/springframework/samples/petclinic/owner/OwnerController.java",
+      "kind": "controller"
+    },
+    {
+      "name": "OwnerRepository",
+      "module": "org.springframework.samples.petclinic.owner",
+      "file": "src/main/java/org/springframework/samples/petclinic/owner/OwnerRepository.java",
+      "kind": "repository"
+    },
+    {
+      "name": "Pet",
+      "module": "org.springframework.samples.petclinic.owner",
+      "file": "src/main/java/org/springframework/samples/petclinic/owner/Pet.java",
+      "kind": "domain"
+    },
+    {
+      "name": "PetController",
+      "module": "org.springframework.samples.petclinic.owner",
+      "file": "src/main/java/org/springframework/samples/petclinic/owner/PetController.java",
+      "kind": "controller"
+    },
+    {
+      "name": "PetType",
+      "module": "org.springframework.samples.petclinic.owner",
+      "file": "src/main/java/org/springframework/samples/petclinic/owner/PetType.java",
+      "kind": "domain"
+    },
+    {
+      "name": "PetTypeRepository",
+      "module": "org.springframework.samples.petclinic.owner",
+      "file": "src/main/java/org/springframework/samples/petclinic/owner/PetTypeRepository.java",
+      "kind": "repository"
+    },
+    {
+      "name": "PetValidator",
+      "module": "org.springframework.samples.petclinic.owner",
+      "file": "src/main/java/org/springframework/samples/petclinic/owner/PetValidator.java",
+      "kind": "validator"
+    },
+    {
+      "name": "Visit",
+      "module": "org.springframework.samples.petclinic.owner",
+      "file": "src/main/java/org/springframework/samples/petclinic/owner/Visit.java",
+      "kind": "domain"
+    },
+    {
+      "name": "VisitController",
+      "module": "org.springframework.samples.petclinic.owner",
+      "file": "src/main/java/org/springframework/samples/petclinic/owner/VisitController.java",
+      "kind": "controller"
+    },
+    {
+      "name": "Specialty",
+      "module": "org.springframework.samples.petclinic.vet",
+      "file": "src/main/java/org/springframework/samples/petclinic/vet/Specialty.java",
+      "kind": "domain"
+    },
+    {
+      "name": "Vet",
+      "module": "org.springframework.samples.petclinic.vet",
+      "file": "src/main/java/org/springframework/samples/petclinic/vet/Vet.java",
+      "kind": "domain"
+    },
+    {
+      "name": "VetController",
+      "module": "org.springframework.samples.petclinic.vet",
+      "file": "src/main/java/org/springframework/samples/petclinic/vet/VetController.java",
+      "kind": "controller"
+    },
+    {
+      "name": "VetRepository",
+      "module": "org.springframework.samples.petclinic.vet",
+      "file": "src/main/java/org/springframework/samples/petclinic/vet/VetRepository.java",
+      "kind": "repository"
+    },
+    {
+      "name": "Vets",
+      "module": "org.springframework.samples.petclinic.vet",
+      "file": "src/main/java/org/springframework/samples/petclinic/vet/Vets.java",
+      "kind": "domain"
+    }
+  ]
+}

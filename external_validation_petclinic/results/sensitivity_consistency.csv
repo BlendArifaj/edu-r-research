@@ -1,0 +1,4 @@
+model,primary_rq1_delta,sensitivity_rq1_delta,primary_rq2_delta,sensitivity_rq2_delta,consistency
+gemini-3.8-flash,0.3098,0.37262,0.27576,0.37262,CONSISTENT
+gpt-4o-mini,0.59998,0.7573,0.29648,0.3702,CONSISTENT
+llama3.1,0.54392,0.68746,0.16216,0.17254,CONSISTENT

@@ -1,0 +1,273 @@
+{
+  "experiment_id": "PETCLINIC_EXT_V1",
+  "evidence_condition": "E1_STRUCTURAL",
+  "identifier_condition": "SEMANTIC",
+  "generated_at": "2026-09-25T21:38:27.047468+00:00",
+  "domain_description_ref": "DOMAIN_DESCRIPTION.txt",
+  "components": [
+    {
+      "name": "Owner",
+      "module": "org.springframework.samples.petclinic.owner",
+      "file": "src/main/java/org/springframework/samples/petclinic/owner/Owner.java",
+      "kind": "domain"
+    },
+    {
+      "name": "OwnerController",
+      "module": "org.springframework.samples.petclinic.owner",
+      "file": "src/main/java/org/springframework/samples/petclinic/owner/OwnerController.java",
+      "kind": "controller"
+    },
+    {
+      "name": "OwnerRepository",
+      "module": "org.springframework.samples.petclinic.owner",
+      "file": "src/main/java/org/springframework/samples/petclinic/owner/OwnerRepository.java",
+      "kind": "repository"
+    },
+    {
+      "name": "Pet",
+      "module": "org.springframework.samples.petclinic.owner",
+      "file": "src/main/java/org/springframework/samples/petclinic/owner/Pet.java",
+      "kind": "domain"
+    },
+    {
+      "name": "PetController",
+      "module": "org.springframework.samples.petclinic.owner",
+      "file": "src/main/java/org/springframework/samples/petclinic/owner/PetController.java",
+      "kind": "controller"
+    },
+    {
+      "name": "PetType",
+      "module": "org.springframework.samples.petclinic.owner",
+      "file": "src/main/java/org/springframework/samples/petclinic/owner/PetType.java",
+      "kind": "domain"
+    },
+    {
+      "name": "PetTypeRepository",
+      "module": "org.springframework.samples.petclinic.owner",
+      "file": "src/main/java/org/springframework/samples/petclinic/owner/PetTypeRepository.java",
+      "kind": "repository"
+    },
+    {
+      "name": "PetValidator",
+      "module": "org.springframework.samples.petclinic.owner",
+      "file": "src/main/java/org/springframework/samples/petclinic/owner/PetValidator.java",
+      "kind": "validator"
+    },
+    {
+      "name": "Visit",
+      "module": "org.springframework.samples.petclinic.owner",
+      "file": "src/main/java/org/springframework/samples/petclinic/owner/Visit.java",
+      "kind": "domain"
+    },
+    {
+      "name": "VisitController",
+      "module": "org.springframework.samples.petclinic.owner",
+      "file": "src/main/java/org/springframework/samples/petclinic/owner/VisitController.java",
+      "kind": "controller"
+    },
+    {
+      "name": "Specialty",
+      "module": "org.springframework.samples.petclinic.vet",
+      "file": "src/main/java/org/springframework/samples/petclinic/vet/Specialty.java",
+      "kind": "domain"
+    },
+    {
+      "name": "Vet",
+      "module": "org.springframework.samples.petclinic.vet",
+      "file": "src/main/java/org/springframework/samples/petclinic/vet/Vet.java",
+      "kind": "domain"
+    },
+    {
+      "name": "VetController",
+      "module": "org.springframework.samples.petclinic.vet",
+      "file": "src/main/java/org/springframework/samples/petclinic/vet/VetController.java",
+      "kind": "controller"
+    },
+    {
+      "name": "VetRepository",
+      "module": "org.springframework.samples.petclinic.vet",
+      "file": "src/main/java/org/springframework/samples/petclinic/vet/VetRepository.java",
+      "kind": "repository"
+    },
+    {
+      "name": "Vets",
+      "module": "org.springframework.samples.petclinic.vet",
+      "file": "src/main/java/org/springframework/samples/petclinic/vet/Vets.java",
+      "kind": "domain"
+    }
+  ],
+  "static_call_edges": [
+    {
+      "source": "Owner",
+      "target": "Pet",
+      "relation": "static_reference"
+    },
+    {
+      "source": "Owner",
+      "target": "Visit",
+      "relation": "static_reference"
+    },
+    {
+      "source": "OwnerController",
+      "target": "Owner",
+      "relation": "static_reference"
+    },
+    {
+      "source": "OwnerController",
+      "target": "OwnerRepository",
+      "relation": "static_reference"
+    },
+    {
+      "source": "OwnerRepository",
+      "target": "Owner",
+      "relation": "static_reference"
+    },
+    {
+      "source": "Pet",
+      "target": "PetType",
+      "relation": "static_reference"
+    },
+    {
+      "source": "Pet",
+      "target": "Visit",
+      "relation": "static_reference"
+    },
+    {
+      "source": "PetController",
+      "target": "Owner",
+      "relation": "static_reference"
+    },
+    {
+      "source": "PetController",
+      "target": "OwnerRepository",
+      "relation": "static_reference"
+    },
+    {
+      "source": "PetController",
+      "target": "Pet",
+      "relation": "static_reference"
+    },
+    {
+      "source": "PetController",
+      "target": "PetType",
+      "relation": "static_reference"
+    },
+    {
+      "source": "PetController",
+      "target": "PetTypeRepository",
+      "relation": "static_reference"
+    },
+    {
+      "source": "PetController",
+      "target": "PetValidator",
+      "relation": "static_reference"
+    },
+    {
+      "source": "PetTypeRepository",
+      "target": "PetType",
+      "relation": "static_reference"
+    },
+    {
+      "source": "PetValidator",
+      "target": "Pet",
+      "relation": "static_reference"
+    },
+    {
+      "source": "VisitController",
+      "target": "Owner",
+      "relation": "static_reference"
+    },
+    {
+      "source": "VisitController",
+      "target": "OwnerRepository",
+      "relation": "static_reference"
+    },
+    {
+      "source": "VisitController",
+      "target": "Pet",
+      "relation": "static_reference"
+    },
+    {
+      "source": "VisitController",
+      "target": "Visit",
+      "relation": "static_reference"
+    },
+    {
+      "source": "Specialty",
+      "target": "Vet",
+      "relation": "static_reference"
+    },
+    {
+      "source": "Vet",
+      "target": "Specialty",
+      "relation": "static_reference"
+    },
+    {
+      "source": "VetController",
+      "target": "Vet",
+      "relation": "static_reference"
+    },
+    {
+      "source": "VetController",
+      "target": "VetRepository",
+      "relation": "static_reference"
+    },
+    {
+      "source": "VetController",
+      "target": "Vets",
+      "relation": "static_reference"
+    },
+    {
+      "source": "VetRepository",
+      "target": "Vet",
+      "relation": "static_reference"
+    },
+    {
+      "source": "Vets",
+      "target": "Vet",
+      "relation": "static_reference"
+    }
+  ],
+  "data_relations": [
+    {
+      "source": "OwnerController",
+      "target": "OwnerRepository",
+      "relation": "controller_repository"
+    },
+    {
+      "source": "OwnerRepository",
+      "target": "Owner",
+      "relation": "repository_entity"
+    },
+    {
+      "source": "PetController",
+      "target": "PetTypeRepository",
+      "relation": "controller_repository"
+    },
+    {
+      "source": "PetController",
+      "target": "OwnerRepository",
+      "relation": "controller_repository"
+    },
+    {
+      "source": "PetTypeRepository",
+      "target": "PetType",
+      "relation": "repository_entity"
+    },
+    {
+      "source": "VisitController",
+      "target": "OwnerRepository",
+      "relation": "controller_repository"
+    },
+    {
+      "source": "VetController",
+      "target": "VetRepository",
+      "relation": "controller_repository"
+    },
+    {
+      "source": "VetRepository",
+      "target": "Vet",
+      "relation": "repository_entity"
+    }
+  ]
+}

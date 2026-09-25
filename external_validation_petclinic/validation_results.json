@@ -1,0 +1,94 @@
+{
+  "all_pass": true,
+  "checks": {
+    "A_monolith_frozen": {
+      "pass": true,
+      "sha": "818c4136ea971c21674525f9053de0d9c7ad8cfe",
+      "status": "clean"
+    },
+    "A_microservices_frozen": {
+      "pass": true,
+      "sha": "aefaf7fa9eb0ab911a24c346ca0e4dc5837251c7",
+      "status": "clean"
+    },
+    "B_mapping_no_llm": {
+      "pass": true,
+      "note": "derived by build_petclinic_freeze.py"
+    },
+    "C_one_service_per_component": {
+      "pass": true,
+      "n": 15
+    },
+    "D_no_silent_ambiguous": {
+      "pass": true,
+      "excluded_ambiguous": 0
+    },
+    "E_no_reference_in_prompts": {
+      "pass": true,
+      "hits": []
+    },
+    "F_identical_graph_structure": {
+      "pass": true,
+      "note": "same component count/kinds and edge counts; identifiers differ by arm"
+    },
+    "G_anonymization_bijection": {
+      "pass": true
+    },
+    "H_reverse_map_absent_from_prompts": {
+      "pass": true
+    },
+    "I_E0_no_structural": {
+      "pass": true
+    },
+    "J_E1_adds_structure_only": {
+      "pass": true
+    },
+    "K_pairs_complete": {
+      "pass": true,
+      "pairs": 30
+    },
+    "L_counterbalance": {
+      "pass": true,
+      "semantic_first": 15,
+      "total_pairs": 30
+    },
+    "M_reference_hash": {
+      "pass": true,
+      "hash": "57071674554b53207fb7f5112768f189c41600cfd119b1883474dae4707d94c7"
+    },
+    "N_schema_no_required_labels": {
+      "pass": true,
+      "note": "free-text service names"
+    },
+    "reference_pair_math": {
+      "total_unordered_pairs_C_15_2": 105,
+      "same_service_positive_pairs": {
+        "CUSTOMERS_C_8_2": 28,
+        "VETS_C_5_2": 10,
+        "VISITS_C_2_2": 1,
+        "total": 39
+      },
+      "visits_component_count": 2
+    },
+    "H_small_reference_clusters": {
+      "VISITS": 2
+    },
+    "stop_go": {
+      "A_independent_source": true,
+      "B_preexisting_microservice_reference": true,
+      "C_deterministic_mapping": true,
+      "D_total_components_ge_12": true,
+      "E_three_business_services": true,
+      "F_min_two_per_service": true,
+      "G_no_reference_label_leakage": true,
+      "H_small_cluster_limitation_recorded": true,
+      "I_primary_and_sensitivity_frozen": true,
+      "per_service_counts": {
+        "CUSTOMERS": 8,
+        "VISITS": 2,
+        "VETS": 5
+      },
+      "recommendation": "GO"
+    }
+  }
+}

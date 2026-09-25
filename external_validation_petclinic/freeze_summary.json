@@ -1,0 +1,11 @@
+{
+  "included_components": 15,
+  "per_service": {
+    "CUSTOMERS": 8,
+    "VISITS": 2,
+    "VETS": 5
+  },
+  "excluded_count": 15,
+  "blocker_min_three_per_service": true,
+  "go_recommendation": "NO-GO"
+}

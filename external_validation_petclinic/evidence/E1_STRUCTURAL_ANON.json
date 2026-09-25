@@ -1,0 +1,273 @@
+{
+  "experiment_id": "PETCLINIC_EXT_V1",
+  "evidence_condition": "E1_STRUCTURAL",
+  "identifier_condition": "ANONYMIZED",
+  "generated_at": "2026-09-25T21:38:27.047886+00:00",
+  "domain_description_ref": "DOMAIN_DESCRIPTION.txt",
+  "components": [
+    {
+      "name": "Component_01",
+      "module": "Module_01",
+      "file": "artifacts/Component_01.java",
+      "kind": "domain"
+    },
+    {
+      "name": "Component_02",
+      "module": "Module_02",
+      "file": "artifacts/Component_02.java",
+      "kind": "controller"
+    },
+    {
+      "name": "Component_03",
+      "module": "Module_03",
+      "file": "artifacts/Component_03.java",
+      "kind": "repository"
+    },
+    {
+      "name": "Component_04",
+      "module": "Module_04",
+      "file": "artifacts/Component_04.java",
+      "kind": "domain"
+    },
+    {
+      "name": "Component_05",
+      "module": "Module_05",
+      "file": "artifacts/Component_05.java",
+      "kind": "controller"
+    },
+    {
+      "name": "Component_06",
+      "module": "Module_06",
+      "file": "artifacts/Component_06.java",
+      "kind": "domain"
+    },
+    {
+      "name": "Component_07",
+      "module": "Module_07",
+      "file": "artifacts/Component_07.java",
+      "kind": "repository"
+    },
+    {
+      "name": "Component_08",
+      "module": "Module_08",
+      "file": "artifacts/Component_08.java",
+      "kind": "validator"
+    },
+    {
+      "name": "Component_14",
+      "module": "Module_14",
+      "file": "artifacts/Component_14.java",
+      "kind": "domain"
+    },
+    {
+      "name": "Component_15",
+      "module": "Module_15",
+      "file": "artifacts/Component_15.java",
+      "kind": "controller"
+    },
+    {
+      "name": "Component_09",
+      "module": "Module_09",
+      "file": "artifacts/Component_09.java",
+      "kind": "domain"
+    },
+    {
+      "name": "Component_10",
+      "module": "Module_10",
+      "file": "artifacts/Component_10.java",
+      "kind": "domain"
+    },
+    {
+      "name": "Component_11",
+      "module": "Module_11",
+      "file": "artifacts/Component_11.java",
+      "kind": "controller"
+    },
+    {
+      "name": "Component_12",
+      "module": "Module_12",
+      "file": "artifacts/Component_12.java",
+      "kind": "repository"
+    },
+    {
+      "name": "Component_13",
+      "module": "Module_13",
+      "file": "artifacts/Component_13.java",
+      "kind": "domain"
+    }
+  ],
+  "static_call_edges": [
+    {
+      "source": "Component_01",
+      "target": "Component_04",
+      "relation": "static_reference"
+    },
+    {
+      "source": "Component_01",
+      "target": "Component_14",
+      "relation": "static_reference"
+    },
+    {
+      "source": "Component_02",
+      "target": "Component_01",
+      "relation": "static_reference"
+    },
+    {
+      "source": "Component_02",
+      "target": "Component_03",
+      "relation": "static_reference"
+    },
+    {
+      "source": "Component_03",
+      "target": "Component_01",
+      "relation": "static_reference"
+    },
+    {
+      "source": "Component_04",
+      "target": "Component_06",
+      "relation": "static_reference"
+    },
+    {
+      "source": "Component_04",
+      "target": "Component_14",
+      "relation": "static_reference"
+    },
+    {
+      "source": "Component_05",
+      "target": "Component_01",
+      "relation": "static_reference"
+    },
+    {
+      "source": "Component_05",
+      "target": "Component_03",
+      "relation": "static_reference"
+    },
+    {
+      "source": "Component_05",
+      "target": "Component_04",
+      "relation": "static_reference"
+    },
+    {
+      "source": "Component_05",
+      "target": "Component_06",
+      "relation": "static_reference"
+    },
+    {
+      "source": "Component_05",
+      "target": "Component_07",
+      "relation": "static_reference"
+    },
+    {
+      "source": "Component_05",
+      "target": "Component_08",
+      "relation": "static_reference"
+    },
+    {
+      "source": "Component_07",
+      "target": "Component_06",
+      "relation": "static_reference"
+    },
+    {
+      "source": "Component_08",
+      "target": "Component_04",
+      "relation": "static_reference"
+    },
+    {
+      "source": "Component_15",
+      "target": "Component_01",
+      "relation": "static_reference"
+    },
+    {
+      "source": "Component_15",
+      "target": "Component_03",
+      "relation": "static_reference"
+    },
+    {
+      "source": "Component_15",
+      "target": "Component_04",
+      "relation": "static_reference"
+    },
+    {
+      "source": "Component_15",
+      "target": "Component_14",
+      "relation": "static_reference"
+    },
+    {
+      "source": "Component_09",
+      "target": "Component_10",
+      "relation": "static_reference"
+    },
+    {
+      "source": "Component_10",
+      "target": "Component_09",
+      "relation": "static_reference"
+    },
+    {
+      "source": "Component_11",
+      "target": "Component_10",
+      "relation": "static_reference"
+    },
+    {
+      "source": "Component_11",
+      "target": "Component_12",
+      "relation": "static_reference"
+    },
+    {
+      "source": "Component_11",
+      "target": "Component_13",
+      "relation": "static_reference"
+    },
+    {
+      "source": "Component_12",
+      "target": "Component_10",
+      "relation": "static_reference"
+    },
+    {
+      "source": "Component_13",
+      "target": "Component_10",
+      "relation": "static_reference"
+    }
+  ],
+  "data_relations": [
+    {
+      "source": "Component_02",
+      "target": "Component_03",
+      "relation": "controller_repository"
+    },
+    {
+      "source": "Component_03",
+      "target": "Component_01",
+      "relation": "repository_entity"
+    },
+    {
+      "source": "Component_05",
+      "target": "Component_07",
+      "relation": "controller_repository"
+    },
+    {
+      "source": "Component_05",
+      "target": "Component_03",
+      "relation": "controller_repository"
+    },
+    {
+      "source": "Component_07",
+      "target": "Component_06",
+      "relation": "repository_entity"
+    },
+    {
+      "source": "Component_15",
+      "target": "Component_03",
+      "relation": "controller_repository"
+    },
+    {
+      "source": "Component_11",
+      "target": "Component_12",
+      "relation": "controller_repository"
+    },
+    {
+      "source": "Component_12",
+      "target": "Component_10",
+      "relation": "repository_entity"
+    }
+  ]
+}

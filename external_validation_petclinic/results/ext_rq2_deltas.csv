@@ -1,0 +1,4 @@
+model,mean_f1_e0_anonymized,mean_f1_e1_anonymized,delta_f1_e1_minus_e0_anonymized
+gemini-3.8-flash,0.55404,0.8298,0.27576
+gpt-4o-mini,0.22982,0.5263,0.29648
+llama3.1,0.28588,0.44804,0.16216

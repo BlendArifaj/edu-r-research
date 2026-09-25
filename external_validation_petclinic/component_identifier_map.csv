@@ -1,0 +1,16 @@
+original_identifier,anonymized_identifier,anonymized_module,anonymized_file
+Owner,Component_01,Module_01,artifacts/Component_01.java
+OwnerController,Component_02,Module_02,artifacts/Component_02.java
+OwnerRepository,Component_03,Module_03,artifacts/Component_03.java
+Pet,Component_04,Module_04,artifacts/Component_04.java
+PetController,Component_05,Module_05,artifacts/Component_05.java
+PetType,Component_06,Module_06,artifacts/Component_06.java
+PetTypeRepository,Component_07,Module_07,artifacts/Component_07.java
+PetValidator,Component_08,Module_08,artifacts/Component_08.java
+Specialty,Component_09,Module_09,artifacts/Component_09.java
+Vet,Component_10,Module_10,artifacts/Component_10.java
+VetController,Component_11,Module_11,artifacts/Component_11.java
+VetRepository,Component_12,Module_12,artifacts/Component_12.java
+Vets,Component_13,Module_13,artifacts/Component_13.java
+Visit,Component_14,Module_14,artifacts/Component_14.java
+VisitController,Component_15,Module_15,artifacts/Component_15.java

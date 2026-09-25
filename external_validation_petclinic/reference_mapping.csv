@@ -1,0 +1,16 @@
+monolith_component,reference_service,mapping_rule,reference_artifact,reference_path,mapping_confidence,included
+Owner,CUSTOMERS,RULE_1_UNIQUE_SIMPLE_NAME,Owner.java,spring-petclinic-customers-service/src/main/java/org/springframework/samples/petclinic/customers/model/Owner.java,HIGH,true
+OwnerController,CUSTOMERS,RULE_2_CONTROLLER_TO_RESOURCE,OwnerResource,spring-petclinic-customers-service/src/main/java/org/springframework/samples/petclinic/customers/web/OwnerResource.java,HIGH,true
+OwnerRepository,CUSTOMERS,RULE_1_UNIQUE_SIMPLE_NAME,OwnerRepository.java,spring-petclinic-customers-service/src/main/java/org/springframework/samples/petclinic/customers/model/OwnerRepository.java,HIGH,true
+Pet,CUSTOMERS,RULE_1_UNIQUE_SIMPLE_NAME,Pet.java,spring-petclinic-customers-service/src/main/java/org/springframework/samples/petclinic/customers/model/Pet.java,HIGH,true
+PetController,CUSTOMERS,RULE_2_CONTROLLER_TO_RESOURCE,PetResource,spring-petclinic-customers-service/src/main/java/org/springframework/samples/petclinic/customers/web/PetResource.java,HIGH,true
+PetType,CUSTOMERS,RULE_1_UNIQUE_SIMPLE_NAME,PetType.java,spring-petclinic-customers-service/src/main/java/org/springframework/samples/petclinic/customers/model/PetType.java,HIGH,true
+PetTypeRepository,CUSTOMERS,RULE_2_REPOSITORY_ENTITY_TYPE,PetType.java,spring-petclinic-customers-service/src/main/java/org/springframework/samples/petclinic/customers/model/PetType.java,HIGH,true
+PetValidator,CUSTOMERS,RULE_2_VALIDATOR_FOR_ENTITY_PET,Pet.java,spring-petclinic-customers-service/src/main/java/org/springframework/samples/petclinic/customers/model/Pet.java,MEDIUM,true
+Visit,VISITS,RULE_1_UNIQUE_SIMPLE_NAME,Visit.java,spring-petclinic-visits-service/src/main/java/org/springframework/samples/petclinic/visits/model/Visit.java,HIGH,true
+VisitController,VISITS,RULE_2_CONTROLLER_TO_RESOURCE,VisitResource,spring-petclinic-visits-service/src/main/java/org/springframework/samples/petclinic/visits/web/VisitResource.java,HIGH,true
+Specialty,VETS,RULE_1_UNIQUE_SIMPLE_NAME,Specialty.java,spring-petclinic-vets-service/src/main/java/org/springframework/samples/petclinic/vets/model/Specialty.java,HIGH,true
+Vet,VETS,RULE_1_UNIQUE_SIMPLE_NAME,Vet.java,spring-petclinic-vets-service/src/main/java/org/springframework/samples/petclinic/vets/model/Vet.java,HIGH,true
+VetController,VETS,RULE_2_CONTROLLER_TO_RESOURCE,VetResource,spring-petclinic-vets-service/src/main/java/org/springframework/samples/petclinic/vets/web/VetResource.java,HIGH,true
+VetRepository,VETS,RULE_1_UNIQUE_SIMPLE_NAME,VetRepository.java,spring-petclinic-vets-service/src/main/java/org/springframework/samples/petclinic/vets/model/VetRepository.java,HIGH,true
+Vets,VETS,RULE_2_VET_PACKAGE_AGGREGATE,Vet.java,spring-petclinic-vets-service/src/main/java/org/springframework/samples/petclinic/vets/model/Vet.java,MEDIUM,true

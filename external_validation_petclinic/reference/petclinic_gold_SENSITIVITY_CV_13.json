@@ -1,0 +1,31 @@
+{
+  "system": "spring-petclinic-monolith",
+  "evaluation_scope": "PETCLINIC_EXT_V1_SENSITIVITY_CV",
+  "services": {
+    "CUSTOMERS": {
+      "components": [
+        "Owner",
+        "OwnerController",
+        "OwnerRepository",
+        "Pet",
+        "PetController",
+        "PetType",
+        "PetTypeRepository",
+        "PetValidator"
+      ]
+    },
+    "VETS": {
+      "components": [
+        "Specialty",
+        "Vet",
+        "VetController",
+        "VetRepository",
+        "Vets"
+      ]
+    }
+  },
+  "shared_identity": {
+    "excluded_from_six_way_clustering": false,
+    "components": []
+  }
+}

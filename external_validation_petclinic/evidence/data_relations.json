@@ -1,0 +1,50 @@
+{
+  "method": "repository_generic_and_controller_repository_scan",
+  "rules": [
+    "Repository<T> -> entity T edge",
+    "Controller referencing Repository simple name -> controller_repository edge"
+  ],
+  "edge_count": 8,
+  "edges": [
+    {
+      "source": "OwnerController",
+      "target": "OwnerRepository",
+      "relation": "controller_repository"
+    },
+    {
+      "source": "OwnerRepository",
+      "target": "Owner",
+      "relation": "repository_entity"
+    },
+    {
+      "source": "PetController",
+      "target": "PetTypeRepository",
+      "relation": "controller_repository"
+    },
+    {
+      "source": "PetController",
+      "target": "OwnerRepository",
+      "relation": "controller_repository"
+    },
+    {
+      "source": "PetTypeRepository",
+      "target": "PetType",
+      "relation": "repository_entity"
+    },
+    {
+      "source": "VisitController",
+      "target": "OwnerRepository",
+      "relation": "controller_repository"
+    },
+    {
+      "source": "VetController",
+      "target": "VetRepository",
+      "relation": "controller_repository"
+    },
+    {
+      "source": "VetRepository",
+      "target": "Vet",
+      "relation": "repository_entity"
+    }
+  ]
+}
