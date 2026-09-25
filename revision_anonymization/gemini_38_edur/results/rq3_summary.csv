@@ -1,0 +1,5 @@
+condition,rule_compliance,stability,attempted,valid,invalid
+C0,1.0,1.0,3,3,0
+C1,1.0,0.9649,3,3,0
+C2,1.0,1.0,3,3,0
+C3,1.0,1.0,3,3,0
