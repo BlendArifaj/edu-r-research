@@ -1,0 +1,132 @@
+{
+  "schema_version": "1",
+  "method": "petclinic_gemini-3.8-flash_E0_MINIMAL_ANONYMIZED",
+  "method_family": "llm",
+  "system": {
+    "name": "SEMS-R",
+    "is_original_sems_source": false,
+    "gold_labels_used": false,
+    "integrity": "SEMS-R LLM decomposition. Not original production SEMS. This output does not consume evaluation gold labels.",
+    "generated_at": "2026-09-25T22:22:22.832594+00:00"
+  },
+  "config": {
+    "provider": "gemini",
+    "model": "gemini-3.8-flash",
+    "temperature": 0.2,
+    "condition": null,
+    "run_number": null,
+    "is_scientific_run": false
+  },
+  "available": true,
+  "component_assignment": {
+    "Component_01": "candidate-service-alpha",
+    "Component_02": "candidate-service-alpha",
+    "Component_03": "candidate-service-alpha",
+    "Component_04": "candidate-service-alpha",
+    "Component_05": "candidate-service-beta",
+    "Component_06": "candidate-service-beta",
+    "Component_07": "candidate-service-beta",
+    "Component_08": "candidate-service-alpha",
+    "Component_09": "candidate-service-beta",
+    "Component_10": "candidate-service-beta",
+    "Component_11": "candidate-service-gamma",
+    "Component_12": "candidate-service-gamma",
+    "Component_13": "candidate-service-gamma",
+    "Component_14": "candidate-service-gamma",
+    "Component_15": "candidate-service-gamma"
+  },
+  "services": [
+    {
+      "id": "candidate-service-alpha",
+      "label": "candidate-service-alpha",
+      "components": [
+        "Component_01",
+        "Component_02",
+        "Component_03",
+        "Component_04",
+        "Component_08"
+      ],
+      "owned_entities": [
+        "Component_01",
+        "Component_04"
+      ]
+    },
+    {
+      "id": "candidate-service-beta",
+      "label": "candidate-service-beta",
+      "components": [
+        "Component_05",
+        "Component_06",
+        "Component_07",
+        "Component_09",
+        "Component_10"
+      ],
+      "owned_entities": [
+        "Component_06",
+        "Component_09",
+        "Component_10"
+      ]
+    },
+    {
+      "id": "candidate-service-gamma",
+      "label": "candidate-service-gamma",
+      "components": [
+        "Component_11",
+        "Component_12",
+        "Component_13",
+        "Component_14",
+        "Component_15"
+      ],
+      "owned_entities": [
+        "Component_13",
+        "Component_14"
+      ]
+    }
+  ],
+  "uncertain_decisions": [
+    {
+      "component": "Partitioning of components across service boundaries is speculative due to total absence of static call traces, data model foreign keys, or behavioral coupling metrics.",
+      "reason": "Partitioning of components across service boundaries is speculative due to total absence of static call traces, data model foreign keys, or behavioral coupling metrics."
+    },
+    {
+      "component": "Mapping of domain entities (Component_01, Component_04, Component_06, Component_09, Component_10, Component_13, Component_14) to specific controllers and repositories cannot be confirmed from the evidence.",
+      "reason": "Mapping of domain entities (Component_01, Component_04, Component_06, Component_09, Component_10, Component_13, Component_14) to specific controllers and repositories cannot be confirmed from the evidence."
+    }
+  ],
+  "unsupported_assumptions": [
+    "Assumed that each repository component (Component_03, Component_07, Component_12) anchors an independent bounded context.",
+    "Assumed that controllers Component_11 and Component_15 share the persistence context of Component_12.",
+    "Assumed that validator Component_08 relates directly to controller Component_02 and domain entities Component_01/Component_04 without explicit reference evidence."
+  ],
+  "rule_violations": [],
+  "architectural_risks": [
+    "High probability of cross-service distributed transactions and circular dependencies if split entities have unobserved relational foreign keys.",
+    "Potential performance degradation caused by synchronous inter-service communication across candidate boundaries if domain entities interact frequently.",
+    "Risk of splitting cohesive aggregates across services due to lack of domain semantics in anonymized identifiers."
+  ],
+  "critique": "The evidence package provides only anonymized component identifiers, component architectural kinds (domain, controller, repository, validator), and module paths under condition E0_MINIMAL. In the absence of static call graphs, dynamic execution traces, database schemas, or domain-specific semantic labels, any decomposition is fundamentally hypothetical. Decompositions constructed under these constraints cannot guarantee bounded-context cohesion or low coupling.",
+  "revised": false,
+  "migration_priority": [
+    {
+      "service": "candidate-service-alpha",
+      "rank": 1,
+      "confidence": 0.2,
+      "reason": "Includes a validator component alongside repository and controller components, but ordering is tentative due to absent invocation coupling data."
+    },
+    {
+      "service": "candidate-service-beta",
+      "rank": 2,
+      "confidence": 0.2,
+      "reason": "Contains single repository and controller with associated domain models; intermediate priority pending dependency resolution."
+    },
+    {
+      "service": "candidate-service-gamma",
+      "rank": 3,
+      "confidence": 0.2,
+      "reason": "Contains multiple controllers (Component_11 and Component_15) sharing a repository, suggesting higher internal complexity or cross-service dependencies."
+    }
+  ],
+  "notes": [
+    "Parsed from LLM JSON. Gold labels were not in the prompt."
+  ]
+}

@@ -1,0 +1,102 @@
+{
+  "services": [
+    {
+      "name": "candidate-service-1",
+      "components": [
+        "Component_01",
+        "Component_02",
+        "Component_03",
+        "Component_04"
+      ],
+      "owned_entities": [
+        "Component_01",
+        "Component_04"
+      ],
+      "responsibilities": [
+        "Provide domain logic and persistence for clinic domain entities in Cluster 1",
+        "Handle web requests via controller Component_02 and data persistence via repository Component_03"
+      ],
+      "dependencies": [],
+      "rationale": "Groups contiguous domain entities Component_01 and Component_04 with their corresponding controller Component_02 and repository Component_03, forming an independent bounded context."
+    },
+    {
+      "name": "candidate-service-2",
+      "components": [
+        "Component_05",
+        "Component_06",
+        "Component_07",
+        "Component_08"
+      ],
+      "owned_entities": [
+        "Component_06"
+      ],
+      "responsibilities": [
+        "Manage clinic operational subdomain records and input validation",
+        "Expose REST/web endpoints via Component_05, validation via Component_08, and persistence via Component_07"
+      ],
+      "dependencies": [
+        "candidate-service-3"
+      ],
+      "rationale": "Combines controller Component_05, repository Component_07, domain entity Component_06, and validator Component_08 into a cohesive operational service unit."
+    },
+    {
+      "name": "candidate-service-3",
+      "components": [
+        "Component_09",
+        "Component_10",
+        "Component_11",
+        "Component_12",
+        "Component_13",
+        "Component_14",
+        "Component_15"
+      ],
+      "owned_entities": [
+        "Component_09",
+        "Component_10",
+        "Component_13",
+        "Component_14"
+      ],
+      "responsibilities": [
+        "Maintain core aggregate domain entities and business rules",
+        "Provide web handling across controllers Component_11 and Component_15 backed by repository Component_12"
+      ],
+      "dependencies": [],
+      "rationale": "Consolidates the larger aggregate cluster containing four domain entities, two controllers, and an underlying repository representing the primary business domain."
+    }
+  ],
+  "migration_priority": [
+    {
+      "service": "candidate-service-1",
+      "rank": 1,
+      "confidence": 0.45,
+      "reason": "Relatively self-contained footprint with a single repository and controller, making it the lowest-risk candidate for initial extraction."
+    },
+    {
+      "service": "candidate-service-2",
+      "rank": 2,
+      "confidence": 0.35,
+      "reason": "Moderate complexity containing validation logic; dependent on reference domain data from primary aggregates."
+    },
+    {
+      "service": "candidate-service-3",
+      "rank": 3,
+      "confidence": 0.3,
+      "reason": "Core business domain with multiple entities and controllers; highest gravity and risk of regression during extraction."
+    }
+  ],
+  "uncertain_decisions": [
+    "Assignment of anonymized components Component_01 through Component_15 to specific functional services based solely on component kind distributions rather than explicit interaction graphs.",
+    "Directionality and existence of inter-service dependencies between candidate-service-2 and candidate-service-3."
+  ],
+  "unsupported_assumptions": [
+    "Assumed that contiguous component identifiers and modules reflect proximity in the legacy source structure.",
+    "Assumed that the four controllers and three repositories partition cleanly into 1:1:1 and 2:1 controller-to-repository subdomains typical of PetClinic architectures."
+  ],
+  "rule_violations": [],
+  "architectural_risks": [
+    "Absence of call graph and foreign key relationships in E0_MINIMAL evidence may conceal cross-service synchronous coupling and shared database transactions.",
+    "Validator Component_08 might validate entities belonging to candidate-service-3 rather than candidate-service-2, creating cross-boundary coupling."
+  ],
+  "critique": "Under the E0_MINIMAL condition with anonymized identifiers, only component kinds and module tokens are available. The proposed 3-service decomposition relies on structural archetypes (distributing the 4 controllers, 3 repositories, 1 validator, and 7 domain entities into three complete functional vertical slices), but cannot be definitively validated without dependency or interaction evidence.",
+  "revised": false
+}

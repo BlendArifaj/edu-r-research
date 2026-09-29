@@ -1,0 +1,111 @@
+{
+  "schema_version": "1",
+  "method": "petclinic_gemini-3.8-flash_E1_STRUCTURAL_SEMANTIC",
+  "method_family": "llm",
+  "system": {
+    "name": "SEMS-R",
+    "is_original_sems_source": false,
+    "gold_labels_used": false,
+    "integrity": "SEMS-R LLM decomposition. Not original production SEMS. This output does not consume evaluation gold labels.",
+    "generated_at": "2026-09-25T22:23:11.342520+00:00"
+  },
+  "config": {
+    "provider": "gemini",
+    "model": "gemini-3.8-flash",
+    "temperature": 0.2,
+    "condition": null,
+    "run_number": null,
+    "is_scientific_run": false
+  },
+  "available": true,
+  "component_assignment": {
+    "Owner": "owner-service",
+    "OwnerController": "owner-service",
+    "OwnerRepository": "owner-service",
+    "Pet": "owner-service",
+    "PetController": "owner-service",
+    "PetType": "owner-service",
+    "PetTypeRepository": "owner-service",
+    "PetValidator": "owner-service",
+    "Specialty": "vet-service",
+    "Vet": "vet-service",
+    "VetController": "vet-service",
+    "VetRepository": "vet-service",
+    "Vets": "vet-service",
+    "Visit": "owner-service",
+    "VisitController": "owner-service"
+  },
+  "services": [
+    {
+      "id": "vet-service",
+      "label": "vet-service",
+      "components": [
+        "Specialty",
+        "Vet",
+        "VetController",
+        "VetRepository",
+        "Vets"
+      ],
+      "owned_entities": [
+        "Specialty",
+        "Vet",
+        "Vets"
+      ]
+    },
+    {
+      "id": "owner-service",
+      "label": "owner-service",
+      "components": [
+        "Owner",
+        "OwnerController",
+        "OwnerRepository",
+        "Pet",
+        "PetController",
+        "PetType",
+        "PetTypeRepository",
+        "PetValidator",
+        "Visit",
+        "VisitController"
+      ],
+      "owned_entities": [
+        "Owner",
+        "Pet",
+        "PetType",
+        "Visit"
+      ]
+    }
+  ],
+  "uncertain_decisions": [
+    {
+      "component": "Whether Visit and VisitController should be carved out into an independent visit-service or kept within owner-service due to shared OwnerRepository usage.",
+      "reason": "Whether Visit and VisitController should be carved out into an independent visit-service or kept within owner-service due to shared OwnerRepository usage."
+    }
+  ],
+  "unsupported_assumptions": [
+    "Assuming that Visit can be persisted independently without schema and persistence refactoring, as the evidence shows Visit lacks a VisitRepository and relies on OwnerRepository."
+  ],
+  "rule_violations": [],
+  "architectural_risks": [
+    "Retaining Pet, Owner, and Visit together preserves a relatively large aggregate that may become a bottleneck if visit volume grows significantly.",
+    "Attempting further sub-decomposition of owner-service without introducing dedicated repositories for Pet and Visit would cause inter-service database sharing or tight synchronous service calls."
+  ],
+  "critique": "The evidence strictly divides the codebase into two disconnected structural subgraphs along package lines (vet vs. owner). While decomposing owner-service into separate owner, pet, and visit services might be desirable from a pure DDD bounded-context standpoint, the structural dependency and repository relations show that PetController and VisitController are tightly bound to OwnerRepository, and Visit has no standalone repository. Decomposing along package boundaries is the most architecturally faithful partition supported by the evidence.",
+  "revised": false,
+  "migration_priority": [
+    {
+      "service": "vet-service",
+      "rank": 1,
+      "confidence": 0.95,
+      "reason": "Completely decoupled from the rest of the monolith with no static call edges or data-access links across package boundaries, enabling low-risk standalone extraction."
+    },
+    {
+      "service": "owner-service",
+      "rank": 2,
+      "confidence": 0.85,
+      "reason": "Forms the core remaining monolith containing interconnected owner, pet, and visit domain models and data-access flows; best handled after isolating peripheral services."
+    }
+  ],
+  "notes": [
+    "Parsed from LLM JSON. Gold labels were not in the prompt."
+  ]
+}

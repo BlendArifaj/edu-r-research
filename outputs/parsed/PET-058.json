@@ -1,0 +1,97 @@
+{
+  "schema_version": "1",
+  "method": "petclinic_llama3.1_E1_STRUCTURAL_ANONYMIZED",
+  "method_family": "llm",
+  "system": {
+    "name": "SEMS-R",
+    "is_original_sems_source": false,
+    "gold_labels_used": false,
+    "integrity": "SEMS-R LLM decomposition. Not original production SEMS. This output does not consume evaluation gold labels.",
+    "generated_at": "2026-09-25T21:48:43.993378+00:00"
+  },
+  "config": {
+    "provider": "ollama",
+    "model": "llama3.1",
+    "temperature": 0.2,
+    "condition": null,
+    "run_number": null,
+    "is_scientific_run": false
+  },
+  "available": true,
+  "component_assignment": {
+    "Component_01": "client-service",
+    "Component_02": "client-service",
+    "Component_03": "visit-service",
+    "Component_04": "client-service",
+    "Component_05": "visit-service",
+    "Component_06": "visit-service",
+    "Component_07": "visit-service",
+    "Component_08": "visit-service",
+    "Component_09": "client-service",
+    "Component_10": "client-service",
+    "Component_11": "client-service",
+    "Component_13": "client-service",
+    "Component_14": "client-service",
+    "Component_15": "visit-service"
+  },
+  "services": [
+    {
+      "id": "client-service",
+      "label": "client-service",
+      "components": [
+        "Component_01",
+        "Component_02",
+        "Component_04",
+        "Component_14",
+        "Component_09",
+        "Component_10",
+        "Component_11",
+        "Component_13"
+      ],
+      "owned_entities": [
+        "Client",
+        "Pet"
+      ]
+    },
+    {
+      "id": "visit-service",
+      "label": "visit-service",
+      "components": [
+        "Component_03",
+        "Component_05",
+        "Component_06",
+        "Component_07",
+        "Component_08",
+        "Component_15"
+      ],
+      "owned_entities": [
+        "Visit",
+        "Veterinarian",
+        "Specialty"
+      ]
+    }
+  ],
+  "uncertain_decisions": [],
+  "unsupported_assumptions": [],
+  "rule_violations": [],
+  "architectural_risks": [],
+  "critique": "",
+  "revised": false,
+  "migration_priority": [
+    {
+      "service": "client-service",
+      "rank": 1,
+      "confidence": 0.0,
+      "reason": ""
+    },
+    {
+      "service": "visit-service",
+      "rank": 2,
+      "confidence": 0.0,
+      "reason": ""
+    }
+  ],
+  "notes": [
+    "Parsed from LLM JSON. Gold labels were not in the prompt."
+  ]
+}

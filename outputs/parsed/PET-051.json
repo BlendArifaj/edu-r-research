@@ -1,0 +1,140 @@
+{
+  "schema_version": "1",
+  "method": "petclinic_llama3.1_E1_STRUCTURAL_ANONYMIZED",
+  "method_family": "llm",
+  "system": {
+    "name": "SEMS-R",
+    "is_original_sems_source": false,
+    "gold_labels_used": false,
+    "integrity": "SEMS-R LLM decomposition. Not original production SEMS. This output does not consume evaluation gold labels.",
+    "generated_at": "2026-09-25T21:47:27.850319+00:00"
+  },
+  "config": {
+    "provider": "ollama",
+    "model": "llama3.1",
+    "temperature": 0.2,
+    "condition": null,
+    "run_number": null,
+    "is_scientific_run": false
+  },
+  "available": true,
+  "component_assignment": {
+    "Component_01": "pet-service",
+    "Component_02": "client-service",
+    "Component_03": "veterinarian-service",
+    "Component_04": "veterinarian-service",
+    "Component_05": "pet-service",
+    "Component_06": "veterinarian-service",
+    "Component_07": "pet-service",
+    "Component_08": "visit-service",
+    "Component_09": "staff-service",
+    "Component_10": "staff-service",
+    "Component_11": "staff-service",
+    "Component_12": "visit-service",
+    "Component_13": "staff-service",
+    "Component_15": "client-service"
+  },
+  "services": [
+    {
+      "id": "client-service",
+      "label": "client-service",
+      "components": [
+        "Component_02",
+        "Component_15"
+      ],
+      "owned_entities": [
+        "Client"
+      ]
+    },
+    {
+      "id": "pet-service",
+      "label": "pet-service",
+      "components": [
+        "Component_01",
+        "Component_05",
+        "Component_07"
+      ],
+      "owned_entities": [
+        "Pet"
+      ]
+    },
+    {
+      "id": "veterinarian-service",
+      "label": "veterinarian-service",
+      "components": [
+        "Component_03",
+        "Component_04",
+        "Component_06"
+      ],
+      "owned_entities": [
+        "Vet",
+        "Specialty"
+      ]
+    },
+    {
+      "id": "visit-service",
+      "label": "visit-service",
+      "components": [
+        "Component_08",
+        "Component_12"
+      ],
+      "owned_entities": [
+        "Visit"
+      ]
+    },
+    {
+      "id": "staff-service",
+      "label": "staff-service",
+      "components": [
+        "Component_09",
+        "Component_10",
+        "Component_11",
+        "Component_13"
+      ],
+      "owned_entities": [
+        "Staff"
+      ]
+    }
+  ],
+  "uncertain_decisions": [],
+  "unsupported_assumptions": [],
+  "rule_violations": [],
+  "architectural_risks": [],
+  "critique": "",
+  "revised": false,
+  "migration_priority": [
+    {
+      "service": "pet-service",
+      "rank": 1,
+      "confidence": 0.8,
+      "reason": "pet-related functionality is a core part of the application"
+    },
+    {
+      "service": "veterinarian-service",
+      "rank": 2,
+      "confidence": 0.7,
+      "reason": "veterinarian-related functionality is a key part of the application"
+    },
+    {
+      "service": "client-service",
+      "rank": 3,
+      "confidence": 0.6,
+      "reason": "client-related functionality is a significant part of the application"
+    },
+    {
+      "service": "visit-service",
+      "rank": 4,
+      "confidence": 0.5,
+      "reason": "visit-related functionality is a part of the application"
+    },
+    {
+      "service": "staff-service",
+      "rank": 5,
+      "confidence": 0.4,
+      "reason": "staff-related functionality is a minor part of the application"
+    }
+  ],
+  "notes": [
+    "Parsed from LLM JSON. Gold labels were not in the prompt."
+  ]
+}

@@ -1,0 +1,112 @@
+{
+  "schema_version": "1",
+  "method": "petclinic_gemini-3.8-flash_E0_MINIMAL_SEMANTIC",
+  "method_family": "llm",
+  "system": {
+    "name": "SEMS-R",
+    "is_original_sems_source": false,
+    "gold_labels_used": false,
+    "integrity": "SEMS-R LLM decomposition. Not original production SEMS. This output does not consume evaluation gold labels.",
+    "generated_at": "2026-09-25T22:20:41.894036+00:00"
+  },
+  "config": {
+    "provider": "gemini",
+    "model": "gemini-3.8-flash",
+    "temperature": 0.2,
+    "condition": null,
+    "run_number": null,
+    "is_scientific_run": false
+  },
+  "available": true,
+  "component_assignment": {
+    "Owner": "owner-service",
+    "OwnerController": "owner-service",
+    "OwnerRepository": "owner-service",
+    "Pet": "owner-service",
+    "PetController": "owner-service",
+    "PetType": "owner-service",
+    "PetTypeRepository": "owner-service",
+    "PetValidator": "owner-service",
+    "Specialty": "vet-service",
+    "Vet": "vet-service",
+    "VetController": "vet-service",
+    "VetRepository": "vet-service",
+    "Vets": "vet-service",
+    "Visit": "owner-service",
+    "VisitController": "owner-service"
+  },
+  "services": [
+    {
+      "id": "vet-service",
+      "label": "vet-service",
+      "components": [
+        "Specialty",
+        "Vet",
+        "VetController",
+        "VetRepository",
+        "Vets"
+      ],
+      "owned_entities": [
+        "Specialty",
+        "Vet",
+        "Vets"
+      ]
+    },
+    {
+      "id": "owner-service",
+      "label": "owner-service",
+      "components": [
+        "Owner",
+        "OwnerController",
+        "OwnerRepository",
+        "Pet",
+        "PetController",
+        "PetType",
+        "PetTypeRepository",
+        "PetValidator",
+        "Visit",
+        "VisitController"
+      ],
+      "owned_entities": [
+        "Owner",
+        "Pet",
+        "PetType",
+        "Visit"
+      ]
+    }
+  ],
+  "uncertain_decisions": [
+    {
+      "component": "Co-locating Visit and VisitController in owner-service instead of creating an independent visit service, chosen because Visit is packaged under org.springframework.samples.petclinic.owner and lacks its own repository in the component catalog.",
+      "reason": "Co-locating Visit and VisitController in owner-service instead of creating an independent visit service, chosen because Visit is packaged under org.springframework.samples.petclinic.owner and lacks its own repository in the component catalog."
+    }
+  ],
+  "unsupported_assumptions": [
+    "Assumed Visit persistence lifecycle is managed through OwnerRepository or cascade operations, as no VisitRepository is present in the evidence catalog.",
+    "Assumed no direct static calls or foreign keys between Vet and Visit/Owner, as relational and call data are omitted under condition E0_MINIMAL."
+  ],
+  "rule_violations": [],
+  "architectural_risks": [
+    "Potential high coupling inside owner-service if visits scale at a significantly higher write rate than owner profiles.",
+    "Data model entanglement if Visit records require veterinarian references that cannot be enforced via monolithic foreign keys post-migration."
+  ],
+  "critique": "A two-service decomposition aligns cleanly with existing Java package structure (vet vs. owner). However, grouping visits with owners and pets may limit independent scalability of visit scheduling; extraction of a dedicated visit service should be evaluated when call graph and persistence evidence become available.",
+  "revised": false,
+  "migration_priority": [
+    {
+      "service": "vet-service",
+      "rank": 1,
+      "confidence": 0.9,
+      "reason": "Clear module boundary (org.springframework.samples.petclinic.vet), self-contained persistence and presentation, with no dependencies on client or visit tracking."
+    },
+    {
+      "service": "owner-service",
+      "rank": 2,
+      "confidence": 0.8,
+      "reason": "Core business domain containing multiple related entities (Owner, Pet, PetType, Visit); higher internal complexity and transaction scope."
+    }
+  ],
+  "notes": [
+    "Parsed from LLM JSON. Gold labels were not in the prompt."
+  ]
+}

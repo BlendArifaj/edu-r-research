@@ -1,0 +1,80 @@
+{
+  "services": [
+    {
+      "name": "vet-service",
+      "components": [
+        "Specialty",
+        "Vet",
+        "VetController",
+        "VetRepository",
+        "Vets"
+      ],
+      "owned_entities": [
+        "Specialty",
+        "Vet",
+        "Vets"
+      ],
+      "responsibilities": [
+        "Manage veterinarian staff information and their professional specialties",
+        "Provide read and list operations for clinic veterinarians"
+      ],
+      "dependencies": [],
+      "rationale": "All components belong to org.springframework.samples.petclinic.vet and form a completely disconnected subgraph with no static calls or data-access dependencies to or from the owner package components."
+    },
+    {
+      "name": "owner-service",
+      "components": [
+        "Owner",
+        "OwnerController",
+        "OwnerRepository",
+        "Pet",
+        "PetController",
+        "PetType",
+        "PetTypeRepository",
+        "PetValidator",
+        "Visit",
+        "VisitController"
+      ],
+      "owned_entities": [
+        "Owner",
+        "Pet",
+        "PetType",
+        "Visit"
+      ],
+      "responsibilities": [
+        "Manage pet owner records and contact details",
+        "Handle pet registration, validation, and pet type reference data",
+        "Record and manage pet clinic visits"
+      ],
+      "dependencies": [],
+      "rationale": "Components in org.springframework.samples.petclinic.owner are heavily interconnected: Owner aggregates Pet and Visit, Pet references Visit, and VisitController relies directly on Owner and OwnerRepository without an independent repository for visits."
+    }
+  ],
+  "migration_priority": [
+    {
+      "service": "vet-service",
+      "rank": 1,
+      "confidence": 0.95,
+      "reason": "Complete structural isolation from the rest of the monolith with zero incoming or outgoing dependencies makes it a low-risk candidate for initial extraction."
+    },
+    {
+      "service": "owner-service",
+      "rank": 2,
+      "confidence": 0.85,
+      "reason": "Contains core business logic with high internal coupling across Owner, Pet, and Visit entities and repositories, requiring careful extraction or potential later sub-decomposition."
+    }
+  ],
+  "uncertain_decisions": [
+    "Deferred decomposing Visit and VisitController into an independent service because Visit lacks its own repository component and is persisted and managed via OwnerRepository."
+  ],
+  "unsupported_assumptions": [
+    "Assumed that assigning veterinarians to visits or clinic appointments is not currently modeled, as no static call or data relationship exists between Vet and Visit in the provided evidence."
+  ],
+  "rule_violations": [],
+  "architectural_risks": [
+    "Retaining Visit and Pet within owner-service limits independent scalability of high-frequency visit transactions.",
+    "VisitController directly depending on OwnerRepository indicates leaky aggregate boundaries within the owner module."
+  ],
+  "critique": "The structural evidence reveals two completely disjoint clusters of components: vet and owner. The vet cluster is autonomous and trivial to extract. Within the owner package, while Pet and Visit could conceptually represent distinct business capabilities, they are tightly coupled at the data and code levels via aggregate root references in Owner and direct usage of OwnerRepository by VisitController and PetController.",
+  "revised": false
+}

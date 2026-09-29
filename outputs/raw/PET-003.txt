@@ -1,0 +1,101 @@
+{
+  "services": [
+    {
+      "name": "veterinarian-service",
+      "components": [
+        "Component_01",
+        "Component_02",
+        "Component_03",
+        "Component_04"
+      ],
+      "owned_entities": [
+        "Component_01",
+        "Component_04"
+      ],
+      "responsibilities": [
+        "Manage veterinarian staff records and clinical specialties"
+      ],
+      "dependencies": [],
+      "rationale": "Groups an anonymized controller, repository, and domain entities representing a bounded context for clinic staff management, based on domain descriptions."
+    },
+    {
+      "name": "visit-scheduling-service",
+      "components": [
+        "Component_05",
+        "Component_06",
+        "Component_07",
+        "Component_09"
+      ],
+      "owned_entities": [
+        "Component_06",
+        "Component_09"
+      ],
+      "responsibilities": [
+        "Schedule and record veterinary visits and consultations"
+      ],
+      "dependencies": [
+        "veterinarian-service",
+        "pet-clinic-customer-service"
+      ],
+      "rationale": "Bundles visit scheduling operations, controllers, repositories, and entities as indicated by the veterinary clinic workflow."
+    },
+    {
+      "name": "pet-clinic-customer-service",
+      "components": [
+        "Component_08",
+        "Component_10",
+        "Component_11",
+        "Component_12",
+        "Component_13",
+        "Component_14",
+        "Component_15"
+      ],
+      "owned_entities": [
+        "Component_10",
+        "Component_13",
+        "Component_14"
+      ],
+      "responsibilities": [
+        "Maintain customer records, validate registrations, and manage pet profiles"
+      ],
+      "dependencies": [],
+      "rationale": "Encompasses pet and owner lifecycle management including input validation and entity persistence."
+    }
+  ],
+  "migration_priority": [
+    {
+      "service": "veterinarian-service",
+      "rank": 1,
+      "confidence": 0.3,
+      "reason": "Veterinarian catalog is typically read-heavy and has fewer operational dependencies, making it a low-risk initial extraction target."
+    },
+    {
+      "service": "pet-clinic-customer-service",
+      "rank": 2,
+      "confidence": 0.25,
+      "reason": "Core master data entity for customers and pets; needed by visits before visits can be fully decoupled."
+    },
+    {
+      "service": "visit-scheduling-service",
+      "rank": 3,
+      "confidence": 0.2,
+      "reason": "Transactional hub dependent on both vet and customer/pet identities, best migrated after core registers."
+    }
+  ],
+  "uncertain_decisions": [
+    "Assignment of specific anonymized components (Component_01 through Component_15) to candidate services cannot be verified due to lack of behavioral, structural, or semantic metadata.",
+    "Component distribution across services is conjectural and based strictly on structural component kinds (controller, repository, domain, validator) matched against domain capabilities."
+  ],
+  "unsupported_assumptions": [
+    "Assumed that each repository corresponds to one of the primary subdomains mentioned in the domain narrative.",
+    "Assumed that the validator component belongs to customer/pet registration without interaction or schema evidence.",
+    "Assumed directional dependencies among candidate services without static call graphs or persistence references."
+  ],
+  "rule_violations": [],
+  "architectural_risks": [
+    "Risk of creating high cross-service synchronous coupling and distributed transactions due to unknown entity relationships.",
+    "Risk of misplacing shared domain base classes across service boundaries resulting in code duplication or inappropriate coupling."
+  ],
+  "critique": "Under condition E0_MINIMAL with anonymized identifiers, the evidence provides only a flat component catalog with architectural layers (controller, repository, domain, validator) and no call graph or database relationship information. Without semantic names or dependency links, any partition into microservices cannot be grounded in factual coupling metrics and remains speculative.",
+  "revised": false
+}

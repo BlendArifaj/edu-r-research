@@ -1,0 +1,110 @@
+{
+  "schema_version": "1",
+  "method": "petclinic_gemini-3.8-flash_E1_STRUCTURAL_ANONYMIZED",
+  "method_family": "llm",
+  "system": {
+    "name": "SEMS-R",
+    "is_original_sems_source": false,
+    "gold_labels_used": false,
+    "integrity": "SEMS-R LLM decomposition. Not original production SEMS. This output does not consume evaluation gold labels.",
+    "generated_at": "2026-09-25T22:22:41.691149+00:00"
+  },
+  "config": {
+    "provider": "gemini",
+    "model": "gemini-3.8-flash",
+    "temperature": 0.2,
+    "condition": null,
+    "run_number": null,
+    "is_scientific_run": false
+  },
+  "available": true,
+  "component_assignment": {
+    "Component_01": "clinic-operations-service",
+    "Component_02": "clinic-operations-service",
+    "Component_03": "clinic-operations-service",
+    "Component_04": "clinic-operations-service",
+    "Component_05": "clinic-operations-service",
+    "Component_06": "clinic-operations-service",
+    "Component_07": "clinic-operations-service",
+    "Component_08": "clinic-operations-service",
+    "Component_09": "veterinarian-service",
+    "Component_10": "veterinarian-service",
+    "Component_11": "veterinarian-service",
+    "Component_12": "veterinarian-service",
+    "Component_13": "veterinarian-service",
+    "Component_14": "clinic-operations-service",
+    "Component_15": "clinic-operations-service"
+  },
+  "services": [
+    {
+      "id": "veterinarian-service",
+      "label": "veterinarian-service",
+      "components": [
+        "Component_09",
+        "Component_10",
+        "Component_11",
+        "Component_12",
+        "Component_13"
+      ],
+      "owned_entities": [
+        "Component_09",
+        "Component_10",
+        "Component_13"
+      ]
+    },
+    {
+      "id": "clinic-operations-service",
+      "label": "clinic-operations-service",
+      "components": [
+        "Component_01",
+        "Component_02",
+        "Component_03",
+        "Component_04",
+        "Component_05",
+        "Component_06",
+        "Component_07",
+        "Component_08",
+        "Component_14",
+        "Component_15"
+      ],
+      "owned_entities": [
+        "Component_01",
+        "Component_04",
+        "Component_06",
+        "Component_14"
+      ]
+    }
+  ],
+  "uncertain_decisions": [
+    {
+      "component": "Whether Component_14 (visits) and Component_04 (pets) should be separated into dedicated microservices; structural evidence shows Component_15 and Component_05 both directly depend on Component_03, and Component_14 lacks an independent repository.",
+      "reason": "Whether Component_14 (visits) and Component_04 (pets) should be separated into dedicated microservices; structural evidence shows Component_15 and Component_05 both directly depend on Component_03, and Component_14 lacks an independent repository."
+    }
+  ],
+  "unsupported_assumptions": [
+    "Assumed there are no indirect or runtime associations (e.g., vet assignment to visits) between veterinarian components (09-13) and operational components (01-08, 14-15), as none are present in static call or data relation evidence."
+  ],
+  "rule_violations": [],
+  "architectural_risks": [
+    "High internal coupling within clinic-operations-service where multiple controllers share repository Component_03 and domain entities navigate directly across aggregate boundaries, creating a larger failure domain."
+  ],
+  "critique": "The decomposition cleanly isolates the veterinarian bounded context from the main clinic operations. A finer-grained split of pet, visit, and owner management is discouraged at this stage due to shared repository access (Component_03) and direct domain object references across those entities.",
+  "revised": false,
+  "migration_priority": [
+    {
+      "service": "veterinarian-service",
+      "rank": 1,
+      "confidence": 0.95,
+      "reason": "Completely decoupled from other components in both static calls and data relations, making extraction low risk with no dependency entanglement."
+    },
+    {
+      "service": "clinic-operations-service",
+      "rank": 2,
+      "confidence": 0.8,
+      "reason": "Contains the core operational workflows and complex internal domain relationships; best migrated after the independent veterinarian service is extracted."
+    }
+  ],
+  "notes": [
+    "Parsed from LLM JSON. Gold labels were not in the prompt."
+  ]
+}

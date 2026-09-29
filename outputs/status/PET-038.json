@@ -1,0 +1,22 @@
+{
+  "run_id": "PET-038",
+  "run_status": "VALID",
+  "execution_status": "COMPLETED",
+  "parse_status": "valid",
+  "invalid_reason": "",
+  "latency_ms": 4984.22,
+  "attempt_count": 1,
+  "infra_retry_count": 0,
+  "timestamp": "2026-09-25T22:04:16.411086+00:00",
+  "model": "gpt-4o-mini",
+  "provider": "openai",
+  "requested_model_id": "gpt-4o-mini",
+  "resolved_model_version": "",
+  "evidence_condition": "E1_STRUCTURAL",
+  "identifier_condition": "ANONYMIZED",
+  "repetition": "4",
+  "temperature": 0.2,
+  "raw_sha256": "be4879c33c265bfe17c6add176ce8f15dd128da372451a35b75cf5f5a38165f1",
+  "prompt_sha256": "7afb31d93c232a45484f67c38c38ea69df70efa8f15f8ef8143b1214e79af2a5",
+  "evidence_sha256": "d63ba926c6223645a2c839a3b7611b79d4ac85184b3a036e905ecf5802c5784f"
+}

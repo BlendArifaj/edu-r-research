@@ -1,0 +1,101 @@
+{
+  "schema_version": "1",
+  "method": "petclinic_llama3.1_E0_MINIMAL_SEMANTIC",
+  "method_family": "llm",
+  "system": {
+    "name": "SEMS-R",
+    "is_original_sems_source": false,
+    "gold_labels_used": false,
+    "integrity": "SEMS-R LLM decomposition. Not original production SEMS. This output does not consume evaluation gold labels.",
+    "generated_at": "2026-09-25T21:46:16.840374+00:00"
+  },
+  "config": {
+    "provider": "ollama",
+    "model": "llama3.1",
+    "temperature": 0.2,
+    "condition": null,
+    "run_number": null,
+    "is_scientific_run": false
+  },
+  "available": true,
+  "component_assignment": {
+    "Owner": "owner-service",
+    "OwnerController": "owner-service",
+    "OwnerRepository": "owner-service",
+    "Pet": "owner-service",
+    "PetController": "owner-service",
+    "PetType": "owner-service",
+    "PetTypeRepository": "owner-service",
+    "PetValidator": "owner-service",
+    "Specialty": "vet-service",
+    "Vet": "vet-service",
+    "VetController": "vet-service",
+    "VetRepository": "vet-service",
+    "Vets": "vet-service",
+    "Visit": "owner-service",
+    "VisitController": "owner-service"
+  },
+  "services": [
+    {
+      "id": "owner-service",
+      "label": "owner-service",
+      "components": [
+        "Owner",
+        "OwnerController",
+        "OwnerRepository",
+        "Pet",
+        "PetController",
+        "PetType",
+        "PetTypeRepository",
+        "PetValidator",
+        "Visit",
+        "VisitController"
+      ],
+      "owned_entities": [
+        "Owner",
+        "Pet",
+        "PetType",
+        "Visit"
+      ]
+    },
+    {
+      "id": "vet-service",
+      "label": "vet-service",
+      "components": [
+        "Specialty",
+        "Vet",
+        "VetController",
+        "VetRepository",
+        "Vets"
+      ],
+      "owned_entities": [
+        "Specialty",
+        "Vet",
+        "Vets"
+      ]
+    }
+  ],
+  "uncertain_decisions": [],
+  "unsupported_assumptions": [],
+  "rule_violations": [],
+  "architectural_risks": [],
+  "critique": "",
+  "revised": false,
+  "migration_priority": [
+    {
+      "service": "owner-service",
+      "rank": 1,
+      "confidence": 0.0,
+      "reason": ""
+    },
+    {
+      "service": "vet-service",
+      "rank": 2,
+      "confidence": 0.0,
+      "reason": ""
+    }
+  ],
+  "notes": [
+    "Parsed from LLM JSON. Gold labels were not in the prompt."
+  ]
+}

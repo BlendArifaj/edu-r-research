@@ -1,0 +1,112 @@
+{
+  "schema_version": "1",
+  "method": "petclinic_gemini-3.8-flash_E0_MINIMAL_SEMANTIC",
+  "method_family": "llm",
+  "system": {
+    "name": "SEMS-R",
+    "is_original_sems_source": false,
+    "gold_labels_used": false,
+    "integrity": "SEMS-R LLM decomposition. Not original production SEMS. This output does not consume evaluation gold labels.",
+    "generated_at": "2026-09-25T22:20:24.452276+00:00"
+  },
+  "config": {
+    "provider": "gemini",
+    "model": "gemini-3.8-flash",
+    "temperature": 0.2,
+    "condition": null,
+    "run_number": null,
+    "is_scientific_run": false
+  },
+  "available": true,
+  "component_assignment": {
+    "Owner": "customer-service",
+    "OwnerController": "customer-service",
+    "OwnerRepository": "customer-service",
+    "Pet": "customer-service",
+    "PetController": "customer-service",
+    "PetType": "customer-service",
+    "PetTypeRepository": "customer-service",
+    "PetValidator": "customer-service",
+    "Specialty": "vet-service",
+    "Vet": "vet-service",
+    "VetController": "vet-service",
+    "VetRepository": "vet-service",
+    "Vets": "vet-service",
+    "Visit": "customer-service",
+    "VisitController": "customer-service"
+  },
+  "services": [
+    {
+      "id": "vet-service",
+      "label": "vet-service",
+      "components": [
+        "Specialty",
+        "Vet",
+        "VetController",
+        "VetRepository",
+        "Vets"
+      ],
+      "owned_entities": [
+        "Specialty",
+        "Vet",
+        "Vets"
+      ]
+    },
+    {
+      "id": "customer-service",
+      "label": "customer-service",
+      "components": [
+        "Owner",
+        "OwnerController",
+        "OwnerRepository",
+        "Pet",
+        "PetController",
+        "PetType",
+        "PetTypeRepository",
+        "PetValidator",
+        "Visit",
+        "VisitController"
+      ],
+      "owned_entities": [
+        "Owner",
+        "Pet",
+        "PetType",
+        "Visit"
+      ]
+    }
+  ],
+  "uncertain_decisions": [
+    {
+      "component": "Retaining Visit and VisitController inside the customer-service rather than separating them into an independent visit-service, due to absence of static call/persistence evidence.",
+      "reason": "Retaining Visit and VisitController inside the customer-service rather than separating them into an independent visit-service, due to absence of static call/persistence evidence."
+    }
+  ],
+  "unsupported_assumptions": [
+    "Assumed Visit persistence operations are handled via OwnerRepository or embedded domain operations, as no VisitRepository exists in the catalog.",
+    "Assumed no direct runtime compile or database constraints link Vet to Visit or Pet."
+  ],
+  "rule_violations": [],
+  "architectural_risks": [
+    "Coarse granularity of customer-service combines client master data, pet profiles, and visit logs, which could become a bottleneck for independent scaling.",
+    "Shared database or transactional boundaries between Owner and Visit may complicate future fine-grained extraction."
+  ],
+  "critique": "A two-service partition strictly respects the package-level modularity available in E0_MINIMAL evidence. While domain concepts suggest visits could ideally form a separate service, the lack of an independent visit repository in the component catalog warrants keeping visits within customer-service until call graphs or data models prove independence.",
+  "revised": false,
+  "migration_priority": [
+    {
+      "service": "vet-service",
+      "rank": 1,
+      "confidence": 0.9,
+      "reason": "Vet domain is self-contained with its own repository and domain model, presenting low risk and minimal external dependencies."
+    },
+    {
+      "service": "customer-service",
+      "rank": 2,
+      "confidence": 0.7,
+      "reason": "Encapsulates the core transactional entities (Owner, Pet, Visit); higher complexity and potential need for subsequent decomposition."
+    }
+  ],
+  "notes": [
+    "Parsed from LLM JSON. Gold labels were not in the prompt."
+  ]
+}

@@ -1,0 +1,128 @@
+{
+  "schema_version": "1",
+  "method": "petclinic_gpt-4o-mini_E1_STRUCTURAL_SEMANTIC",
+  "method_family": "llm",
+  "system": {
+    "name": "SEMS-R",
+    "is_original_sems_source": false,
+    "gold_labels_used": false,
+    "integrity": "SEMS-R LLM decomposition. Not original production SEMS. This output does not consume evaluation gold labels.",
+    "generated_at": "2026-09-25T22:04:02.774258+00:00"
+  },
+  "config": {
+    "provider": "openai",
+    "model": "gpt-4o-mini",
+    "temperature": 0.2,
+    "condition": null,
+    "run_number": null,
+    "is_scientific_run": false
+  },
+  "available": true,
+  "component_assignment": {
+    "Owner": "owner-service",
+    "OwnerController": "owner-service",
+    "OwnerRepository": "owner-service",
+    "Pet": "pet-service",
+    "PetController": "pet-service",
+    "PetType": "pet-service",
+    "PetTypeRepository": "pet-service",
+    "PetValidator": "pet-service",
+    "Specialty": "vet-service",
+    "Vet": "vet-service",
+    "VetController": "vet-service",
+    "VetRepository": "vet-service",
+    "Vets": "vet-service",
+    "Visit": "visit-service",
+    "VisitController": "visit-service"
+  },
+  "services": [
+    {
+      "id": "owner-service",
+      "label": "owner-service",
+      "components": [
+        "Owner",
+        "OwnerController",
+        "OwnerRepository"
+      ],
+      "owned_entities": [
+        "Owner"
+      ]
+    },
+    {
+      "id": "pet-service",
+      "label": "pet-service",
+      "components": [
+        "Pet",
+        "PetController",
+        "PetType",
+        "PetTypeRepository",
+        "PetValidator"
+      ],
+      "owned_entities": [
+        "Pet",
+        "PetType"
+      ]
+    },
+    {
+      "id": "visit-service",
+      "label": "visit-service",
+      "components": [
+        "Visit",
+        "VisitController"
+      ],
+      "owned_entities": [
+        "Visit"
+      ]
+    },
+    {
+      "id": "vet-service",
+      "label": "vet-service",
+      "components": [
+        "Vet",
+        "VetController",
+        "VetRepository",
+        "Specialty",
+        "Vets"
+      ],
+      "owned_entities": [
+        "Vet",
+        "Specialty"
+      ]
+    }
+  ],
+  "uncertain_decisions": [],
+  "unsupported_assumptions": [],
+  "rule_violations": [],
+  "architectural_risks": [],
+  "critique": "",
+  "revised": false,
+  "migration_priority": [
+    {
+      "service": "owner-service",
+      "rank": 1,
+      "confidence": 0.9,
+      "reason": "Central to clinic operations and has high interdependencies."
+    },
+    {
+      "service": "pet-service",
+      "rank": 2,
+      "confidence": 0.8,
+      "reason": "Closely related to owner management and essential for visit scheduling."
+    },
+    {
+      "service": "visit-service",
+      "rank": 3,
+      "confidence": 0.7,
+      "reason": "Dependent on both owner and pet services, critical for operational flow."
+    },
+    {
+      "service": "vet-service",
+      "rank": 4,
+      "confidence": 0.6,
+      "reason": "Independent but necessary for complete clinic management."
+    }
+  ],
+  "notes": [
+    "Parsed from LLM JSON. Gold labels were not in the prompt."
+  ]
+}

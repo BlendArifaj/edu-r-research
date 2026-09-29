@@ -1,0 +1,22 @@
+{
+  "run_id": "PET-041",
+  "run_status": "VALID",
+  "execution_status": "COMPLETED",
+  "parse_status": "valid",
+  "invalid_reason": "",
+  "latency_ms": 18453.57,
+  "attempt_count": 1,
+  "infra_retry_count": 0,
+  "timestamp": "2026-09-25T21:45:35.993256+00:00",
+  "model": "llama3.1",
+  "provider": "ollama",
+  "requested_model_id": "llama3.1",
+  "resolved_model_version": "",
+  "evidence_condition": "E0_MINIMAL",
+  "identifier_condition": "SEMANTIC",
+  "repetition": "1",
+  "temperature": 0.2,
+  "raw_sha256": "7f71be0554b5c455ed654134697c31cd2c43defdf9578cf812642d8bd74768f0",
+  "prompt_sha256": "b454700c487640640f8386974b7954d73b8a0223a0f3ce80ba8729aa0f4e97e5",
+  "evidence_sha256": "77f00063592b8c6cbac3c23f62fab671875d1fcfb151cd8e10bae77107fe17f9"
+}

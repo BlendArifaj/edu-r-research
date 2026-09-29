@@ -1,0 +1,39 @@
+{
+  "services": [
+    {
+      "name": "client-service",
+      "components": ["Component_01", "Component_02", "Component_04", "Component_06", "Component_14", "Component_09", "Component_10"],
+      "owned_entities": ["Client"],
+      "responsibilities": ["Maintain client records", "Register pets", "Manage client relationships"],
+      "dependencies": ["scheduler-service"],
+      "rationale": "Client-related components are grouped together for a cohesive client management service."
+    },
+    {
+      "name": "scheduler-service",
+      "components": ["Component_03", "Component_07", "Component_12"],
+      "owned_entities": ["Visit", "Pet"],
+      "responsibilities": ["Schedule and record veterinary visits", "Manage pet records"],
+      "dependencies": ["client-service", "staff-service"],
+      "rationale": "Scheduler-related components are grouped together for a cohesive scheduling service."
+    },
+    {
+      "name": "staff-service",
+      "components": ["Component_08", "Component_11", "Component_13", "Component_15"],
+      "owned_entities": ["Vet", "Specialty"],
+      "responsibilities": ["Manage veterinarian staff and their specialties", "Validate vet-related data"],
+      "dependencies": ["client-service", "scheduler-service"],
+      "rationale": "Staff-related components are grouped together for a cohesive staff management service."
+    }
+  ],
+  "migration_priority": [
+    {"service": "scheduler-service", "rank": 1, "confidence": 0.0, "reason": ""},
+    {"service": "client-service", "rank": 2, "confidence": 0.0, "reason": ""},
+    {"service": "staff-service", "rank": 3, "confidence": 0.0, "reason": ""}
+  ],
+  "uncertain_decisions": [],
+  "unsupported_assumptions": [],
+  "rule_violations": [],
+  "architectural_risks": [],
+  "critique": "",
+  "revised": false
+}

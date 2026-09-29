@@ -1,0 +1,111 @@
+{
+  "schema_version": "1",
+  "method": "petclinic_llama3.1_E1_STRUCTURAL_ANONYMIZED",
+  "method_family": "llm",
+  "system": {
+    "name": "SEMS-R",
+    "is_original_sems_source": false,
+    "gold_labels_used": false,
+    "integrity": "SEMS-R LLM decomposition. Not original production SEMS. This output does not consume evaluation gold labels.",
+    "generated_at": "2026-09-25T21:48:07.253027+00:00"
+  },
+  "config": {
+    "provider": "ollama",
+    "model": "llama3.1",
+    "temperature": 0.2,
+    "condition": null,
+    "run_number": null,
+    "is_scientific_run": false
+  },
+  "available": true,
+  "component_assignment": {
+    "Component_01": "pet-management-service",
+    "Component_02": "veterinarian-service",
+    "Component_03": "veterinarian-service",
+    "Component_04": "pet-management-service",
+    "Component_05": "veterinarian-service",
+    "Component_06": "pet-management-service",
+    "Component_07": "veterinarian-service",
+    "Component_08": "veterinarian-service",
+    "Component_09": "client-service",
+    "Component_10": "client-service",
+    "Component_11": "client-service",
+    "Component_12": "client-service",
+    "Component_13": "client-service",
+    "Component_14": "pet-management-service"
+  },
+  "services": [
+    {
+      "id": "pet-management-service",
+      "label": "pet-management-service",
+      "components": [
+        "Component_01",
+        "Component_04",
+        "Component_06",
+        "Component_14"
+      ],
+      "owned_entities": [
+        "Pet",
+        "Client"
+      ]
+    },
+    {
+      "id": "veterinarian-service",
+      "label": "veterinarian-service",
+      "components": [
+        "Component_02",
+        "Component_03",
+        "Component_05",
+        "Component_07",
+        "Component_08"
+      ],
+      "owned_entities": [
+        "Veterinarian",
+        "Specialty"
+      ]
+    },
+    {
+      "id": "client-service",
+      "label": "client-service",
+      "components": [
+        "Component_09",
+        "Component_10",
+        "Component_11",
+        "Component_12",
+        "Component_13"
+      ],
+      "owned_entities": [
+        "Client"
+      ]
+    }
+  ],
+  "uncertain_decisions": [],
+  "unsupported_assumptions": [],
+  "rule_violations": [],
+  "architectural_risks": [],
+  "critique": "",
+  "revised": false,
+  "migration_priority": [
+    {
+      "service": "pet-management-service",
+      "rank": 1,
+      "confidence": 0.8,
+      "reason": "pet management is a core feature of the application"
+    },
+    {
+      "service": "veterinarian-service",
+      "rank": 2,
+      "confidence": 0.7,
+      "reason": "veterinarian management is a key feature of the application"
+    },
+    {
+      "service": "client-service",
+      "rank": 3,
+      "confidence": 0.6,
+      "reason": "client management is a key feature of the application"
+    }
+  ],
+  "notes": [
+    "Parsed from LLM JSON. Gold labels were not in the prompt."
+  ]
+}

@@ -1,0 +1,241 @@
+{
+  "schema_version": "1",
+  "method": "llm_gemini-3.8-flash_C0",
+  "method_family": "llm",
+  "system": {
+    "name": "SEMS-R",
+    "is_original_sems_source": false,
+    "gold_labels_used": false,
+    "integrity": "SEMS-R LLM decomposition. Not original production SEMS. This output does not consume evaluation gold labels.",
+    "generated_at": "2026-09-25T22:31:54.612698+00:00"
+  },
+  "config": {
+    "provider": "gemini",
+    "model": "gemini-3.8-flash",
+    "temperature": 0.2,
+    "condition": "C0",
+    "run_number": 1,
+    "is_scientific_run": true
+  },
+  "available": true,
+  "component_assignment": {
+    "AcademicCalendarRepository": "faculty-service",
+    "AttendanceRepository": "attendance-service",
+    "AttendanceService": "attendance-service",
+    "AuthService": "auth-service",
+    "CourseEnrollmentRepository": "student-service",
+    "CourseRepository": "faculty-service",
+    "DepartmentRepository": "faculty-service",
+    "EnrollmentGateService": "student-service",
+    "ExamRepository": "grade-service",
+    "FacultyRepository": "faculty-service",
+    "FacultyService": "faculty-service",
+    "FacultyStatisticsService": "faculty-service",
+    "FinanceRepository": "finance-service",
+    "FinanceService": "finance-service",
+    "GradeRepository": "grade-service",
+    "GradeService": "grade-service",
+    "LibraryRepository": "library-service",
+    "LibraryService": "library-service",
+    "ReportBuilder": "reporting-service",
+    "SemesterRegistrationRepository": "student-service",
+    "StaffRepository": "faculty-service",
+    "StudentOverviewService": "student-service",
+    "StudentRepository": "student-service",
+    "StudentService": "student-service",
+    "TeacherRepository": "faculty-service",
+    "UserRepository": "auth-service"
+  },
+  "services": [
+    {
+      "id": "auth-service",
+      "label": "auth-service",
+      "components": [
+        "AuthService",
+        "UserRepository"
+      ],
+      "owned_entities": [
+        "User"
+      ]
+    },
+    {
+      "id": "faculty-service",
+      "label": "faculty-service",
+      "components": [
+        "AcademicCalendarRepository",
+        "CourseRepository",
+        "DepartmentRepository",
+        "FacultyRepository",
+        "FacultyService",
+        "FacultyStatisticsService",
+        "StaffRepository",
+        "TeacherRepository"
+      ],
+      "owned_entities": [
+        "AcademicCalendar",
+        "Course",
+        "Department",
+        "Faculty",
+        "Staff",
+        "Teacher"
+      ]
+    },
+    {
+      "id": "student-service",
+      "label": "student-service",
+      "components": [
+        "CourseEnrollmentRepository",
+        "EnrollmentGateService",
+        "SemesterRegistrationRepository",
+        "StudentOverviewService",
+        "StudentRepository",
+        "StudentService"
+      ],
+      "owned_entities": [
+        "CourseEnrollment",
+        "SemesterRegistration",
+        "Student"
+      ]
+    },
+    {
+      "id": "grade-service",
+      "label": "grade-service",
+      "components": [
+        "ExamRepository",
+        "GradeRepository",
+        "GradeService"
+      ],
+      "owned_entities": [
+        "Exam",
+        "Grade"
+      ]
+    },
+    {
+      "id": "finance-service",
+      "label": "finance-service",
+      "components": [
+        "FinanceRepository",
+        "FinanceService"
+      ],
+      "owned_entities": [
+        "AccountBalance",
+        "Fee",
+        "Invoice",
+        "LedgerEntry",
+        "Payment"
+      ]
+    },
+    {
+      "id": "attendance-service",
+      "label": "attendance-service",
+      "components": [
+        "AttendanceRepository",
+        "AttendanceService"
+      ],
+      "owned_entities": [
+        "AttendanceRecord",
+        "ClassSession"
+      ]
+    },
+    {
+      "id": "library-service",
+      "label": "library-service",
+      "components": [
+        "LibraryRepository",
+        "LibraryService"
+      ],
+      "owned_entities": [
+        "Book",
+        "BookCopy",
+        "LibraryMembership",
+        "Loan",
+        "Reservation"
+      ]
+    },
+    {
+      "id": "reporting-service",
+      "label": "reporting-service",
+      "components": [
+        "ReportBuilder"
+      ],
+      "owned_entities": [
+        "ReportDefinition"
+      ]
+    }
+  ],
+  "uncertain_decisions": [
+    {
+      "component": "UNCERTAIN: Placement of ReportBuilder in a standalone reporting-service versus embedding it within individual consuming services (e.g., attendance monthly reports or faculty statistics) due to lack of explicit schema information.",
+      "reason": "UNCERTAIN: Placement of ReportBuilder in a standalone reporting-service versus embedding it within individual consuming services (e.g., attendance monthly reports or faculty statistics) due to lack of explicit schema information."
+    },
+    {
+      "component": "UNCERTAIN: Placement of StudentOverviewService within student-service rather than as a BFF/composite gateway, as it reads cross-domain student academic records.",
+      "reason": "UNCERTAIN: Placement of StudentOverviewService within student-service rather than as a BFF/composite gateway, as it reads cross-domain student academic records."
+    }
+  ],
+  "unsupported_assumptions": [
+    "Assumed EnrollmentGateService primarily guards enrollment based on student state and prerequisite business rules within student-service.",
+    "Assumed ReportBuilder does not own business entities directly, acting as a stateless transformation or formatting utility."
+  ],
+  "rule_violations": [],
+  "architectural_risks": [
+    "High coupling between student-service and faculty-service due to shared course catalog and enrollment references.",
+    "ReportBuilder may introduce distributed querying challenges across separate service databases if maintained as a monolithic legacy reporting component.",
+    "StudentOverviewService may require distributed joins across student, grade, and attendance domains, impacting latency and network overhead."
+  ],
+  "critique": "The decomposition aligns strictly with the functional capabilities described in SEMS-R. The isolation of ReportBuilder into a separate service mitigates monolithic leakage, but cross-service queries for reporting and student overviews present distributed data access challenges that may require read replicas, event-driven data feeds, or API composition.",
+  "revised": false,
+  "migration_priority": [
+    {
+      "service": "auth-service",
+      "rank": 1,
+      "confidence": 0.95,
+      "reason": "Foundational authentication and user repository required by all other microservices."
+    },
+    {
+      "service": "faculty-service",
+      "rank": 2,
+      "confidence": 0.9,
+      "reason": "Provides core reference data including courses, faculties, departments, and teachers required across workflows."
+    },
+    {
+      "service": "student-service",
+      "rank": 3,
+      "confidence": 0.85,
+      "reason": "Core consumer of faculty courses and upstream prerequisite for grades, attendance, finance, and library."
+    },
+    {
+      "service": "finance-service",
+      "rank": 4,
+      "confidence": 0.8,
+      "reason": "Depends on student enrollment and faculty ledgers, but operates with clear transactional boundaries."
+    },
+    {
+      "service": "grade-service",
+      "rank": 5,
+      "confidence": 0.8,
+      "reason": "Relies on completed student registrations, courses, and teacher assignments."
+    },
+    {
+      "service": "attendance-service",
+      "rank": 6,
+      "confidence": 0.75,
+      "reason": "High-frequency operational tracking relying on student enrollments and course session definitions."
+    },
+    {
+      "service": "library-service",
+      "rank": 7,
+      "confidence": 0.85,
+      "reason": "Autonomous domain with minimal outward coupling except for member reference lookups."
+    },
+    {
+      "service": "reporting-service",
+      "rank": 8,
+      "confidence": 0.5,
+      "reason": "Legacy cross-cutting component that reads across multiple domains; should be extracted or deprecated last."
+    }
+  ],
+  "notes": [
+    "Parsed from LLM JSON. Gold labels were not in the prompt."
+  ]
+}

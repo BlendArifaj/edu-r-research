@@ -1,0 +1,14 @@
+{
+  "model": "gemini-3.8-flash",
+  "provider": "gemini",
+  "temperature": 0.2,
+  "timestamp": "2026-09-25T22:31:54.612350+00:00",
+  "condition": "C0",
+  "run_number": 1,
+  "retries_used": 0,
+  "parse_ok": true,
+  "is_scientific_run": true,
+  "is_original_sems_source": false,
+  "gold_labels_in_prompt": false,
+  "error": null
+}

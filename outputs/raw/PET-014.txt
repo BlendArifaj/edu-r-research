@@ -1,0 +1,76 @@
+{
+  "services": [
+    {
+      "name": "veterinary-service",
+      "components": [
+        "Component_09",
+        "Component_10",
+        "Component_11",
+        "Component_12",
+        "Component_13"
+      ],
+      "owned_entities": [
+        "Component_10"
+      ],
+      "responsibilities": [
+        "Manage veterinarian staff information and their specialties",
+        "Handle veterinary clinic staff queries via Component_11 and persistence via Component_12"
+      ],
+      "dependencies": [],
+      "rationale": "Components 09 through 13 form a completely disconnected, self-contained sub-graph with zero static calls or data relations to the other components."
+    },
+    {
+      "name": "customer-pet-service",
+      "components": [
+        "Component_01",
+        "Component_02",
+        "Component_03",
+        "Component_04",
+        "Component_05",
+        "Component_06",
+        "Component_07",
+        "Component_08",
+        "Component_14",
+        "Component_15"
+      ],
+      "owned_entities": [
+        "Component_01",
+        "Component_06"
+      ],
+      "responsibilities": [
+        "Manage client/owner profiles, pet registrations, and visit schedules",
+        "Perform pet validation and manage pet type metadata",
+        "Expose API and UI endpoints for owner, pet, and visit management"
+      ],
+      "dependencies": [],
+      "rationale": "Components 01-08, 14, and 15 are strongly coupled through shared repository access (Component_03 accessed by Component_02, Component_05, and Component_15) and direct domain navigability (Component_01 calls Component_04 and Component_14)."
+    }
+  ],
+  "migration_priority": [
+    {
+      "service": "veterinary-service",
+      "rank": 1,
+      "confidence": 0.95,
+      "reason": "Completely decoupled from the rest of the application codebase with no incoming or outgoing static dependencies, making it an ideal first extraction candidate."
+    },
+    {
+      "service": "customer-pet-service",
+      "rank": 2,
+      "confidence": 0.8,
+      "reason": "Contains the core domain with multiple tightly coupled controllers and repositories; requires careful boundary handling if further sub-decomposition is desired."
+    }
+  ],
+  "uncertain_decisions": [
+    "Retaining visits (Component_14, Component_15) within customer-pet-service instead of creating an independent visit service, chosen due to lack of a dedicated visit repository and tight coupling to Component_01, Component_03, and Component_04."
+  ],
+  "unsupported_assumptions": [
+    "Assumed that Component_06 represents reference data (such as pet types) rather than an independent bounded context requiring a dedicated service.",
+    "Assumed that the zero cross-cluster static call edges between the vet cluster and the rest reflect runtime independence."
+  ],
+  "rule_violations": [],
+  "architectural_risks": [
+    "Customer-pet-service is relatively large and aggregates multiple sub-domains (owners, pets, visits, pet types), which may present maintenance bottlenecks if traffic grows unevenly."
+  ],
+  "critique": "The evidence exhibits two distinct structural partitions. The veterinary cluster (09-13) is strictly isolated and easily extracted. The remaining components (01-08, 14-15) exhibit dense inter-component coupling around Component_03 and Component_01, suggesting that an unassisted split into finer services without schema refactoring would produce distributed monolith anti-patterns.",
+  "revised": false
+}

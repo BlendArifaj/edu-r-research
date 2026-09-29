@@ -1,0 +1,48 @@
+{
+  "services": [
+    {
+      "name": "client-service",
+      "components": ["Component_01", "Component_02", "Component_08"],
+      "owned_entities": ["Client"],
+      "responsibilities": ["Manage client records and interactions"],
+      "dependencies": [],
+      "rationale": "Client management is a distinct domain area that can be isolated for better scalability and maintainability."
+    },
+    {
+      "name": "pet-service",
+      "components": ["Component_04", "Component_05"],
+      "owned_entities": ["Pet"],
+      "responsibilities": ["Register and manage pets"],
+      "dependencies": [],
+      "rationale": "Pet management is a separate concern that can be developed and deployed independently."
+    },
+    {
+      "name": "visit-service",
+      "components": ["Component_06", "Component_11"],
+      "owned_entities": ["Visit"],
+      "responsibilities": ["Schedule and record veterinary visits"],
+      "dependencies": [],
+      "rationale": "Visit management is a critical function that can benefit from isolation for performance and clarity."
+    },
+    {
+      "name": "veterinarian-service",
+      "components": ["Component_09", "Component_10", "Component_15"],
+      "owned_entities": ["Veterinarian"],
+      "responsibilities": ["Manage veterinarian staff and their specialties"],
+      "dependencies": [],
+      "rationale": "Veterinarian management is a distinct area that requires specific functionality and can be independently managed."
+    }
+  ],
+  "migration_priority": [
+    {"service": "client-service", "rank": 1, "confidence": 0.0, "reason": ""},
+    {"service": "pet-service", "rank": 2, "confidence": 0.0, "reason": ""},
+    {"service": "visit-service", "rank": 3, "confidence": 0.0, "reason": ""},
+    {"service": "veterinarian-service", "rank": 4, "confidence": 0.0, "reason": ""}
+  ],
+  "uncertain_decisions": [],
+  "unsupported_assumptions": [],
+  "rule_violations": [],
+  "architectural_risks": [],
+  "critique": "",
+  "revised": false
+}

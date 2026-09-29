@@ -1,0 +1,81 @@
+{
+  "services": [
+    {
+      "name": "vet-service",
+      "components": [
+        "Specialty",
+        "Vet",
+        "VetController",
+        "VetRepository",
+        "Vets"
+      ],
+      "owned_entities": [
+        "Specialty",
+        "Vet",
+        "Vets"
+      ],
+      "responsibilities": [
+        "Manage veterinarian profiles and credentials",
+        "Manage veterinarian specialties",
+        "Provide read and query interfaces for the clinic veterinary staff roster"
+      ],
+      "dependencies": [],
+      "rationale": "All components belong to org.springframework.samples.petclinic.vet and exhibit high internal cohesion. There are zero incoming or outgoing static call edges or data relations connecting this group to any component in org.springframework.samples.petclinic.owner, allowing completely independent extraction."
+    },
+    {
+      "name": "owner-service",
+      "components": [
+        "Owner",
+        "OwnerController",
+        "OwnerRepository",
+        "Pet",
+        "PetController",
+        "PetType",
+        "PetTypeRepository",
+        "PetValidator",
+        "Visit",
+        "VisitController"
+      ],
+      "owned_entities": [
+        "Owner",
+        "Pet",
+        "PetType",
+        "Visit"
+      ],
+      "responsibilities": [
+        "Manage pet owner records and contact information",
+        "Manage pet registration, pet types, and pet validations",
+        "Manage and schedule veterinary visits for pets"
+      ],
+      "dependencies": [],
+      "rationale": "All components reside in org.springframework.samples.petclinic.owner and share extensive structural dependencies. Specifically, Owner directly references Pet and Visit, while PetController and VisitController directly depend on OwnerRepository for persistence. Visit has no dedicated repository in the structural evidence, binding its lifecycle to the Owner aggregate."
+    }
+  ],
+  "migration_priority": [
+    {
+      "service": "vet-service",
+      "rank": 1,
+      "confidence": 0.95,
+      "reason": "Completely decoupled from the rest of the monolith with no static call edges or data-access links across package boundaries, enabling low-risk standalone extraction."
+    },
+    {
+      "service": "owner-service",
+      "rank": 2,
+      "confidence": 0.85,
+      "reason": "Forms the core remaining monolith containing interconnected owner, pet, and visit domain models and data-access flows; best handled after isolating peripheral services."
+    }
+  ],
+  "uncertain_decisions": [
+    "Whether Visit and VisitController should be carved out into an independent visit-service or kept within owner-service due to shared OwnerRepository usage."
+  ],
+  "unsupported_assumptions": [
+    "Assuming that Visit can be persisted independently without schema and persistence refactoring, as the evidence shows Visit lacks a VisitRepository and relies on OwnerRepository."
+  ],
+  "rule_violations": [],
+  "architectural_risks": [
+    "Retaining Pet, Owner, and Visit together preserves a relatively large aggregate that may become a bottleneck if visit volume grows significantly.",
+    "Attempting further sub-decomposition of owner-service without introducing dedicated repositories for Pet and Visit would cause inter-service database sharing or tight synchronous service calls."
+  ],
+  "critique": "The evidence strictly divides the codebase into two disconnected structural subgraphs along package lines (vet vs. owner). While decomposing owner-service into separate owner, pet, and visit services might be desirable from a pure DDD bounded-context standpoint, the structural dependency and repository relations show that PetController and VisitController are tightly bound to OwnerRepository, and Visit has no standalone repository. Decomposing along package boundaries is the most architecturally faithful partition supported by the evidence.",
+  "revised": false
+}

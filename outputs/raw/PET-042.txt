@@ -1,0 +1,39 @@
+{
+  "services": [
+    {
+      "name": "client-service",
+      "components": ["Component_01", "Component_02", "Component_04", "Component_06", "Component_14", "Component_09", "Component_10", "Component_13"],
+      "owned_entities": ["Client", "Pet"],
+      "responsibilities": ["Maintain client records", "Register pets", "Manage client and pet relationships"],
+      "dependencies": [],
+      "rationale": "Client and pet management is a cohesive domain that can be separated from other concerns"
+    },
+    {
+      "name": "visit-service",
+      "components": ["Component_03", "Component_07", "Component_12"],
+      "owned_entities": ["Visit", "Veterinarian"],
+      "responsibilities": ["Schedule and record veterinary visits", "Manage veterinarian staff and their specialties"],
+      "dependencies": ["client-service"],
+      "rationale": "Visit management is closely tied to client and pet management, but also involves veterinarian staff and specialties"
+    },
+    {
+      "name": "staff-service",
+      "components": ["Component_08", "Component_11", "Component_15"],
+      "owned_entities": ["Veterinarian", "Specialty"],
+      "responsibilities": ["Manage veterinarian staff and their specialties", "Validate input data"],
+      "dependencies": ["visit-service"],
+      "rationale": "Staff management is closely tied to visit management, and also involves validation of input data"
+    }
+  ],
+  "migration_priority": [
+    {"service": "client-service", "rank": 1, "confidence": 0.8, "reason": "Client and pet management is a critical business function"},
+    {"service": "visit-service", "rank": 2, "confidence": 0.7, "reason": "Visit management is closely tied to client and pet management"},
+    {"service": "staff-service", "rank": 3, "confidence": 0.6, "reason": "Staff management is closely tied to visit management"}
+  ],
+  "uncertain_decisions": [],
+  "unsupported_assumptions": [],
+  "rule_violations": [],
+  "architectural_risks": [],
+  "critique": "",
+  "revised": false
+}

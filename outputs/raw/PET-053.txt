@@ -1,0 +1,39 @@
+{
+  "services": [
+    {
+      "name": "owner-service",
+      "components": ["Owner", "OwnerController", "OwnerRepository"],
+      "owned_entities": ["Owner", "Pet", "Visit"],
+      "responsibilities": ["manage client records", "register pets", "schedule and record veterinary visits"],
+      "dependencies": [],
+      "rationale": "owner-service is responsible for managing client records, registering pets, and scheduling and recording veterinary visits. It has its own controller and repository components."
+    },
+    {
+      "name": "pet-service",
+      "components": ["Pet", "PetController", "PetTypeRepository", "PetValidator"],
+      "owned_entities": ["Pet", "PetType"],
+      "responsibilities": ["manage pet records", "validate pet data"],
+      "dependencies": ["owner-service"],
+      "rationale": "pet-service is responsible for managing pet records and validating pet data. It depends on owner-service for accessing owner data."
+    },
+    {
+      "name": "vet-service",
+      "components": ["Vet", "VetController", "VetRepository", "Vets"],
+      "owned_entities": ["Vet", "Specialty"],
+      "responsibilities": ["manage veterinarian staff and their specialties"],
+      "dependencies": [],
+      "rationale": "vet-service is responsible for managing veterinarian staff and their specialties. It has its own controller and repository components."
+    }
+  ],
+  "migration_priority": [
+    {"service": "owner-service", "rank": 1, "confidence": 0.0, "reason": ""},
+    {"service": "pet-service", "rank": 2, "confidence": 0.0, "reason": ""},
+    {"service": "vet-service", "rank": 3, "confidence": 0.0, "reason": ""}
+  ],
+  "uncertain_decisions": [],
+  "unsupported_assumptions": [],
+  "rule_violations": [],
+  "architectural_risks": [],
+  "critique": "",
+  "revised": false
+}

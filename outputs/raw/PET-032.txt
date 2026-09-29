@@ -1,0 +1,48 @@
+{
+  "services": [
+    {
+      "name": "owner-service",
+      "components": ["Owner", "OwnerController", "OwnerRepository"],
+      "owned_entities": ["Owner"],
+      "responsibilities": ["Manage owner records and interactions"],
+      "dependencies": ["pet-service", "visit-service"],
+      "rationale": "Owner is a core entity that interacts with pets and visits, making it central to the clinic's operations."
+    },
+    {
+      "name": "pet-service",
+      "components": ["Pet", "PetController", "PetType", "PetTypeRepository", "PetValidator"],
+      "owned_entities": ["Pet", "PetType"],
+      "responsibilities": ["Manage pet records and types, validate pet data"],
+      "dependencies": ["owner-service", "visit-service"],
+      "rationale": "Pets are essential to the clinic's operations and are closely tied to owners and visits."
+    },
+    {
+      "name": "visit-service",
+      "components": ["Visit", "VisitController"],
+      "owned_entities": ["Visit"],
+      "responsibilities": ["Schedule and record veterinary visits"],
+      "dependencies": ["owner-service", "pet-service"],
+      "rationale": "Visits are a key operation in the clinic, requiring access to both owner and pet information."
+    },
+    {
+      "name": "vet-service",
+      "components": ["Vet", "VetController", "VetRepository", "Specialty", "Vets"],
+      "owned_entities": ["Vet", "Specialty"],
+      "responsibilities": ["Manage veterinarian records and specialties"],
+      "dependencies": [],
+      "rationale": "Veterinarians are crucial to the clinic's operations, managing their specialties and interactions with pets."
+    }
+  ],
+  "migration_priority": [
+    {"service": "owner-service", "rank": 1, "confidence": 0.9, "reason": "Owner management is foundational to clinic operations."},
+    {"service": "pet-service", "rank": 2, "confidence": 0.8, "reason": "Pets are directly linked to owners and visits."},
+    {"service": "visit-service", "rank": 3, "confidence": 0.7, "reason": "Visits depend on owner and pet data."},
+    {"service": "vet-service", "rank": 4, "confidence": 0.6, "reason": "Veterinarians are essential but less interdependent than other services."}
+  ],
+  "uncertain_decisions": [],
+  "unsupported_assumptions": [],
+  "rule_violations": [],
+  "architectural_risks": [],
+  "critique": "",
+  "revised": false
+}

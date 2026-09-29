@@ -1,0 +1,39 @@
+{
+  "services": [
+    {
+      "name": "client-service",
+      "components": ["Component_01", "Component_02", "Component_04", "Component_06", "Component_09", "Component_10", "Component_13"],
+      "owned_entities": ["Client", "Pet"],
+      "responsibilities": ["Maintain client records", "Register pets", "Manage client-pet relationships"],
+      "dependencies": [],
+      "rationale": "Client and pet management are core business functions that can be decoupled from other services"
+    },
+    {
+      "name": "visit-service",
+      "components": ["Component_03", "Component_07", "Component_12"],
+      "owned_entities": ["Visit", "Veterinarian"],
+      "responsibilities": ["Schedule and record veterinary visits", "Manage veterinarian staff and their specialties"],
+      "dependencies": ["client-service"],
+      "rationale": "Visit management and veterinarian staff management are closely related and can be decoupled from client and pet management"
+    },
+    {
+      "name": "staff-service",
+      "components": ["Component_08", "Component_11", "Component_15"],
+      "owned_entities": ["Veterinarian", "Specialty"],
+      "responsibilities": ["Manage veterinarian staff and their specialties", "Validate input data"],
+      "dependencies": ["visit-service"],
+      "rationale": "Staff management and input validation are important business functions that can be decoupled from visit management"
+    }
+  ],
+  "migration_priority": [
+    {"service": "client-service", "rank": 1, "confidence": 0.8, "reason": "Client and pet management are critical business functions"},
+    {"service": "visit-service", "rank": 2, "confidence": 0.7, "reason": "Visit management is a key business function"},
+    {"service": "staff-service", "rank": 3, "confidence": 0.6, "reason": "Staff management is an important business function"}
+  ],
+  "uncertain_decisions": [],
+  "unsupported_assumptions": [],
+  "rule_violations": [],
+  "architectural_risks": [],
+  "critique": "",
+  "revised": false
+}

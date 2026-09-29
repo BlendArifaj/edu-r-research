@@ -1,0 +1,107 @@
+{
+  "schema_version": "1",
+  "method": "petclinic_gemini-3.8-flash_E1_STRUCTURAL_ANONYMIZED",
+  "method_family": "llm",
+  "system": {
+    "name": "SEMS-R",
+    "is_original_sems_source": false,
+    "gold_labels_used": false,
+    "integrity": "SEMS-R LLM decomposition. Not original production SEMS. This output does not consume evaluation gold labels.",
+    "generated_at": "2026-09-25T22:24:55.763342+00:00"
+  },
+  "config": {
+    "provider": "gemini",
+    "model": "gemini-3.8-flash",
+    "temperature": 0.2,
+    "condition": null,
+    "run_number": null,
+    "is_scientific_run": false
+  },
+  "available": true,
+  "component_assignment": {
+    "Component_01": "client-pet-care-service",
+    "Component_02": "client-pet-care-service",
+    "Component_03": "client-pet-care-service",
+    "Component_04": "client-pet-care-service",
+    "Component_05": "client-pet-care-service",
+    "Component_06": "client-pet-care-service",
+    "Component_07": "client-pet-care-service",
+    "Component_08": "client-pet-care-service",
+    "Component_09": "veterinarian-service",
+    "Component_10": "veterinarian-service",
+    "Component_11": "veterinarian-service",
+    "Component_12": "veterinarian-service",
+    "Component_13": "veterinarian-service",
+    "Component_14": "client-pet-care-service",
+    "Component_15": "client-pet-care-service"
+  },
+  "services": [
+    {
+      "id": "veterinarian-service",
+      "label": "veterinarian-service",
+      "components": [
+        "Component_09",
+        "Component_10",
+        "Component_11",
+        "Component_12",
+        "Component_13"
+      ],
+      "owned_entities": [
+        "Component_10"
+      ]
+    },
+    {
+      "id": "client-pet-care-service",
+      "label": "client-pet-care-service",
+      "components": [
+        "Component_01",
+        "Component_02",
+        "Component_03",
+        "Component_04",
+        "Component_05",
+        "Component_06",
+        "Component_07",
+        "Component_08",
+        "Component_14",
+        "Component_15"
+      ],
+      "owned_entities": [
+        "Component_01",
+        "Component_06"
+      ]
+    }
+  ],
+  "uncertain_decisions": [
+    {
+      "component": "Whether to split client-pet-care-service into separate owner, pet, and visit microservices: structural evidence shows bidirectional domain relationships (01, 04, 14) and shared repository access (Component_03 used by Component_02, Component_05, Component_15), making an earlier separation structurally unverified without domain refactoring.",
+      "reason": "Whether to split client-pet-care-service into separate owner, pet, and visit microservices: structural evidence shows bidirectional domain relationships (01, 04, 14) and shared repository access (Component_03 used by Component_02, Component_05, Component_15), making an earlier separation structurally unverified without domain refactoring."
+    }
+  ],
+  "unsupported_assumptions": [
+    "Assumed that Component_14 (visit entity) does not have an independent persistence mechanism in the provided evidence, as it lacks a dedicated repository component."
+  ],
+  "rule_violations": [],
+  "architectural_risks": [
+    "client-pet-care-service retains relatively high internal coupling across domain entities and controllers, which could hinder independent scaling of visit booking vs. owner profile management.",
+    "Component_03 acts as a shared persistence gateway for multiple controllers (02, 05, 15), which could become a bottleneck if multi-team development is introduced without internal modularization."
+  ],
+  "critique": "The evidence reveals two disjoint subgraphs: {09, 10, 11, 12, 13} and {01, 02, 03, 04, 05, 06, 07, 08, 14, 15}. While domain heuristics often suggest a three-service split (vets, owners/pets, visits), the static call graph and data relations demonstrate direct coupling among 01, 04, 14, and shared use of repository 03 across controllers 02, 05, and 15. Decomposing visits or pets into separate microservices without refactoring would introduce cyclic cross-service calls and distributed transaction complexity.",
+  "revised": false,
+  "migration_priority": [
+    {
+      "service": "veterinarian-service",
+      "rank": 1,
+      "confidence": 0.95,
+      "reason": "Completely decoupled from the rest of the system with no inbound or outbound static calls and an isolated data repository, allowing seamless extraction with minimal regression risk."
+    },
+    {
+      "service": "client-pet-care-service",
+      "rank": 2,
+      "confidence": 0.8,
+      "reason": "Contains core business interactions and shared data access patterns across controllers and entities; extraction requires careful database and transaction boundary planning."
+    }
+  ],
+  "notes": [
+    "Parsed from LLM JSON. Gold labels were not in the prompt."
+  ]
+}

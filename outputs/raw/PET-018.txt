@@ -1,0 +1,80 @@
+{
+  "services": [
+    {
+      "name": "veterinary-service",
+      "components": [
+        "Component_09",
+        "Component_10",
+        "Component_11",
+        "Component_12",
+        "Component_13"
+      ],
+      "owned_entities": [
+        "Component_09",
+        "Component_10",
+        "Component_13"
+      ],
+      "responsibilities": [
+        "Manage veterinarian staff information and professional specialties",
+        "Provide read and management APIs for clinic veterinarians"
+      ],
+      "dependencies": [],
+      "rationale": "Components 09 through 13 form a completely isolated, self-contained connected component in the static call graph and data relations, with zero dependencies on external components."
+    },
+    {
+      "name": "customer-pet-visit-service",
+      "components": [
+        "Component_01",
+        "Component_02",
+        "Component_03",
+        "Component_04",
+        "Component_05",
+        "Component_06",
+        "Component_07",
+        "Component_08",
+        "Component_14",
+        "Component_15"
+      ],
+      "owned_entities": [
+        "Component_01",
+        "Component_04",
+        "Component_06",
+        "Component_14"
+      ],
+      "responsibilities": [
+        "Maintain customer/client records and contact details",
+        "Handle pet registrations, validations, and pet type classifications",
+        "Schedule, record, and track veterinary visits"
+      ],
+      "dependencies": [],
+      "rationale": "These components exhibit strong internal coupling, including multi-entity static call references (e.g., Component_01 references Component_04 and Component_14; Component_05 and Component_15 both access repository Component_03). Keeping them in a single service prevents distributed data-consistency issues and cross-service cyclic references."
+    }
+  ],
+  "migration_priority": [
+    {
+      "service": "veterinary-service",
+      "rank": 1,
+      "confidence": 0.95,
+      "reason": "Completely decoupled from the rest of the application with no static calls or data access ties to other modules, making it an ideal low-risk candidate for initial extraction."
+    },
+    {
+      "service": "customer-pet-visit-service",
+      "rank": 2,
+      "confidence": 0.8,
+      "reason": "Contains core business capabilities and complex interdependencies across clients, pets, and visits; best extracted after operationalizing the initial service architecture."
+    }
+  ],
+  "uncertain_decisions": [
+    "Whether to further decompose customer-pet-visit-service into separate client, pet, and visit microservices given the static coupling between entities (Component_01 navigating to Component_04 and Component_14)."
+  ],
+  "unsupported_assumptions": [
+    "Assumed that runtime transaction boundaries can be preserved within the customer-pet-visit-service without distributed transactional coordination."
+  ],
+  "rule_violations": [],
+  "architectural_risks": [
+    "Customer-pet-visit-service is relatively large compared to veterinary-service and may become a coarse-grained modular monolith if not refactored internally.",
+    "Component_03 (repository) is shared across multiple controllers (Component_02, Component_05, Component_15), complicating any future granular decomposition of this service."
+  ],
+  "critique": "The codebase naturally bisects into two completely disconnected subgraphs. The veterinarian domain is clean and ready for extraction. The remaining domain contains tight static references and shared repository access, warranting retention as a single bounded context until domain models are decoupled via domain events or asynchronous messaging.",
+  "revised": false
+}

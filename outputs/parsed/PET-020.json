@@ -1,0 +1,111 @@
+{
+  "schema_version": "1",
+  "method": "petclinic_gemini-3.8-flash_E1_STRUCTURAL_SEMANTIC",
+  "method_family": "llm",
+  "system": {
+    "name": "SEMS-R",
+    "is_original_sems_source": false,
+    "gold_labels_used": false,
+    "integrity": "SEMS-R LLM decomposition. Not original production SEMS. This output does not consume evaluation gold labels.",
+    "generated_at": "2026-09-25T22:25:16.587835+00:00"
+  },
+  "config": {
+    "provider": "gemini",
+    "model": "gemini-3.8-flash",
+    "temperature": 0.2,
+    "condition": null,
+    "run_number": null,
+    "is_scientific_run": false
+  },
+  "available": true,
+  "component_assignment": {
+    "Owner": "owner-pet-service",
+    "OwnerController": "owner-pet-service",
+    "OwnerRepository": "owner-pet-service",
+    "Pet": "owner-pet-service",
+    "PetController": "owner-pet-service",
+    "PetType": "owner-pet-service",
+    "PetTypeRepository": "owner-pet-service",
+    "PetValidator": "owner-pet-service",
+    "Specialty": "vet-service",
+    "Vet": "vet-service",
+    "VetController": "vet-service",
+    "VetRepository": "vet-service",
+    "Vets": "vet-service",
+    "Visit": "owner-pet-service",
+    "VisitController": "owner-pet-service"
+  },
+  "services": [
+    {
+      "id": "vet-service",
+      "label": "vet-service",
+      "components": [
+        "Specialty",
+        "Vet",
+        "VetController",
+        "VetRepository",
+        "Vets"
+      ],
+      "owned_entities": [
+        "Specialty",
+        "Vet",
+        "Vets"
+      ]
+    },
+    {
+      "id": "owner-pet-service",
+      "label": "owner-pet-service",
+      "components": [
+        "Owner",
+        "OwnerController",
+        "OwnerRepository",
+        "Pet",
+        "PetController",
+        "PetType",
+        "PetTypeRepository",
+        "PetValidator",
+        "Visit",
+        "VisitController"
+      ],
+      "owned_entities": [
+        "Owner",
+        "Pet",
+        "PetType",
+        "Visit"
+      ]
+    }
+  ],
+  "uncertain_decisions": [
+    {
+      "component": "Retaining Visit and VisitController inside owner-pet-service rather than creating a dedicated visit-service, due to absence of a standalone VisitRepository and direct data dependency of VisitController on OwnerRepository.",
+      "reason": "Retaining Visit and VisitController inside owner-pet-service rather than creating a dedicated visit-service, due to absence of a standalone VisitRepository and direct data dependency of VisitController on OwnerRepository."
+    }
+  ],
+  "unsupported_assumptions": [
+    "Assuming Visit cannot be independently persisted without OwnerRepository based solely on the provided static data relations."
+  ],
+  "rule_violations": [],
+  "architectural_risks": [
+    "Coarse-grained service boundary: owner-pet-service holds multiple subdomains (owners, pets, visits), potentially leading to high internal complexity.",
+    "Tight entity coupling: bidirectional references between Owner, Pet, and Visit make any future finer-grained separation difficult without substantial domain model refactoring."
+  ],
+  "critique": "The structural call graph exhibits two distinct connected components with zero cross-module call edges or repository accesses between org.springframework.samples.petclinic.vet and org.springframework.samples.petclinic.owner. Decomposing the monolith into vet-service and owner-pet-service cleanly aligns with physical module boundaries and dependency cuts. While a separate visits service is a common domain concept, the evidence shows that VisitController relies directly on OwnerRepository and domain classes share static references, which would induce distributed transaction overhead and tight inter-service coupling if split without prior refactoring.",
+  "revised": false,
+  "migration_priority": [
+    {
+      "service": "vet-service",
+      "rank": 1,
+      "confidence": 0.95,
+      "reason": "Completely disconnected from other components in static calls and data relations; can be extracted first with zero coupling risk to the rest of the application."
+    },
+    {
+      "service": "owner-pet-service",
+      "rank": 2,
+      "confidence": 0.85,
+      "reason": "Forms the core domain cluster with tightly interconnected data access and static references; represents the remaining monolith core after vet extraction."
+    }
+  ],
+  "notes": [
+    "Parsed from LLM JSON. Gold labels were not in the prompt."
+  ]
+}

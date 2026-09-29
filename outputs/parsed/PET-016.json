@@ -1,0 +1,111 @@
+{
+  "schema_version": "1",
+  "method": "petclinic_gemini-3.8-flash_E1_STRUCTURAL_SEMANTIC",
+  "method_family": "llm",
+  "system": {
+    "name": "SEMS-R",
+    "is_original_sems_source": false,
+    "gold_labels_used": false,
+    "integrity": "SEMS-R LLM decomposition. Not original production SEMS. This output does not consume evaluation gold labels.",
+    "generated_at": "2026-09-25T22:24:00.544993+00:00"
+  },
+  "config": {
+    "provider": "gemini",
+    "model": "gemini-3.8-flash",
+    "temperature": 0.2,
+    "condition": null,
+    "run_number": null,
+    "is_scientific_run": false
+  },
+  "available": true,
+  "component_assignment": {
+    "Owner": "customer-service",
+    "OwnerController": "customer-service",
+    "OwnerRepository": "customer-service",
+    "Pet": "customer-service",
+    "PetController": "customer-service",
+    "PetType": "customer-service",
+    "PetTypeRepository": "customer-service",
+    "PetValidator": "customer-service",
+    "Specialty": "vet-service",
+    "Vet": "vet-service",
+    "VetController": "vet-service",
+    "VetRepository": "vet-service",
+    "Vets": "vet-service",
+    "Visit": "customer-service",
+    "VisitController": "customer-service"
+  },
+  "services": [
+    {
+      "id": "vet-service",
+      "label": "vet-service",
+      "components": [
+        "Specialty",
+        "Vet",
+        "VetController",
+        "VetRepository",
+        "Vets"
+      ],
+      "owned_entities": [
+        "Specialty",
+        "Vet",
+        "Vets"
+      ]
+    },
+    {
+      "id": "customer-service",
+      "label": "customer-service",
+      "components": [
+        "Owner",
+        "OwnerController",
+        "OwnerRepository",
+        "Pet",
+        "PetController",
+        "PetType",
+        "PetTypeRepository",
+        "PetValidator",
+        "Visit",
+        "VisitController"
+      ],
+      "owned_entities": [
+        "Owner",
+        "Pet",
+        "PetType",
+        "Visit"
+      ]
+    }
+  ],
+  "uncertain_decisions": [
+    {
+      "component": "Whether Visit and Pet should be decomposed into separate microservices. The static call graph and data relations show VisitController and PetController tightly coupled to OwnerRepository, indicating that splitting them would require significant schema and persistence layer redesign not evidenced in the codebase.",
+      "reason": "Whether Visit and Pet should be decomposed into separate microservices. The static call graph and data relations show VisitController and PetController tightly coupled to OwnerRepository, indicating that splitting them would require significant schema and persistence layer redesign not evidenced in the codebase."
+    }
+  ],
+  "unsupported_assumptions": [
+    "Assumed that OwnerRepository handles the persistence of Pet and Visit entities via cascading or aggregate-root patterns, because no separate VisitRepository exists in the evidence."
+  ],
+  "rule_violations": [],
+  "architectural_risks": [
+    "Customer service remains a coarse-grained service containing multiple domain entities (Owner, Pet, Visit), which could become a maintenance bottleneck if visit volume grows significantly.",
+    "If Visit is later separated without decoupling OwnerRepository, distributed queries or distributed transactions will be required across owners, pets, and visits."
+  ],
+  "critique": "A strict two-service decomposition along package lines (vet vs. owner) honors all explicit static call and data-access boundaries. While a 3-way split (Owner, Pet/Visit, Vet) is common in microservice refactorings, the provided structural evidence demonstrates that VisitController and PetController directly depend on OwnerRepository and Owner domain models, precluding a clean separation without substantial code modifications.",
+  "revised": false,
+  "migration_priority": [
+    {
+      "service": "vet-service",
+      "rank": 1,
+      "confidence": 0.95,
+      "reason": "Complete isolation from other domain modules with zero cross-boundary static calls or shared repositories enables extraction with minimal refactoring risk."
+    },
+    {
+      "service": "customer-service",
+      "rank": 2,
+      "confidence": 0.85,
+      "reason": "Retains the core monolithic transactional boundary across Owner, Pet, and Visit, deferring complex database schema splitting until after the independent vet boundary is established."
+    }
+  ],
+  "notes": [
+    "Parsed from LLM JSON. Gold labels were not in the prompt."
+  ]
+}

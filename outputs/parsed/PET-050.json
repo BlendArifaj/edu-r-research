@@ -1,0 +1,110 @@
+{
+  "schema_version": "1",
+  "method": "petclinic_llama3.1_E0_MINIMAL_ANONYMIZED",
+  "method_family": "llm",
+  "system": {
+    "name": "SEMS-R",
+    "is_original_sems_source": false,
+    "gold_labels_used": false,
+    "integrity": "SEMS-R LLM decomposition. Not original production SEMS. This output does not consume evaluation gold labels.",
+    "generated_at": "2026-09-25T21:47:06.435713+00:00"
+  },
+  "config": {
+    "provider": "ollama",
+    "model": "llama3.1",
+    "temperature": 0.2,
+    "condition": null,
+    "run_number": null,
+    "is_scientific_run": false
+  },
+  "available": true,
+  "component_assignment": {
+    "Component_01": "client-service",
+    "Component_02": "client-service",
+    "Component_03": "visit-service",
+    "Component_04": "client-service",
+    "Component_06": "client-service",
+    "Component_07": "visit-service",
+    "Component_08": "staff-service",
+    "Component_09": "client-service",
+    "Component_10": "client-service",
+    "Component_11": "staff-service",
+    "Component_12": "visit-service",
+    "Component_13": "staff-service",
+    "Component_14": "client-service"
+  },
+  "services": [
+    {
+      "id": "client-service",
+      "label": "client-service",
+      "components": [
+        "Component_01",
+        "Component_02",
+        "Component_04",
+        "Component_06",
+        "Component_14",
+        "Component_09",
+        "Component_10"
+      ],
+      "owned_entities": [
+        "Client",
+        "Pet",
+        "Veterinarian"
+      ]
+    },
+    {
+      "id": "visit-service",
+      "label": "visit-service",
+      "components": [
+        "Component_03",
+        "Component_07",
+        "Component_12"
+      ],
+      "owned_entities": [
+        "Visit",
+        "Veterinarian"
+      ]
+    },
+    {
+      "id": "staff-service",
+      "label": "staff-service",
+      "components": [
+        "Component_08",
+        "Component_11",
+        "Component_13"
+      ],
+      "owned_entities": [
+        "Veterinarian"
+      ]
+    }
+  ],
+  "uncertain_decisions": [],
+  "unsupported_assumptions": [],
+  "rule_violations": [],
+  "architectural_risks": [],
+  "critique": "",
+  "revised": false,
+  "migration_priority": [
+    {
+      "service": "client-service",
+      "rank": 1,
+      "confidence": 0.0,
+      "reason": ""
+    },
+    {
+      "service": "visit-service",
+      "rank": 2,
+      "confidence": 0.0,
+      "reason": ""
+    },
+    {
+      "service": "staff-service",
+      "rank": 3,
+      "confidence": 0.0,
+      "reason": ""
+    }
+  ],
+  "notes": [
+    "Parsed from LLM JSON. Gold labels were not in the prompt."
+  ]
+}

@@ -1,0 +1,81 @@
+{
+  "services": [
+    {
+      "name": "vet-service",
+      "components": [
+        "Specialty",
+        "Vet",
+        "VetController",
+        "VetRepository",
+        "Vets"
+      ],
+      "owned_entities": [
+        "Specialty",
+        "Vet",
+        "Vets"
+      ],
+      "responsibilities": [
+        "Manage veterinarian staff records",
+        "Manage veterinary medical specialties",
+        "Provide roster listings of veterinarians"
+      ],
+      "dependencies": [],
+      "rationale": "All components belong to the 'vet' package and form a completely self-contained subgraph. There are zero incoming or outgoing static calls and data relations connecting this cluster to the 'owner' package."
+    },
+    {
+      "name": "customer-pet-service",
+      "components": [
+        "Owner",
+        "OwnerController",
+        "OwnerRepository",
+        "Pet",
+        "PetController",
+        "PetType",
+        "PetTypeRepository",
+        "PetValidator",
+        "Visit",
+        "VisitController"
+      ],
+      "owned_entities": [
+        "Owner",
+        "Pet",
+        "PetType",
+        "Visit"
+      ],
+      "responsibilities": [
+        "Manage pet owners and their contact details",
+        "Manage pets, pet types, and validation",
+        "Schedule and record pet visits"
+      ],
+      "dependencies": [],
+      "rationale": "Components in the 'owner' package are tightly coupled via direct static references (Owner references Pet and Visit; Pet references PetType and Visit) and shared data access (VisitController and PetController both directly depend on OwnerRepository). Keeping them in a single service prevents distributed transaction and aggregate consistency issues."
+    }
+  ],
+  "migration_priority": [
+    {
+      "service": "vet-service",
+      "rank": 1,
+      "confidence": 0.95,
+      "reason": "Complete structural isolation from the rest of the application; zero cross-service static dependencies or data relations facilitate risk-free extraction."
+    },
+    {
+      "service": "customer-pet-service",
+      "rank": 2,
+      "confidence": 0.85,
+      "reason": "Encapsulates the core business workflows and data model; represents the remainder of the monolith once the vet service is carved out."
+    }
+  ],
+  "uncertain_decisions": [
+    "Further decomposition of the customer-pet-service into separate 'pet', 'owner', and 'visit' microservices was deferred because Visit lacks an independent repository and relies on OwnerRepository, while Owner and Pet entities maintain direct static references to Visit."
+  ],
+  "unsupported_assumptions": [
+    "Assumed there are no runtime dependencies, shared database tables, or foreign key constraints between Vet and Owner/Pet/Visit that are omitted from the static call and repository relation graphs."
+  ],
+  "rule_violations": [],
+  "architectural_risks": [
+    "Within customer-pet-service, OwnerRepository acts as a shared data gateway for Owner, Pet, and Visit interactions, which may cause high coupling and concurrency bottlenecks if load increases.",
+    "If business demands later require an independent Visit service, substantial refactoring will be required to decouple Owner/Pet domain models from Visit and introduce a dedicated VisitRepository."
+  ],
+  "critique": "The legacy codebase exhibits two distinct structural partitions at the module level. The vet subsystem is completely orthogonal and presents an ideal candidate for immediate extraction. The owner subsystem, however, conflates Owner, Pet, and Visit lifecycle management under a single aggregate/repository root (OwnerRepository), preventing clean zero-cost separation of visits or pets without prior internal domain refactoring.",
+  "revised": false
+}

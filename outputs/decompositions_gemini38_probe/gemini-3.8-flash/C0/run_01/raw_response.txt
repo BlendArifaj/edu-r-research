@@ -1,0 +1,260 @@
+{
+  "services": [
+    {
+      "name": "auth-service",
+      "components": [
+        "AuthService",
+        "UserRepository"
+      ],
+      "owned_entities": [
+        "User"
+      ],
+      "responsibilities": [
+        "User authentication and authorization",
+        "Credential and account identity management"
+      ],
+      "dependencies": [],
+      "rationale": "AuthService and UserRepository encapsulate foundational identity and authentication capabilities required by all other functional domains."
+    },
+    {
+      "name": "faculty-service",
+      "components": [
+        "AcademicCalendarRepository",
+        "CourseRepository",
+        "DepartmentRepository",
+        "FacultyRepository",
+        "FacultyService",
+        "FacultyStatisticsService",
+        "StaffRepository",
+        "TeacherRepository"
+      ],
+      "owned_entities": [
+        "AcademicCalendar",
+        "Course",
+        "Department",
+        "Faculty",
+        "Staff",
+        "Teacher"
+      ],
+      "responsibilities": [
+        "Faculty and department administration",
+        "Teacher and staff records",
+        "Course catalog management",
+        "Academic calendar management",
+        "Faculty-level statistical reporting"
+      ],
+      "dependencies": [
+        "auth-service"
+      ],
+      "rationale": "Groups components belonging to the documented faculty administration functional area, managing organizational structures, academic catalog, and staff."
+    },
+    {
+      "name": "student-service",
+      "components": [
+        "CourseEnrollmentRepository",
+        "EnrollmentGateService",
+        "SemesterRegistrationRepository",
+        "StudentOverviewService",
+        "StudentRepository",
+        "StudentService"
+      ],
+      "owned_entities": [
+        "CourseEnrollment",
+        "SemesterRegistration",
+        "Student"
+      ],
+      "responsibilities": [
+        "Student profile and registration lifecycle",
+        "Semester registration workflows",
+        "Course enrollment handling and gating",
+        "Student academic overview compilation"
+      ],
+      "dependencies": [
+        "auth-service",
+        "faculty-service"
+      ],
+      "rationale": "Encapsulates student records, semester registrations, and enrollment processes along with overview aggregation directly concerning student status."
+    },
+    {
+      "name": "grade-service",
+      "components": [
+        "ExamRepository",
+        "GradeRepository",
+        "GradeService"
+      ],
+      "owned_entities": [
+        "Exam",
+        "Grade"
+      ],
+      "responsibilities": [
+        "Exam scheduling and registration",
+        "Grade recording, updates, and historical audit",
+        "GPA calculation"
+      ],
+      "dependencies": [
+        "auth-service",
+        "faculty-service",
+        "student-service"
+      ],
+      "rationale": "Focuses strictly on assessment, exam management, and grading lifecycles as identified in the grade functional area."
+    },
+    {
+      "name": "finance-service",
+      "components": [
+        "FinanceRepository",
+        "FinanceService"
+      ],
+      "owned_entities": [
+        "AccountBalance",
+        "Fee",
+        "Invoice",
+        "LedgerEntry",
+        "Payment"
+      ],
+      "responsibilities": [
+        "Tuition and semester fee calculations",
+        "Student invoicing and payment processing",
+        "Account balances and ledgers"
+      ],
+      "dependencies": [
+        "auth-service",
+        "faculty-service",
+        "student-service"
+      ],
+      "rationale": "Isolates monetary transactions, billing, and institutional ledger records aligned with the finance functional area."
+    },
+    {
+      "name": "attendance-service",
+      "components": [
+        "AttendanceRepository",
+        "AttendanceService"
+      ],
+      "owned_entities": [
+        "AttendanceRecord",
+        "ClassSession"
+      ],
+      "responsibilities": [
+        "Class session scheduling and tracking",
+        "Student and staff attendance recording",
+        "Attendance aggregation and reporting"
+      ],
+      "dependencies": [
+        "auth-service",
+        "faculty-service",
+        "student-service"
+      ],
+      "rationale": "Manages class session tracking and attendance records for both students and staff."
+    },
+    {
+      "name": "library-service",
+      "components": [
+        "LibraryRepository",
+        "LibraryService"
+      ],
+      "owned_entities": [
+        "Book",
+        "BookCopy",
+        "LibraryMembership",
+        "Loan",
+        "Reservation"
+      ],
+      "responsibilities": [
+        "Book catalog and copy management",
+        "Library membership lifecycle",
+        "Loan checkouts, returns, and reservations"
+      ],
+      "dependencies": [
+        "auth-service",
+        "faculty-service",
+        "student-service"
+      ],
+      "rationale": "Encapsulates the discrete library domain including physical assets, memberships, and circulation."
+    },
+    {
+      "name": "reporting-service",
+      "components": [
+        "ReportBuilder"
+      ],
+      "owned_entities": [
+        "ReportDefinition"
+      ],
+      "responsibilities": [
+        "Legacy cross-cutting report generation and document compilation"
+      ],
+      "dependencies": [
+        "attendance-service",
+        "faculty-service",
+        "finance-service",
+        "grade-service",
+        "student-service"
+      ],
+      "rationale": "Isolates legacy reporting functionality to prevent coupling across domain services during decomposition."
+    }
+  ],
+  "migration_priority": [
+    {
+      "service": "auth-service",
+      "rank": 1,
+      "confidence": 0.95,
+      "reason": "Foundational authentication and user repository required by all other microservices."
+    },
+    {
+      "service": "faculty-service",
+      "rank": 2,
+      "confidence": 0.9,
+      "reason": "Provides core reference data including courses, faculties, departments, and teachers required across workflows."
+    },
+    {
+      "service": "student-service",
+      "rank": 3,
+      "confidence": 0.85,
+      "reason": "Core consumer of faculty courses and upstream prerequisite for grades, attendance, finance, and library."
+    },
+    {
+      "service": "finance-service",
+      "rank": 4,
+      "confidence": 0.8,
+      "reason": "Depends on student enrollment and faculty ledgers, but operates with clear transactional boundaries."
+    },
+    {
+      "service": "grade-service",
+      "rank": 5,
+      "confidence": 0.8,
+      "reason": "Relies on completed student registrations, courses, and teacher assignments."
+    },
+    {
+      "service": "attendance-service",
+      "rank": 6,
+      "confidence": 0.75,
+      "reason": "High-frequency operational tracking relying on student enrollments and course session definitions."
+    },
+    {
+      "service": "library-service",
+      "rank": 7,
+      "confidence": 0.85,
+      "reason": "Autonomous domain with minimal outward coupling except for member reference lookups."
+    },
+    {
+      "service": "reporting-service",
+      "rank": 8,
+      "confidence": 0.5,
+      "reason": "Legacy cross-cutting component that reads across multiple domains; should be extracted or deprecated last."
+    }
+  ],
+  "uncertain_decisions": [
+    "UNCERTAIN: Placement of ReportBuilder in a standalone reporting-service versus embedding it within individual consuming services (e.g., attendance monthly reports or faculty statistics) due to lack of explicit schema information.",
+    "UNCERTAIN: Placement of StudentOverviewService within student-service rather than as a BFF/composite gateway, as it reads cross-domain student academic records."
+  ],
+  "unsupported_assumptions": [
+    "Assumed EnrollmentGateService primarily guards enrollment based on student state and prerequisite business rules within student-service.",
+    "Assumed ReportBuilder does not own business entities directly, acting as a stateless transformation or formatting utility."
+  ],
+  "rule_violations": [],
+  "architectural_risks": [
+    "High coupling between student-service and faculty-service due to shared course catalog and enrollment references.",
+    "ReportBuilder may introduce distributed querying challenges across separate service databases if maintained as a monolithic legacy reporting component.",
+    "StudentOverviewService may require distributed joins across student, grade, and attendance domains, impacting latency and network overhead."
+  ],
+  "critique": "The decomposition aligns strictly with the functional capabilities described in SEMS-R. The isolation of ReportBuilder into a separate service mitigates monolithic leakage, but cross-service queries for reporting and student overviews present distributed data access challenges that may require read replicas, event-driven data feeds, or API composition.",
+  "revised": false
+}

@@ -1,0 +1,80 @@
+{
+  "services": [
+    {
+      "name": "vet-service",
+      "components": [
+        "Specialty",
+        "Vet",
+        "VetController",
+        "VetRepository",
+        "Vets"
+      ],
+      "owned_entities": [
+        "Specialty",
+        "Vet",
+        "Vets"
+      ],
+      "responsibilities": [
+        "Manage veterinarian staff information and their clinical specialties",
+        "Expose read and search capabilities for veterinarian listings"
+      ],
+      "dependencies": [],
+      "rationale": "The vet module exhibits complete architectural isolation from the rest of the system; there are zero static call edges or data relations connecting vet components to owner, pet, or visit components."
+    },
+    {
+      "name": "customer-service",
+      "components": [
+        "Owner",
+        "OwnerController",
+        "OwnerRepository",
+        "Pet",
+        "PetController",
+        "PetType",
+        "PetTypeRepository",
+        "PetValidator",
+        "Visit",
+        "VisitController"
+      ],
+      "owned_entities": [
+        "Owner",
+        "Pet",
+        "PetType",
+        "Visit"
+      ],
+      "responsibilities": [
+        "Manage client/owner personal details and contact records",
+        "Manage pet registrations, pet types, and pet profile validation",
+        "Schedule and track clinical visits for pets"
+      ],
+      "dependencies": [],
+      "rationale": "Owner, Pet, and Visit components share deep static call references and data coupling: Owner references Pet and Visit, Pet references Visit and PetType, and both PetController and VisitController directly access OwnerRepository. Visit lacks a dedicated repository, making these components mutually dependent under the current data model."
+    }
+  ],
+  "migration_priority": [
+    {
+      "service": "vet-service",
+      "rank": 1,
+      "confidence": 0.95,
+      "reason": "Complete isolation from other domain modules with zero cross-boundary static calls or shared repositories enables extraction with minimal refactoring risk."
+    },
+    {
+      "service": "customer-service",
+      "rank": 2,
+      "confidence": 0.85,
+      "reason": "Retains the core monolithic transactional boundary across Owner, Pet, and Visit, deferring complex database schema splitting until after the independent vet boundary is established."
+    }
+  ],
+  "uncertain_decisions": [
+    "Whether Visit and Pet should be decomposed into separate microservices. The static call graph and data relations show VisitController and PetController tightly coupled to OwnerRepository, indicating that splitting them would require significant schema and persistence layer redesign not evidenced in the codebase."
+  ],
+  "unsupported_assumptions": [
+    "Assumed that OwnerRepository handles the persistence of Pet and Visit entities via cascading or aggregate-root patterns, because no separate VisitRepository exists in the evidence."
+  ],
+  "rule_violations": [],
+  "architectural_risks": [
+    "Customer service remains a coarse-grained service containing multiple domain entities (Owner, Pet, Visit), which could become a maintenance bottleneck if visit volume grows significantly.",
+    "If Visit is later separated without decoupling OwnerRepository, distributed queries or distributed transactions will be required across owners, pets, and visits."
+  ],
+  "critique": "A strict two-service decomposition along package lines (vet vs. owner) honors all explicit static call and data-access boundaries. While a 3-way split (Owner, Pet/Visit, Vet) is common in microservice refactorings, the provided structural evidence demonstrates that VisitController and PetController directly depend on OwnerRepository and Owner domain models, precluding a clean separation without substantial code modifications.",
+  "revised": false
+}

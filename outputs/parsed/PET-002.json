@@ -1,0 +1,130 @@
+{
+  "schema_version": "1",
+  "method": "petclinic_gemini-3.8-flash_E0_MINIMAL_ANONYMIZED",
+  "method_family": "llm",
+  "system": {
+    "name": "SEMS-R",
+    "is_original_sems_source": false,
+    "gold_labels_used": false,
+    "integrity": "SEMS-R LLM decomposition. Not original production SEMS. This output does not consume evaluation gold labels.",
+    "generated_at": "2026-09-25T22:19:54.166219+00:00"
+  },
+  "config": {
+    "provider": "gemini",
+    "model": "gemini-3.8-flash",
+    "temperature": 0.2,
+    "condition": null,
+    "run_number": null,
+    "is_scientific_run": false
+  },
+  "available": true,
+  "component_assignment": {
+    "Component_01": "service-1",
+    "Component_02": "service-1",
+    "Component_03": "service-1",
+    "Component_04": "service-1",
+    "Component_05": "service-2",
+    "Component_06": "service-2",
+    "Component_07": "service-2",
+    "Component_08": "service-3",
+    "Component_09": "service-3",
+    "Component_10": "service-3",
+    "Component_11": "service-3",
+    "Component_12": "service-3",
+    "Component_13": "service-3",
+    "Component_14": "service-3",
+    "Component_15": "service-3"
+  },
+  "services": [
+    {
+      "id": "service-1",
+      "label": "service-1",
+      "components": [
+        "Component_01",
+        "Component_02",
+        "Component_03",
+        "Component_04"
+      ],
+      "owned_entities": [
+        "Component_01",
+        "Component_04"
+      ]
+    },
+    {
+      "id": "service-2",
+      "label": "service-2",
+      "components": [
+        "Component_05",
+        "Component_06",
+        "Component_07"
+      ],
+      "owned_entities": [
+        "Component_06"
+      ]
+    },
+    {
+      "id": "service-3",
+      "label": "service-3",
+      "components": [
+        "Component_08",
+        "Component_09",
+        "Component_10",
+        "Component_11",
+        "Component_12",
+        "Component_13",
+        "Component_14",
+        "Component_15"
+      ],
+      "owned_entities": [
+        "Component_09",
+        "Component_10",
+        "Component_13",
+        "Component_14"
+      ]
+    }
+  ],
+  "uncertain_decisions": [
+    {
+      "component": "Assignment of anonymized domain components to specific repositories without call graph or schema foreign key information",
+      "reason": "Assignment of anonymized domain components to specific repositories without call graph or schema foreign key information"
+    },
+    {
+      "component": "Separation of controllers Component_11 and Component_15 into service-3 based solely on identifier clustering rather than functional analysis",
+      "reason": "Separation of controllers Component_11 and Component_15 into service-3 based solely on identifier clustering rather than functional analysis"
+    }
+  ],
+  "unsupported_assumptions": [
+    "Assumed that each of the three repository components (Component_03, Component_07, Component_12) anchors an independent bounded context",
+    "Assumed domain entities associate with the nearest numeric controller and repository modules in the absence of explicit references"
+  ],
+  "rule_violations": [],
+  "architectural_risks": [
+    "High probability of cross-service data coupling and distributed transaction overhead due to unknown domain relationships",
+    "Potential network chattiness if controllers invoke repositories or domain entities assigned to other candidate services"
+  ],
+  "critique": "Under condition E0_MINIMAL with ANONYMIZED identifiers, only component kinds and module identifiers are available. Without behavioral traces, source code, semantic naming, or relational models, any decomposition boundary remains conjectural and low-confidence.",
+  "revised": false,
+  "migration_priority": [
+    {
+      "service": "service-1",
+      "rank": 1,
+      "confidence": 0.3,
+      "reason": "Independent candidate unit containing a single repository and controller pairing with minimal hypothesized dependencies."
+    },
+    {
+      "service": "service-2",
+      "rank": 2,
+      "confidence": 0.25,
+      "reason": "Small, self-contained component cluster that can be extracted after foundational services are established."
+    },
+    {
+      "service": "service-3",
+      "rank": 3,
+      "confidence": 0.2,
+      "reason": "Contains the largest number of entities, controllers, and validation logic, making extraction riskier without call graph evidence."
+    }
+  ],
+  "notes": [
+    "Parsed from LLM JSON. Gold labels were not in the prompt."
+  ]
+}

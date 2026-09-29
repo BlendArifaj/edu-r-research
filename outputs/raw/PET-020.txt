@@ -1,0 +1,80 @@
+{
+  "services": [
+    {
+      "name": "vet-service",
+      "components": [
+        "Specialty",
+        "Vet",
+        "VetController",
+        "VetRepository",
+        "Vets"
+      ],
+      "owned_entities": [
+        "Specialty",
+        "Vet",
+        "Vets"
+      ],
+      "responsibilities": [
+        "Manage veterinarian profiles and specialties",
+        "Expose read and management endpoints for veterinary staff"
+      ],
+      "dependencies": [],
+      "rationale": "The veterinarian components form a completely isolated subgraph in the static call graph and data relations, sharing zero static dependencies or repository references with the owner/pet components."
+    },
+    {
+      "name": "owner-pet-service",
+      "components": [
+        "Owner",
+        "OwnerController",
+        "OwnerRepository",
+        "Pet",
+        "PetController",
+        "PetType",
+        "PetTypeRepository",
+        "PetValidator",
+        "Visit",
+        "VisitController"
+      ],
+      "owned_entities": [
+        "Owner",
+        "Pet",
+        "PetType",
+        "Visit"
+      ],
+      "responsibilities": [
+        "Manage pet owners and registration details",
+        "Manage pets, pet types, and validation logic",
+        "Record and schedule visits and clinic appointments"
+      ],
+      "dependencies": [],
+      "rationale": "Owner, Pet, and Visit components are tightly coupled structurally. VisitController directly depends on Owner, Pet, and OwnerRepository for persistence, while Owner and Pet directly reference Visit. Grouping them preserves data integrity and avoids cross-boundary persistence anti-patterns."
+    }
+  ],
+  "migration_priority": [
+    {
+      "service": "vet-service",
+      "rank": 1,
+      "confidence": 0.95,
+      "reason": "Completely disconnected from other components in static calls and data relations; can be extracted first with zero coupling risk to the rest of the application."
+    },
+    {
+      "service": "owner-pet-service",
+      "rank": 2,
+      "confidence": 0.85,
+      "reason": "Forms the core domain cluster with tightly interconnected data access and static references; represents the remaining monolith core after vet extraction."
+    }
+  ],
+  "uncertain_decisions": [
+    "Retaining Visit and VisitController inside owner-pet-service rather than creating a dedicated visit-service, due to absence of a standalone VisitRepository and direct data dependency of VisitController on OwnerRepository."
+  ],
+  "unsupported_assumptions": [
+    "Assuming Visit cannot be independently persisted without OwnerRepository based solely on the provided static data relations."
+  ],
+  "rule_violations": [],
+  "architectural_risks": [
+    "Coarse-grained service boundary: owner-pet-service holds multiple subdomains (owners, pets, visits), potentially leading to high internal complexity.",
+    "Tight entity coupling: bidirectional references between Owner, Pet, and Visit make any future finer-grained separation difficult without substantial domain model refactoring."
+  ],
+  "critique": "The structural call graph exhibits two distinct connected components with zero cross-module call edges or repository accesses between org.springframework.samples.petclinic.vet and org.springframework.samples.petclinic.owner. Decomposing the monolith into vet-service and owner-pet-service cleanly aligns with physical module boundaries and dependency cuts. While a separate visits service is a common domain concept, the evidence shows that VisitController relies directly on OwnerRepository and domain classes share static references, which would induce distributed transaction overhead and tight inter-service coupling if split without prior refactoring.",
+  "revised": false
+}

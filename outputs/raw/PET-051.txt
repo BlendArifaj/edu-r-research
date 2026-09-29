@@ -1,0 +1,57 @@
+{
+  "services": [
+    {
+      "name": "client-service",
+      "components": ["Component_02", "Component_15"],
+      "owned_entities": ["Client"],
+      "responsibilities": ["manage client records"],
+      "dependencies": ["pet-service"],
+      "rationale": "client-related functionality is isolated"
+    },
+    {
+      "name": "pet-service",
+      "components": ["Component_01", "Component_05", "Component_07"],
+      "owned_entities": ["Pet"],
+      "responsibilities": ["register pets, manage veterinary visits"],
+      "dependencies": ["veterinarian-service"],
+      "rationale": "pet-related functionality is isolated"
+    },
+    {
+      "name": "veterinarian-service",
+      "components": ["Component_03", "Component_04", "Component_06"],
+      "owned_entities": ["Vet", "Specialty"],
+      "responsibilities": ["manage veterinarian staff and their specialties"],
+      "dependencies": [],
+      "rationale": "veterinarian-related functionality is isolated"
+    },
+    {
+      "name": "visit-service",
+      "components": ["Component_08", "Component_12"],
+      "owned_entities": ["Visit"],
+      "responsibilities": ["schedule and record veterinary visits"],
+      "dependencies": ["pet-service", "veterinarian-service"],
+      "rationale": "visit-related functionality is isolated"
+    },
+    {
+      "name": "staff-service",
+      "components": ["Component_09", "Component_10", "Component_11", "Component_13"],
+      "owned_entities": ["Staff"],
+      "responsibilities": ["manage staff"],
+      "dependencies": [],
+      "rationale": "staff-related functionality is isolated"
+    }
+  ],
+  "migration_priority": [
+    {"service": "pet-service", "rank": 1, "confidence": 0.8, "reason": "pet-related functionality is a core part of the application"},
+    {"service": "veterinarian-service", "rank": 2, "confidence": 0.7, "reason": "veterinarian-related functionality is a key part of the application"},
+    {"service": "client-service", "rank": 3, "confidence": 0.6, "reason": "client-related functionality is a significant part of the application"},
+    {"service": "visit-service", "rank": 4, "confidence": 0.5, "reason": "visit-related functionality is a part of the application"},
+    {"service": "staff-service", "rank": 5, "confidence": 0.4, "reason": "staff-related functionality is a minor part of the application"}
+  ],
+  "uncertain_decisions": [],
+  "unsupported_assumptions": [],
+  "rule_violations": [],
+  "architectural_risks": [],
+  "critique": "",
+  "revised": false
+}

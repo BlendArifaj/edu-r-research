@@ -1,0 +1,39 @@
+{
+  "services": [
+    {
+      "name": "owner-service",
+      "components": ["Owner", "OwnerController", "OwnerRepository"],
+      "owned_entities": ["Owner", "Pet", "Visit"],
+      "responsibilities": ["manage client records", "register pets", "schedule and record veterinary visits"],
+      "dependencies": [],
+      "rationale": "all components related to client management"
+    },
+    {
+      "name": "pet-service",
+      "components": ["Pet", "PetController", "PetType", "PetTypeRepository", "PetValidator"],
+      "owned_entities": ["Pet", "PetType"],
+      "responsibilities": ["manage pet records", "validate pet data"],
+      "dependencies": ["owner-service"],
+      "rationale": "all components related to pet management"
+    },
+    {
+      "name": "vet-service",
+      "components": ["Vet", "VetController", "VetRepository", "Vets"],
+      "owned_entities": ["Vet", "Specialty"],
+      "responsibilities": ["manage veterinarian staff and their specialties"],
+      "dependencies": [],
+      "rationale": "all components related to veterinarian management"
+    }
+  ],
+  "migration_priority": [
+    {"service": "owner-service", "rank": 1, "confidence": 0.0, "reason": ""},
+    {"service": "pet-service", "rank": 2, "confidence": 0.0, "reason": ""},
+    {"service": "vet-service", "rank": 3, "confidence": 0.0, "reason": ""}
+  ],
+  "uncertain_decisions": [],
+  "unsupported_assumptions": [],
+  "rule_violations": [],
+  "architectural_risks": [],
+  "critique": "",
+  "revised": false
+}

@@ -1,0 +1,76 @@
+{
+  "services": [
+    {
+      "name": "veterinarian-service",
+      "components": [
+        "Component_09",
+        "Component_10",
+        "Component_11",
+        "Component_12",
+        "Component_13"
+      ],
+      "owned_entities": [
+        "Component_09",
+        "Component_10",
+        "Component_13"
+      ],
+      "responsibilities": [
+        "Manage veterinarian staff information, specialties, and related directory queries"
+      ],
+      "dependencies": [],
+      "rationale": "Components 09, 10, 11, 12, and 13 form a completely isolated connected component in the static call graph and data relations, with zero incoming or outgoing dependencies to the rest of the monolith."
+    },
+    {
+      "name": "clinic-operations-service",
+      "components": [
+        "Component_01",
+        "Component_02",
+        "Component_03",
+        "Component_04",
+        "Component_05",
+        "Component_06",
+        "Component_07",
+        "Component_08",
+        "Component_14",
+        "Component_15"
+      ],
+      "owned_entities": [
+        "Component_01",
+        "Component_04",
+        "Component_06",
+        "Component_14"
+      ],
+      "responsibilities": [
+        "Manage client/owner profiles, pet registrations, pet types, validation rules, and visit scheduling"
+      ],
+      "dependencies": [],
+      "rationale": "These components share dense structural coupling and cross-entity references (Component_01 references Component_04 and Component_14; Component_05 and Component_15 both access Component_03). Keeping them together prevents distributed transactions and cyclic cross-service calls."
+    }
+  ],
+  "migration_priority": [
+    {
+      "service": "veterinarian-service",
+      "rank": 1,
+      "confidence": 0.95,
+      "reason": "Completely decoupled from other components in both static calls and data relations, making extraction low risk with no dependency entanglement."
+    },
+    {
+      "service": "clinic-operations-service",
+      "rank": 2,
+      "confidence": 0.8,
+      "reason": "Contains the core operational workflows and complex internal domain relationships; best migrated after the independent veterinarian service is extracted."
+    }
+  ],
+  "uncertain_decisions": [
+    "Whether Component_14 (visits) and Component_04 (pets) should be separated into dedicated microservices; structural evidence shows Component_15 and Component_05 both directly depend on Component_03, and Component_14 lacks an independent repository."
+  ],
+  "unsupported_assumptions": [
+    "Assumed there are no indirect or runtime associations (e.g., vet assignment to visits) between veterinarian components (09-13) and operational components (01-08, 14-15), as none are present in static call or data relation evidence."
+  ],
+  "rule_violations": [],
+  "architectural_risks": [
+    "High internal coupling within clinic-operations-service where multiple controllers share repository Component_03 and domain entities navigate directly across aggregate boundaries, creating a larger failure domain."
+  ],
+  "critique": "The decomposition cleanly isolates the veterinarian bounded context from the main clinic operations. A finer-grained split of pet, visit, and owner management is discouraged at this stage due to shared repository access (Component_03) and direct domain object references across those entities.",
+  "revised": false
+}

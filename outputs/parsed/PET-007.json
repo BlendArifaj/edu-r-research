@@ -1,0 +1,130 @@
+{
+  "schema_version": "1",
+  "method": "petclinic_gemini-3.8-flash_E0_MINIMAL_ANONYMIZED",
+  "method_family": "llm",
+  "system": {
+    "name": "SEMS-R",
+    "is_original_sems_source": false,
+    "gold_labels_used": false,
+    "integrity": "SEMS-R LLM decomposition. Not original production SEMS. This output does not consume evaluation gold labels.",
+    "generated_at": "2026-09-25T22:21:21.837342+00:00"
+  },
+  "config": {
+    "provider": "gemini",
+    "model": "gemini-3.8-flash",
+    "temperature": 0.2,
+    "condition": null,
+    "run_number": null,
+    "is_scientific_run": false
+  },
+  "available": true,
+  "component_assignment": {
+    "Component_01": "candidate-service-1",
+    "Component_02": "candidate-service-1",
+    "Component_03": "candidate-service-1",
+    "Component_04": "candidate-service-1",
+    "Component_05": "candidate-service-2",
+    "Component_06": "candidate-service-2",
+    "Component_07": "candidate-service-2",
+    "Component_08": "candidate-service-2",
+    "Component_09": "candidate-service-3",
+    "Component_10": "candidate-service-3",
+    "Component_11": "candidate-service-3",
+    "Component_12": "candidate-service-3",
+    "Component_13": "candidate-service-3",
+    "Component_14": "candidate-service-3",
+    "Component_15": "candidate-service-3"
+  },
+  "services": [
+    {
+      "id": "candidate-service-1",
+      "label": "candidate-service-1",
+      "components": [
+        "Component_01",
+        "Component_02",
+        "Component_03",
+        "Component_04"
+      ],
+      "owned_entities": [
+        "Component_01",
+        "Component_04"
+      ]
+    },
+    {
+      "id": "candidate-service-2",
+      "label": "candidate-service-2",
+      "components": [
+        "Component_05",
+        "Component_06",
+        "Component_07",
+        "Component_08"
+      ],
+      "owned_entities": [
+        "Component_06"
+      ]
+    },
+    {
+      "id": "candidate-service-3",
+      "label": "candidate-service-3",
+      "components": [
+        "Component_09",
+        "Component_10",
+        "Component_11",
+        "Component_12",
+        "Component_13",
+        "Component_14",
+        "Component_15"
+      ],
+      "owned_entities": [
+        "Component_09",
+        "Component_10",
+        "Component_13",
+        "Component_14"
+      ]
+    }
+  ],
+  "uncertain_decisions": [
+    {
+      "component": "Assignment of anonymized components Component_01 through Component_15 to specific functional services based solely on component kind distributions rather than explicit interaction graphs.",
+      "reason": "Assignment of anonymized components Component_01 through Component_15 to specific functional services based solely on component kind distributions rather than explicit interaction graphs."
+    },
+    {
+      "component": "Directionality and existence of inter-service dependencies between candidate-service-2 and candidate-service-3.",
+      "reason": "Directionality and existence of inter-service dependencies between candidate-service-2 and candidate-service-3."
+    }
+  ],
+  "unsupported_assumptions": [
+    "Assumed that contiguous component identifiers and modules reflect proximity in the legacy source structure.",
+    "Assumed that the four controllers and three repositories partition cleanly into 1:1:1 and 2:1 controller-to-repository subdomains typical of PetClinic architectures."
+  ],
+  "rule_violations": [],
+  "architectural_risks": [
+    "Absence of call graph and foreign key relationships in E0_MINIMAL evidence may conceal cross-service synchronous coupling and shared database transactions.",
+    "Validator Component_08 might validate entities belonging to candidate-service-3 rather than candidate-service-2, creating cross-boundary coupling."
+  ],
+  "critique": "Under the E0_MINIMAL condition with anonymized identifiers, only component kinds and module tokens are available. The proposed 3-service decomposition relies on structural archetypes (distributing the 4 controllers, 3 repositories, 1 validator, and 7 domain entities into three complete functional vertical slices), but cannot be definitively validated without dependency or interaction evidence.",
+  "revised": false,
+  "migration_priority": [
+    {
+      "service": "candidate-service-1",
+      "rank": 1,
+      "confidence": 0.45,
+      "reason": "Relatively self-contained footprint with a single repository and controller, making it the lowest-risk candidate for initial extraction."
+    },
+    {
+      "service": "candidate-service-2",
+      "rank": 2,
+      "confidence": 0.35,
+      "reason": "Moderate complexity containing validation logic; dependent on reference domain data from primary aggregates."
+    },
+    {
+      "service": "candidate-service-3",
+      "rank": 3,
+      "confidence": 0.3,
+      "reason": "Core business domain with multiple entities and controllers; highest gravity and risk of regression during extraction."
+    }
+  ],
+  "notes": [
+    "Parsed from LLM JSON. Gold labels were not in the prompt."
+  ]
+}

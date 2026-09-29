@@ -1,0 +1,154 @@
+{
+  "schema_version": "1",
+  "method": "petclinic_llama3.1_E1_STRUCTURAL_ANONYMIZED",
+  "method_family": "llm",
+  "system": {
+    "name": "SEMS-R",
+    "is_original_sems_source": false,
+    "gold_labels_used": false,
+    "integrity": "SEMS-R LLM decomposition. Not original production SEMS. This output does not consume evaluation gold labels.",
+    "generated_at": "2026-09-25T21:49:02.195152+00:00"
+  },
+  "config": {
+    "provider": "ollama",
+    "model": "llama3.1",
+    "temperature": 0.2,
+    "condition": null,
+    "run_number": null,
+    "is_scientific_run": false
+  },
+  "available": true,
+  "component_assignment": {
+    "Component_01": "pet-management-service",
+    "Component_02": "controller-service",
+    "Component_03": "repository-service",
+    "Component_04": "pet-management-service",
+    "Component_05": "controller-service",
+    "Component_07": "repository-service",
+    "Component_08": "validator-service",
+    "Component_09": "staff-management-service",
+    "Component_10": "staff-management-service",
+    "Component_11": "controller-service",
+    "Component_12": "repository-service",
+    "Component_13": "staff-management-service",
+    "Component_14": "pet-management-service",
+    "Component_15": "scheduler-service"
+  },
+  "services": [
+    {
+      "id": "pet-management-service",
+      "label": "pet-management-service",
+      "components": [
+        "Component_01",
+        "Component_04",
+        "Component_14"
+      ],
+      "owned_entities": [
+        "EntityName"
+      ]
+    },
+    {
+      "id": "scheduler-service",
+      "label": "scheduler-service",
+      "components": [
+        "Component_15"
+      ],
+      "owned_entities": [
+        "EntityName"
+      ]
+    },
+    {
+      "id": "staff-management-service",
+      "label": "staff-management-service",
+      "components": [
+        "Component_09",
+        "Component_10",
+        "Component_13"
+      ],
+      "owned_entities": [
+        "EntityName"
+      ]
+    },
+    {
+      "id": "repository-service",
+      "label": "repository-service",
+      "components": [
+        "Component_03",
+        "Component_07",
+        "Component_12"
+      ],
+      "owned_entities": [
+        "EntityName"
+      ]
+    },
+    {
+      "id": "validator-service",
+      "label": "validator-service",
+      "components": [
+        "Component_08"
+      ],
+      "owned_entities": [
+        "EntityName"
+      ]
+    },
+    {
+      "id": "controller-service",
+      "label": "controller-service",
+      "components": [
+        "Component_02",
+        "Component_05",
+        "Component_11"
+      ],
+      "owned_entities": [
+        "EntityName"
+      ]
+    }
+  ],
+  "uncertain_decisions": [],
+  "unsupported_assumptions": [],
+  "rule_violations": [],
+  "architectural_risks": [],
+  "critique": "",
+  "revised": false,
+  "migration_priority": [
+    {
+      "service": "pet-management-service",
+      "rank": 1,
+      "confidence": 0.0,
+      "reason": ""
+    },
+    {
+      "service": "scheduler-service",
+      "rank": 2,
+      "confidence": 0.0,
+      "reason": ""
+    },
+    {
+      "service": "staff-management-service",
+      "rank": 3,
+      "confidence": 0.0,
+      "reason": ""
+    },
+    {
+      "service": "repository-service",
+      "rank": 4,
+      "confidence": 0.0,
+      "reason": ""
+    },
+    {
+      "service": "validator-service",
+      "rank": 5,
+      "confidence": 0.0,
+      "reason": ""
+    },
+    {
+      "service": "controller-service",
+      "rank": 6,
+      "confidence": 0.0,
+      "reason": ""
+    }
+  ],
+  "notes": [
+    "Parsed from LLM JSON. Gold labels were not in the prompt."
+  ]
+}

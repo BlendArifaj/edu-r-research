@@ -1,0 +1,66 @@
+{
+  "services": [
+    {
+      "name": "pet-management-service",
+      "components": ["Component_01", "Component_04", "Component_14"],
+      "owned_entities": ["EntityName"],
+      "responsibilities": ["manage client records", "register pets", "schedule and record veterinary visits"],
+      "dependencies": ["scheduler-service"],
+      "rationale": "evidence-based reason"
+    },
+    {
+      "name": "scheduler-service",
+      "components": ["Component_15"],
+      "owned_entities": ["EntityName"],
+      "responsibilities": ["schedule veterinary visits"],
+      "dependencies": ["pet-management-service"],
+      "rationale": "evidence-based reason"
+    },
+    {
+      "name": "staff-management-service",
+      "components": ["Component_09", "Component_10", "Component_13"],
+      "owned_entities": ["EntityName"],
+      "responsibilities": ["manage veterinarian staff and their specialties"],
+      "dependencies": [],
+      "rationale": "evidence-based reason"
+    },
+    {
+      "name": "repository-service",
+      "components": ["Component_03", "Component_07", "Component_12"],
+      "owned_entities": ["EntityName"],
+      "responsibilities": ["store and retrieve data"],
+      "dependencies": ["pet-management-service", "scheduler-service", "staff-management-service"],
+      "rationale": "evidence-based reason"
+    },
+    {
+      "name": "validator-service",
+      "components": ["Component_08"],
+      "owned_entities": ["EntityName"],
+      "responsibilities": ["validate data"],
+      "dependencies": ["pet-management-service", "scheduler-service", "staff-management-service"],
+      "rationale": "evidence-based reason"
+    },
+    {
+      "name": "controller-service",
+      "components": ["Component_02", "Component_05", "Component_11"],
+      "owned_entities": ["EntityName"],
+      "responsibilities": ["handle requests and responses"],
+      "dependencies": ["pet-management-service", "scheduler-service", "staff-management-service"],
+      "rationale": "evidence-based reason"
+    }
+  ],
+  "migration_priority": [
+    {"service": "pet-management-service", "rank": 1, "confidence": 0.0, "reason": ""},
+    {"service": "scheduler-service", "rank": 2, "confidence": 0.0, "reason": ""},
+    {"service": "staff-management-service", "rank": 3, "confidence": 0.0, "reason": ""},
+    {"service": "repository-service", "rank": 4, "confidence": 0.0, "reason": ""},
+    {"service": "validator-service", "rank": 5, "confidence": 0.0, "reason": ""},
+    {"service": "controller-service", "rank": 6, "confidence": 0.0, "reason": ""}
+  ],
+  "uncertain_decisions": [],
+  "unsupported_assumptions": [],
+  "rule_violations": [],
+  "architectural_risks": [],
+  "critique": "",
+  "revised": false
+}

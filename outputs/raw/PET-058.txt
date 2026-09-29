@@ -1,0 +1,30 @@
+{
+  "services": [
+    {
+      "name": "client-service",
+      "components": ["Component_01", "Component_02", "Component_04", "Component_14", "Component_09", "Component_10", "Component_11", "Component_13"],
+      "owned_entities": ["Client", "Pet"],
+      "responsibilities": ["Client management", "Pet management"],
+      "dependencies": ["visit-service"],
+      "rationale": "Client and pet management are core functionalities of the application."
+    },
+    {
+      "name": "visit-service",
+      "components": ["Component_03", "Component_05", "Component_06", "Component_07", "Component_08", "Component_15"],
+      "owned_entities": ["Visit", "Veterinarian", "Specialty"],
+      "responsibilities": ["Visit management", "Veterinarian management", "Specialty management"],
+      "dependencies": ["client-service"],
+      "rationale": "Visit management is closely related to client and pet management."
+    }
+  ],
+  "migration_priority": [
+    {"service": "client-service", "rank": 1, "confidence": 0.0, "reason": ""},
+    {"service": "visit-service", "rank": 2, "confidence": 0.0, "reason": ""}
+  ],
+  "uncertain_decisions": [],
+  "unsupported_assumptions": [],
+  "rule_violations": [],
+  "architectural_risks": [],
+  "critique": "",
+  "revised": false
+}

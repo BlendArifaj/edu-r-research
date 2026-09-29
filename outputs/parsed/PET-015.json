@@ -1,0 +1,106 @@
+{
+  "schema_version": "1",
+  "method": "petclinic_gemini-3.8-flash_E1_STRUCTURAL_ANONYMIZED",
+  "method_family": "llm",
+  "system": {
+    "name": "SEMS-R",
+    "is_original_sems_source": false,
+    "gold_labels_used": false,
+    "integrity": "SEMS-R LLM decomposition. Not original production SEMS. This output does not consume evaluation gold labels.",
+    "generated_at": "2026-09-25T22:23:46.765157+00:00"
+  },
+  "config": {
+    "provider": "gemini",
+    "model": "gemini-3.8-flash",
+    "temperature": 0.2,
+    "condition": null,
+    "run_number": null,
+    "is_scientific_run": false
+  },
+  "available": true,
+  "component_assignment": {
+    "Component_01": "pet-clinic-core-service",
+    "Component_02": "pet-clinic-core-service",
+    "Component_03": "pet-clinic-core-service",
+    "Component_04": "pet-clinic-core-service",
+    "Component_05": "pet-clinic-core-service",
+    "Component_06": "pet-clinic-core-service",
+    "Component_07": "pet-clinic-core-service",
+    "Component_08": "pet-clinic-core-service",
+    "Component_09": "veterinary-service",
+    "Component_10": "veterinary-service",
+    "Component_11": "veterinary-service",
+    "Component_12": "veterinary-service",
+    "Component_13": "veterinary-service",
+    "Component_14": "pet-clinic-core-service",
+    "Component_15": "pet-clinic-core-service"
+  },
+  "services": [
+    {
+      "id": "veterinary-service",
+      "label": "veterinary-service",
+      "components": [
+        "Component_09",
+        "Component_10",
+        "Component_11",
+        "Component_12",
+        "Component_13"
+      ],
+      "owned_entities": [
+        "Component_10"
+      ]
+    },
+    {
+      "id": "pet-clinic-core-service",
+      "label": "pet-clinic-core-service",
+      "components": [
+        "Component_01",
+        "Component_02",
+        "Component_03",
+        "Component_04",
+        "Component_05",
+        "Component_06",
+        "Component_07",
+        "Component_08",
+        "Component_14",
+        "Component_15"
+      ],
+      "owned_entities": [
+        "Component_01",
+        "Component_04",
+        "Component_06",
+        "Component_14"
+      ]
+    }
+  ],
+  "uncertain_decisions": [
+    {
+      "component": "Whether visit management (Component_14, Component_15) should eventually be separated into a distinct visit service once controller dependencies on Component_03 (Owner repository) are refactored into API calls.",
+      "reason": "Whether visit management (Component_14, Component_15) should eventually be separated into a distinct visit service once controller dependencies on Component_03 (Owner repository) are refactored into API calls."
+    }
+  ],
+  "unsupported_assumptions": [],
+  "rule_violations": [],
+  "architectural_risks": [
+    "High coupling inside pet-clinic-core-service between owner, pet, and visit entities could impede future fine-grained scaling if visit volume grows disproportionately."
+  ],
+  "critique": "A two-service partition strictly respects the structural boundaries present in the evidence. Decomposing pet-clinic-core-service further at this stage would violate repository encapsulation because Component_03 is directly queried across multiple sub-domains.",
+  "revised": false,
+  "migration_priority": [
+    {
+      "service": "veterinary-service",
+      "rank": 1,
+      "confidence": 0.95,
+      "reason": "Complete topological isolation with zero incoming or outgoing dependencies makes it a low-risk, immediate candidate for extraction via the strangler fig pattern."
+    },
+    {
+      "service": "pet-clinic-core-service",
+      "rank": 2,
+      "confidence": 0.85,
+      "reason": "Contains remaining legacy business operations and shared data access paths, best extracted as the core monolith or subsequent modernization phase."
+    }
+  ],
+  "notes": [
+    "Parsed from LLM JSON. Gold labels were not in the prompt."
+  ]
+}

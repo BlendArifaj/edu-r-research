@@ -1,0 +1,22 @@
+{
+  "run_id": "PET-004",
+  "run_status": "VALID",
+  "execution_status": "COMPLETED",
+  "parse_status": "valid",
+  "invalid_reason": "",
+  "latency_ms": 13949.25,
+  "attempt_count": 1,
+  "infra_retry_count": 0,
+  "timestamp": "2026-09-25T22:20:24.450043+00:00",
+  "model": "gemini-3.8-flash",
+  "provider": "gemini",
+  "requested_model_id": "gemini-3.8-flash",
+  "resolved_model_version": "",
+  "evidence_condition": "E0_MINIMAL",
+  "identifier_condition": "SEMANTIC",
+  "repetition": "2",
+  "temperature": 0.2,
+  "raw_sha256": "eba61f2f11308119c56cc6c17d4f5bacb8406296ba9411c445f01efcf8e7e022",
+  "prompt_sha256": "b454700c487640640f8386974b7954d73b8a0223a0f3ce80ba8729aa0f4e97e5",
+  "evidence_sha256": "77f00063592b8c6cbac3c23f62fab671875d1fcfb151cd8e10bae77107fe17f9"
+}

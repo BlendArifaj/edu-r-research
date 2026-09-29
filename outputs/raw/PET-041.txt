@@ -1,0 +1,30 @@
+{
+  "services": [
+    {
+      "name": "owner-service",
+      "components": ["Owner", "OwnerController", "OwnerRepository", "Pet", "PetController", "PetType", "PetTypeRepository", "PetValidator", "Visit", "VisitController"],
+      "owned_entities": ["Owner", "Pet", "PetType", "Visit"],
+      "responsibilities": ["Manage client records", "Register pets", "Schedule and record veterinary visits"],
+      "dependencies": [],
+      "rationale": "owner-service is responsible for managing client records, registering pets, and scheduling and recording veterinary visits."
+    },
+    {
+      "name": "vet-service",
+      "components": ["Specialty", "Vet", "VetController", "VetRepository", "Vets"],
+      "owned_entities": ["Specialty", "Vet", "Vets"],
+      "responsibilities": ["Manage veterinarian staff and their specialties"],
+      "dependencies": ["owner-service"],
+      "rationale": "vet-service is responsible for managing veterinarian staff and their specialties, and depends on owner-service for client records and pet information."
+    }
+  ],
+  "migration_priority": [
+    {"service": "owner-service", "rank": 1, "confidence": 0.0, "reason": ""},
+    {"service": "vet-service", "rank": 2, "confidence": 0.0, "reason": ""}
+  ],
+  "uncertain_decisions": [],
+  "unsupported_assumptions": [],
+  "rule_violations": [],
+  "architectural_risks": [],
+  "critique": "",
+  "revised": false
+}
