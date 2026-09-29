@@ -1,5 +1,23 @@
 # EDU-R: Reconstructed Legacy Education System
 
+## Replication package (IEEE Access revision)
+
+This repository is the **official replication package** for the paper:
+
+**Evidence-Constrained LLMs for Microservice Decomposition: An Empirical Study on a Reconstructed Legacy System** (IEEE Access revision).
+
+It contains the EDU-R testbed, frozen experiment definitions, scoring and analysis scripts, committed result tables, and (where included in the tree) raw/parsed LLM outputs used in the revision. Reproduce or audit studies using the tagged releases below—not by editing frozen manifests or reference mappings.
+
+| Study | Tag | Key paths |
+| ----- | --- | --------- |
+| EDU-R identifier anonymization (REVISION_CONTROL_V1) | [`ieee-access-revision-control-v1`](https://github.com/BlendArifaj/sems-research/releases/tag/ieee-access-revision-control-v1) | `revision_anonymization/`, `outputs/runs/anonymization_exp_v1/` (local/hash manifest) |
+| Gemini 3.8 Flash EDU-R rerun (identifier 40 + RQ3 12) | [`gemini-38-edur-results`](https://github.com/BlendArifaj/sems-research/releases/tag/gemini-38-edur-results) | `revision_anonymization/gemini_38_edur/` |
+| Spring PetClinic external validation (PETCLINIC_EXT_V1) | [`petclinic-ext-v1-results`](https://github.com/BlendArifaj/sems-research/releases/tag/petclinic-ext-v1-results) | `external_validation_petclinic/`, `outputs/runs/petclinic_ext_v1/`, `outputs/raw/`, `outputs/parsed/`, `outputs/status/` |
+
+**Umbrella reproducibility release:** [`ieee-access-revision-reproducibility`](https://github.com/BlendArifaj/sems-research/releases/tag/ieee-access-revision-reproducibility) — points at the combined revision package commit.
+
+---
+
 **Research integrity statement**
 
 This repository is a **controlled software reconstruction** based on the documented functional and architectural characteristics of the historical EDU case study. **It is not the original production EDU source code.** Runtime measurements, workload results, and decomposition scores produced here are measurements of EDU-R, not of the historical production system. Historical results from prior studies must be kept in a separate dataset and must never be pooled with EDU-R measurements.
@@ -17,12 +35,11 @@ The six historical services (Faculty, Student, Grade, Finance, Attendance, Libra
 
 ## What is not published here
 
-This git tree is the **reproducible testbed**, not the paper archive. These stay local under `outputs/` (gitignored):
+Large or machine-local artifacts may still be gitignored in minimal clones. The **revision reproducibility release** commit may additionally include PetClinic raw/parsed/status files under `outputs/` when present in the repository. Typical local-only paths:
 
 - generated reports and figures (`outputs/reports/`)
-- experiment snapshots (`outputs/runs/`)
+- some experiment snapshots (`outputs/runs/` except where committed for replication)
 - Locust comparison CSVs (`outputs/performance/`)
-- LLM raw completions and parsed JSON
 - filled expert-review sheets
 
 Copy `.env.example` to `.env`, add your own provider keys, and re-run. Do not commit keys.
