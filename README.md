@@ -1,4 +1,63 @@
+
 # EDU-R: Reconstructed Legacy Education System
+
+[![IEEE Access](https://img.shields.io/badge/Published-IEEE%20Access%202026-blue)](https://doi.org/10.1109/ACCESS.2026.3744313)
+[![DOI](https://img.shields.io/badge/DOI-10.1109%2FACCESS.2026.3744313-blue)](https://doi.org/10.1109/ACCESS.2026.3744313)
+
+## Associated Publication
+
+**Evidence-Constrained LLMs for Microservice Decomposition:
+An Empirical Study on a Reconstructed Legacy System**
+
+- **Journal:** IEEE Access
+- **Publisher:** IEEE
+- **Year:** 2026
+- **DOI:** [10.1109/ACCESS.2026.3744313](https://doi.org/10.1109/ACCESS.2026.3744313)
+
+## About This Repository
+
+This repository provides the research artifacts and replication
+package associated with the IEEE Access publication above.
+
+It includes:
+
+- EDU-R, a reconstructed legacy education-management system.
+- Architectural evidence extraction and decomposition pipelines.
+- Deterministic baselines and LLM-based experiments.
+- Evaluation metrics, scoring scripts, and experimental results.
+- Identifier-anonymization experiments.
+- External validation using Spring PetClinic.
+- Monolith and microservice performance experiments.
+
+EDU-R is a controlled software reconstruction and is not the
+original production EDU system.
+
+## Reproducibility
+
+The experimental artifacts are preserved under frozen Git tags.
+
+| Study | Frozen Tag |
+|---|---|
+| Identifier-anonymization experiment | [`ieee-access-revision-control-v1`](https://github.com/BlendArifaj/edu-r-research/releases/tag/ieee-access-revision-control-v1) |
+| Gemini 3.8 Flash rerun | [`gemini-38-edur-results`](https://github.com/BlendArifaj/edu-r-research/releases/tag/gemini-38-edur-results) |
+| Spring PetClinic external validation | [`petclinic-ext-v1-results`](https://github.com/BlendArifaj/edu-r-research/releases/tag/petclinic-ext-v1-results) |
+
+**Combined replication release:**
+[`ieee-access-revision-reproducibility`](https://github.com/BlendArifaj/edu-r-research/releases/tag/ieee-access-revision-reproducibility)
+
+For reproducibility, use the frozen artifacts rather than
+modifying the experimental configurations or reference mappings.
+
+## Citation
+
+If you use this repository or its research artifacts,
+please cite the associated IEEE Access publication:
+
+**Evidence-Constrained LLMs for Microservice Decomposition:
+An Empirical Study on a Reconstructed Legacy System.**
+*IEEE Access*, 2026.
+
+DOI: https://doi.org/10.1109/ACCESS.2026.3744313
 
 ## Replication package (IEEE Access revision)
 
